@@ -1,0 +1,13 @@
+name: transformation
+title: Transformation
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 140
+bundleId: 24370
+url: https://datos.morant.com.mx:443/content/140/
+when: 1622483973.33885
+lastSyncTime: 1622483973.33888
+asMultiple: FALSE
+asStatic: FALSE

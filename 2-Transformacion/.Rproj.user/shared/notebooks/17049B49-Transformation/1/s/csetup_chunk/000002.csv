@@ -1,0 +1,15 @@
+"0","library(learnr)"
+"0","library(gradethis)"
+"2","
+Attaching package: ‘gradethis’
+
+"
+"2","The following objects are masked from ‘package:learnr’:
+
+    random_encouragement, random_praise
+
+"
+"0","library(learnrhash)"
+"0","library(ggplot2)"
+"0","gradethis::gradethis_setup()"
+"0","knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)"

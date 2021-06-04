@@ -1,0 +1,13 @@
+name: analisisexploratorio
+title: AnalisisExploratorio
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 137
+bundleId: 24260
+url: https://datos.morant.com.mx:443/content/137/
+when: 1621273499.12875
+lastSyncTime: 1621273499.12876
+asMultiple: FALSE
+asStatic: FALSE

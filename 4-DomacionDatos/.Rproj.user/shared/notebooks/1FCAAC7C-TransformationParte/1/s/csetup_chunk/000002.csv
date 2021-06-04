@@ -1,0 +1,6 @@
+"0","library(learnr)"
+"0","library(gradethis)"
+"0","library(learnrhash)"
+"0","library(ggplot2)"
+"0","gradethis::gradethis_setup()"
+"0","knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)"

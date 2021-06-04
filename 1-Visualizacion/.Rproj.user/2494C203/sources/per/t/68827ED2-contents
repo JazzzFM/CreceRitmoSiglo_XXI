@@ -1,0 +1,328 @@
+---
+title: 'Transformación: Introducción a dplyr'
+output: learnr::tutorial
+runtime: shiny_prerendered
+tutorial:
+  id: morant-clase-2
+  version: 1
+resource_files:
+- renv.lock
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(learnrhash)
+library(ggplot2)
+gradethis::gradethis_setup()
+knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
+```
+
+```{r stormtrooper, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%", fig.cap="Ilustración por Emilio Morones."}
+knitr::include_graphics("images/transformation.png")
+```
+
+## Prerequisitos
+
+```{r prerequisites, echo=TRUE}
+library(nycflights13)
+library(dplyr)
+```
+
+Para explorar las funciones principales del paquete `dplyr` utilizaremos la base de datos `flights` 
+
+```{r db_1, echo=TRUE}
+flights
+```
+
+Existen diferentes tipos de variables:
+
+* `int` números enteros.
+* `dbl` números reales.
+* `chr` texto.
+* `dttm` fecha - hora.
+* `lgl` lógico.
+* `fctr` factor, variables categóricas.
+* `date` fecha.
+
+
+### Funciones básicas de `dplyr`
+
+  * `filter()` elige observaciones por sus valores.
+  * `arrange()` reordena los renglones.
+  * `select()` selecciona variables.
+  * `mutate()` genera nuevas variables, generalmente son funciones de variables existentes.
+  * `summarise()` colapsa muchos valores para tener un resumen.
+
+Estas funciones se pueden utilizar en conjunto con la función `group_by()`.
+
+Argumentos:
+
+1. `data.frame`.
+2. Instrucciones que hacer con los datos.
+
+Resultados:
+
+Un nuevo `data.frame`.
+
+## Filtrar renglones con filter()
+
+```{r filter_1, echo=TRUE}
+filter(flights, month == 1, day == 1)
+```
+Operadores comparativos: `>` (mayor a),`>=` (mayor o igual a),`<` (menor a),`<=` (menor o igual a),`!=` (diferente),`==` (igual)
+
+Cuidados:
+```{r operadores_1, exercise=TRUE}
+sqrt(2) ^ 2 == 2
+1 / 49 * 49 == 1
+```
+
+Utilizar función near()
+```{r near_1, echo=TRUE}
+near(sqrt(2) ^ 2,  2)
+near(1 / 49 * 49, 1)
+```
+
+### Operadores lógicos
+![x es el círculo de la izquierda, y es el de la derecha y la zona sombreada es lo que representa la operación](images/operaciones.png)
+
+```{r operaciones_1, echo=TRUE}
+filter(flights, month == 11 | month == 12)
+```
+
+```{r operaciones_2, echo=TRUE}
+filter(flights, month %in% c(11,12))
+```
+
+Algunas veces filtros complicados se pueden simplificar con la ley De Morgan:
+
+* `!(x & y)` es lo mismo a `!x | !y`
+* `!(x | y)` es lo mismo a `!x & !y`
+
+Por ejemplo:
+```{r operaciones_3, exercise=TRUE}
+filter(flights, !(arr_delay > 120 | dep_delay > 120))
+filter(flights, arr_delay <= 120, dep_delay <= 120)
+```
+
+### Valores faltantes
+Algo que podría hacer a `R` un tanto mañoso es el trato de los valores faltantes. Casi cualquier operación que involucre valores faltantes también será desconocido.
+
+```{r na_1, exercise=TRUE}
+NA > 1
+1 == NA
+NA + 1
+NA / 1
+NA == NA
+```
+
+```{r na_2, echo=TRUE}
+is.na(NA)
+```
+
+```{r na_3, exercise=TRUE}
+bd <-  tibble(x = c(1:3, NA))
+filter(bd, x > 2)
+filter(bd, x > 2 | is.na(x))
+```
+
+### Ejercicios
+
+1. Encuentra todos los vuelos que:
+
+1.1 Que tuvieron un retraso de llegada de 2 horas o más
+```{r ejercicio1, exercise=TRUE}
+filter(flights, ___)
+```
+<div id="ejercicio1-hint">
+**Hint:** Usa la variable *arr_delay*
+</div>
+```{r ejercicio1-solution}
+filter(flights, arr_delay >= 120)
+```
+```{r ejercicio1-check}
+grade_this_code()
+```
+
+1.2 Volaron a Houston (IAH o HOU)
+```{r ejercicio2, exercise=TRUE}
+filter(flights, ___)
+```
+<div id="ejercicio2-hint">
+**Hint:** Usa la variable *dest*
+</div>
+```{r ejercicio2-solution}
+filter(flights, dest == "IAH" | dest == "HOU")
+```
+```{r ejercicio2-check}
+grade_this_code()
+```
+
+1.3 Fueron operados por United, American, o Delta
+```{r ejercicio3, exercise=TRUE}
+filter(flights, ___)
+```
+
+<div id="ejercicio3-hint">
+**Hint:** Usa la variable **carrier**
+</div>
+
+```{r ejercicio3-solution}
+filter(flights, carrier %in% c("AA", "DL", "UA"))
+```
+
+```{r ejercicio3-check}
+grade_this_code()
+```
+
+1.4 Salieron en Julio, Agosto y Septiembre
+```{r ejercicio4, exercise=TRUE}
+filter(flights, ___)
+```
+
+<div id="ejercicio4-hint">
+**Hint:** Usa la variable **month**
+</div>
+
+```{r ejercicio4-solution}
+filter(flights, month >= 7, month <= 9)
+```
+
+```{r ejercicio4-check}
+grade_this_code()
+```
+
+1.5 LLegaron más de dos horas tarde pero no salieron tarde
+```{r ejercicio5, exercise=TRUE}
+filter(flights, ___)
+```
+
+<div id="ejercicio5-hint">
+**Hint:** Usa la variable **arr_delay** y **dep_delay**
+</div>
+
+```{r ejercicio5-solution}
+filter(flights, arr_delay > 120, dep_delay <= 0)
+```
+
+```{r ejercicio5-check}
+grade_this_code()
+```
+
+1.6 Salieron al menos una hora tarde pero recuperaron 30 minutos de vuelo
+```{r ejercicio6, exercise=TRUE}
+filter(flights, ___)
+```
+
+<div id="ejercicio6-hint">
+**Hint:** Usa la variable **dep_delay** y usa la diferencia entre **arr_delay** y esta. 
+</div>
+
+```{r ejercicio6-solution}
+filter(flights, dep_delay >= 60, dep_delay - arr_delay > 30)
+```
+
+```{r ejercicio6-check}
+grade_this_code()
+```
+
+1.7 Salieron de la media noche a las 6am (incluyéndo)
+```{r ejercicio7, exercise=TRUE}
+filter(flights, ___)
+```
+
+<div id="ejercicio7-hint">
+**Hint:** Usa la variable **dep_delay** y usa la diferencia entre **arr_delay** y esta. 
+</div>
+
+```{r ejercicio7-solution}
+filter(flights, dep_time <= 600 | dep_time == 2400)
+```
+
+```{r ejercicio7-check}
+grade_this_code()
+```
+
+2 Otra función muy útil de `dplyr` es `between()`.`
+
+```{r quiz1, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Qué hace? ¿Podrías utilizarlo para simplificar el código para responder las preguntas anteriores?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+3 ¿Cuántos vuelos no tienen información en la variable `dep_time`?
+```{r ejercicio8, exercise=TRUE}
+filter(flights, ___)
+```
+
+<div id="ejercicio8-hint">
+**Hint:** Usa la función `is.na()` en la variable necesaria. 
+</div>
+
+```{r ejercicio8-solution}
+filter(flights, is.na(dep_time))
+```
+
+```{r ejercicio8-check}
+grade_this_code()
+```
+
+```{r quiz2, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Qué otras variables faltan? ¿Qué podrían representar estos renglones?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+4
+```{r quiz3, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Por qué `NA ^ 0`, `NA | TRUE`, `FALSE & NA` no son valores faltantes? ¿Podrías descubrir una regla general? (NA * 0 tiene truco)",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+## Envía tus respuestas
+
+### Material de referencia
+Hadley Wickham y Garrett Grolemund, "R for Data Science: Import, Tidy, Transform, Visualize, and Model Data" O'REILLY [`R for Data Science`](https://r4ds.had.co.nz/)
+
+
+```{r context="server"}
+learnrhash::encoder_logic()
+```
+
+```{r encode, echo=FALSE}
+learnrhash::encoder_ui(
+  ui_before = shiny::div(
+    "Si ha completado este tutorial y está satisfecho con todos sus",
+     "soluciones, haga clic en el botón de abajo para generar su hash y",
+     "envíalo usando el siguiente formulario:",
+    shiny::tags$br()
+  )
+)
+```
+
+Enviar hash al siguiente link -> [__Aqui__](https://docs.google.com/spreadsheets/d/1eXNEGrumywfCt4xop5ygcJGxbXI5kfNdiHOztiGspoA/edit?usp=sharing)
+
+```{r stormtrooper2, echo = FALSE}
+knitr::include_graphics("images/morant.jpg")
+```

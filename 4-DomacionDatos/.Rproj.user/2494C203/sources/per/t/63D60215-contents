@@ -1,0 +1,582 @@
+---
+title: 'Domación de Datos'
+output: learnr::tutorial
+runtime: shiny_prerendered
+tutorial:
+  id: morant-clase-4
+  version: 1
+resource_files:
+- renv.lock
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(learnrhash)
+library(tidyverse)
+library(ggplot2)
+require("maps")
+gradethis::gradethis_setup()
+knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
+```
+
+
+```{r stormtrooper, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%", fig.cap="Ilustración por Emilio Morones."}
+knitr::include_graphics("images/wrangle.png")
+```
+
+## Introducción
+
+En esra sección aprenderás sobre la manipulación de datos, el arte de llevar los datos a R en una forma útil para la visualización y el modelado. La manipulación de datos es muy importante: sin ella, no puede trabajar con sus propios datos. Hay tres partes principales en la domación de los datos:
+
+Esta sección se procederá de la siguiente manera:
+
+  * En **Tibbles**, aprenderás sobre la variante del `dataframe` que usamos usualmente en Ciencia de Datos: el `tibble`. Aprenderás qué los hace diferentes de los `dataframe` normales y cómo puede construirlos "a mano".
+
+  * En la **Importación**, aprenderás cómo obtener sus datos del disco y en R. Nos enfocaremos en formatos rectangulares de texto sin formato, pero le daremos sugerencias sobre paquetes que ayudan con otros tipos de datos.
+
+  * En **Tidy**, aprenderás sobre datos ordenados, una forma coherente de almacenar sus datos que facilita la transformación, la visualización y el modelado. Aprenderá los principios subyacentes y cómo ordenar los datos.
+
+  * La **Domación de datos** también abarca la transformación de datos, sobre la que ya haz aprendido un poco. Ahora nos centraremos en nuevas habilidades para tres tipos específicos de datos que encontrarás con frecuencia en la práctica:
+
+  * Los **Datos relacionales** le brindarán herramientas para trabajar con múltiples conjuntos de datos interrelacionados.
+
+  * Los **Strings** introducirán expresiones regulares, una poderosa herramienta para manipular cadenas.
+
+  * Los **Factores** son cómo R almacena datos categóricos. Se utilizan cuando una variable tiene un conjunto fijo de valores posibles o cuando desea utilizar un orden no alfabético de una cadena.
+  
+  * Los **Dates & Times ** le proporcionarán las herramientas clave para trabajar con fechas y horas.
+  
+## Tibbles
+
+### Introducción
+
+Los **Tibbles** son dataframes, pero modifican algunos comportamientos antiguos para hacer la vida un poco más fácil. R es un lenguaje antiguo, y algunas cosas que eran útiles hace 10 o 20 años ahora se interponen en el camino. Es difícil cambiar la base R sin romper el código existente, por lo que la mayor parte de la innovación se produce en paquetes.
+
+Aquí describiremos el paquete `tibble`, que proporciona dataframe obstinados que facilitan un poco el trabajo en tidyverse. En la mayoría de los lugares, usarémos el término `tibble` y `dataframe` indistintamente; cuando se quiera llamar la atención sobre el dataframe integrado de R, se denominarán `data.frames`.
+
+
+### Requisitos previos
+
+En esta sección exploraremos el paquete tibble, parte del núcleo tidyverse.
+
+```{r set-up, echo=TRUE}
+library(tidyverse)
+# O bien 
+library(tibble)
+```
+
+### Creando tibbles
+
+Casi todas las funciones que utilizarán con el `tidyverse` producen `tibbles`, ya que los tibbles son una de las características unificadoras del tidyverse. La mayoría de los otros paquetes de R usan dataframes regulares, por lo que es posible que desee convertir un dataframe en un tibble. Puedes hacer eso con `as_tibble()`:
+
+```{r tibble_1, echo=TRUE}
+as_tibble(iris)
+```
+
+Puede crear un nuevo tibble a partir de vectores individuales con `tibble()`, `tibble()` reciclará automáticamente las entradas de longitud 1 y le permitirá hacer referencia a las variables que acaba de crear, como se muestra a continuación.
+
+```{r tibble_2, echo=TRUE}
+tibble(
+  x = 1:5, 
+  y = 1, 
+  z = x ^ 2 + y
+)
+```
+
+Si ya está familiarizado con `data.frame()`, tenga en cuenta que `tibble()` hace mucho menos: nunca cambia el tipo de las entradas (por ejemplo, ¡nunca convierte cadenas en factores!), nunca cambia los nombres de las variables, y nunca crea nombres de filas.
+
+Es posible que un tibble tenga nombres de columna que no sean nombres de variable R válidos, también conocidos como nombres no sintácticos. Por ejemplo, es posible que no comiencen con una letra o que contengan caracteres inusuales como un espacio. Para hacer referencia a estas variables, debe rodearlas con comillas invertidas ( ` ):
+
+```{r tibble_3, echo=TRUE}
+tb <- tibble(
+  `:)` = "smile", 
+  ` ` = "space",
+  `2000` = "number"
+)
+tb
+```
+
+También necesitará las comillas inversas cuando trabaje con estas variables en otros paquetes, como `ggplot2`, `dplyr` y `tidyr`.
+
+Otra forma de crear un tibble es con `tribble()`, abreviatura de **tibble transpuesto**, `tribble()` está personalizado para la entrada de datos en el código: los encabezados de las columnas se definen mediante fórmulas (es decir, comienzan con ~) y las entradas están separadas por comas. Esto hace posible disponer pequeñas cantidades de datos de forma fácil de leer.
+
+```{r tibble_4, echo=TRUE}
+tribble(
+  ~x, ~y, ~z,
+  #--|--|----
+  "a", 2, 3.6,
+  "b", 1, 8.5
+)
+```
+
+A menudo se agrega un comentario (la línea que comienza con `#`), para dejar muy claro dónde está el encabezado.
+
+### Tibbles frente a data.frame
+
+Hay dos diferencias principales en el uso de un tibble frente a un marco de datos clásico: impresión y subconjuntos.
+
+**Impresión**: 
+
+  * `tibbles` tiene un método de impresión refinado que muestra solo las primeras 10 filas y todas las columnas que caben en la pantalla. Esto hace que sea mucho más fácil trabajar con datos grandes. Además de su nombre, cada columna informa su tipo, una buena característica tomada de `str()`:
+  
+```{r tibble_5, echo=TRUE}
+tibble(
+  a = lubridate::now() + runif(1e3) * 86400,
+  b = lubridate::today() + runif(1e3) * 30,
+  c = 1:1e3,
+  d = runif(1e3),
+  e = sample(letters, 1e3, replace = TRUE)
+)
+```
+
+  * Tibbles está diseñado para que no abrume accidentalmente su consola cuando imprime grandes `dataframe`. Pero a veces necesita más salida que la pantalla predeterminada. Hay algunas opciones que pueden ayudar.
+
+  * Primero, puede imprimir explícitamente con `print()` el `dataframe` y controlar el número de filas `(n)` y el ancho de la pantalla, `width = Inf` mostrará todas las columnas:
+
+```{r tibble_6, echo=TRUE}
+nycflights13::flights %>% 
+  print(n = 10, width = Inf)
+```
+
+También puede controlar el comportamiento de impresión predeterminado configurando opciones:
+
+  * `opcions(tibble.print_max = n, tibble.print_min = m)`: si hay más de `n` filas, imprima solo `m` filas. Utilice opciones `options(tibble.print_min = Inf)` para mostrar siempre todas las filas.
+
+  * Utilice las `opcions(tibble.width = Inf)` para imprimir siempre todas las columnas, independientemente del ancho de la pantalla.
+
+  * Puede ver una lista completa de opciones consultando la ayuda del paquete con `package?tibble`.
+
+  * Una última opción es utilizar el visor de datos integrado de RStudio para obtener una vista desplazable del conjunto de datos completo. Esto también suele ser útil al final de una larga cadena de manipulaciones.
+  
+```{r tibble_7, echo=TRUE}
+  nycflights13::flights %>% 
+  View()
+```
+
+**Sub**:
+
+  * Hasta ahora, todas las herramientas que ha aprendido han funcionado con marcos de datos completos. Si desea extraer una sola variable, necesita algunas herramientas nuevas, `$` y `[[`. `[[` puede extraer por nombre o cargo; `$` solo extrae por nombre pero es un poco menos tipeado.
+  
+```{r tibble_8, echo=TRUE}
+df <- tibble(
+  x = runif(5),
+  y = rnorm(5)
+)
+
+# Extract by name
+df$x
+
+df[["x"]]
+
+df[[1]]
+```
+
+  * Para usarlos en un **pipe**, deberá usar el marcador de posición especial ` . `:
+  
+```{r tibble_9, echo=TRUE}
+df %>% .$x
+
+df %>% .[["x"]]
+```
+
+  * En comparación con un `data.frame`, los `tibbles` son más estrictos: nunca hacen coincidencias parciales y generarán una advertencia si la columna a la que está intentando acceder no existe.
+  
+
+### Interactuar con código antiguo
+
+Algunas funciones antiguas no funcionan con tibbles. Si encuentra una de estas funciones, use `as.data.frame()` para convertir un tibble en un `data.frame`:
+
+```{r tibble_10, echo=TRUE}
+class(as.data.frame(tb))
+```
+
+  La razón principal por la que algunas funciones antiguas no funcionan con tibble es la función [. No usamos [mucho en este libro porque `dplyr::filter()` y `dplyr::select(`) le permiten resolver los mismos problemas con un código más claro (pero aprenderá un poco sobre esto en subconjuntos de vectores). Con los dataframes base R, `[` a veces devuelve un dataframe y, a veces, devuelve un vector. Con tibbles, `[` siempre devuelve otro tibble.
+
+
+### Ejercicios
+
+1 - ¿Cómo se puede saber si un objeto es un tibble? (Sugerencia: intente imprimir mtcars, que es un dataframe normal).
+
+```{r ejercicio1, exercise=TRUE}
+is_tibble(___)
+class(___)
+```
+<div id="ejercicio1-hint">
+**Hint:** Utilice la base de datos. 
+</div>
+
+```{r ejercicio1-solution}
+is_tibble(mtcars)
+class(mtcars)
+```
+
+```{r ejercicio1-check}
+grade_this_code()
+```
+
+
+2 - Compara y contraste las siguientes operaciones en un `data.frame` y un tibble equivalente. 
+
+```{r ex_2, echo=TRUE}
+df <- data.frame(abc = 1, xyz = "a")
+df$x
+df[, "xyz"]
+df[, c("abc", "xyz")]
+```
+
+```{r quiz1, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Que es diferente? ¿Por qué los comportamientos predeterminados del marco de datos pueden causarle frustración?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+3 - Si tiene el nombre de una variable almacenada en un objeto, p. Ej. `var <- "mpg"`
+
+```{r quiz2, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Cómo se puede extraer la variable de referencia de un tibble?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+4 - Practica referirse a nombres no sintácticos en el siguiente marco de datos mediante:
+```{r ejer-4, echo=TRUE}
+annoying <- tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+)
+```
+
+4-1 - Extrayendo la variable llamada `1`
+```{r ejercicio41, exercise=TRUE}
+annoying[[___]]
+# o bien
+annoying$___
+```
+
+<div id="ejercicio41-hint">
+**Hint:** Coloca el nombre de la variable. 
+</div>
+
+```{r ejercicio41-solution}
+annoying[["1"]]
+# o bien
+annoying$`1`
+```
+
+```{r ejercicio41-check}
+grade_this_code()
+```
+  
+4-2 - Trazar una gráfica de dispersión de `1` vs `2`.
+```{r ejercicio42, exercise=TRUE}
+ggplot(annoying, aes(x = ___, y = __)) +
+  geom_point()
+```
+
+<div id="ejercicio42-hint">
+**Hint:** Coloca las variables en el parámetro `aes`.
+</div>
+
+```{r ejercicio42-solution}
+ggplot(annoying, aes(x = `1`, y = `2`)) +
+  geom_point()
+```
+
+```{r ejercicio42-check}
+grade_this_code()
+```
+ 
+4-3 - Crear una nueva columna llamada `3` que es `2` dividido por `1`.
+```{r ejercicio43, exercise=TRUE}
+mutate(annoying, `3` = ___ / ___)
+```
+
+<div id="ejercicio43-hint">
+**Hint:** Coloca las variables en el parámetro de `mutate`.
+</div>
+
+```{r ejercicio43-solution}
+mutate(annoying, `3` = `2` / `1`)
+```
+
+```{r ejercicio43-check}
+grade_this_code()
+```
+  
+4-4 - Cambiar el nombre de las columnas a `one` y `two`.
+```{r ejercicio44, exercise=TRUE}
+rename(annoying, one = ___, two = ___)
+```
+
+<div id="ejercicio44-hint">
+**Hint:** Coloca las variables en el parámetro de `rename`.
+</div>
+
+```{r ejercicio44-solution}
+rename(annoying, one = `1`, two = `2`)
+```
+
+```{r ejercicio44-check}
+grade_this_code()
+```
+
+5 - ¿Qué hace `tibble::enframe()`? 
+```{r ejercicio5, exercise=TRUE}
+enframe(c(a = 1, b = 2, c = 3))
+```
+
+```{r quiz3, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Cuándo puedes usarlo?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+
+## Importación
+
+Trabajar con datos proporcionados por paquetes R es una excelente manera de aprender las herramientas de la ciencia de datos, pero en algún momento querrá dejar de aprender y comenzar a trabajar con sus propios datos. En este capítulo, aprenderá a leer archivos rectangulares de texto sin formato en R. Aquí, solo arañaremos la superficie de la importación de datos, pero muchos de los principios se traducirán a otras formas de datos. Terminaremos con algunas sugerencias sobre paquetes que son útiles para otros tipos de datos.
+
+### Requisitos previos
+En este capítulo, aprenderá a cargar archivos planos en R con el paquete **readr**, que es parte del núcleo tidyverse.
+
+```{r set-up_2, echo=TRUE}
+library(tidyverse) 
+# O bien 
+library(readr) 
+```
+
+### Primeros pasos 
+
+La mayoría de las funciones de readr están relacionadas con convertir archivos planos en dataframes:
+
+  * `read_csv()` lee archivos delimitados por comas, `read_csv2()` lee archivos separados por punto y coma (común en países donde, se usa como el lugar decimal), `read_tsv()` lee archivos delimitados por tabulaciones y `read_delim()` lee archivos con cualquier delimitador.
+
+  * `read_fwf()` lee archivos de ancho fijo. Puede especificar campos por sus anchos con `fwf_widths()` o su posición con `fwf_positions()`, `read_table()` lee una variación común de archivos de ancho fijo donde las columnas están separadas por espacios en blanco.
+
+  * `read_log()` lee archivos de registro de estilo Apache. (Pero también echa un vistazo a `webreadr`, que está construido sobre `read_log()` y proporciona muchas más herramientas útiles).
+
+Todas estas funciones tienen una sintaxis similar: una vez que domina una, puede utilizar las demás con facilidad. Durante el resto de este capítulo, nos centraremos en `read_csv()`. Los archivos csv no solo son una de las formas más comunes de almacenamiento de datos, sino que una vez que comprenda `read_csv()`, puede aplicar fácilmente sus conocimientos a todas las demás funciones de readr.
+
+El primer argumento de `read_csv()` es el más importante: es la ruta al archivo a leer.
+
+```{r read_1, echo=TRUE}
+heights <- read_csv("data/heights.csv")
+```
+
+Cuando ejecutas `read_csv()` imprime una especificación de columna que da el nombre y tipo de cada columna. Esa es una parte importante de readr, a la que volveremos al analizar un archivo.
+
+También puede proporcionar un archivo csv en línea. Esto es útil para experimentar con `readr` y para crear ejemplos reproducibles para compartir con otros:
+
+```{r  read_2, echo=TRUE}
+read_csv("a,b,c
+1,2,3
+4,5,6")
+```
+
+En ambos casos, `read_csv()` usa la primera línea de los datos para los nombres de las columnas, lo cual es una convención muy común. Hay dos casos en los que es posible que desee modificar este comportamiento:
+
+  1 - A veces, hay algunas líneas de metadatos en la parte superior del archivo. Puede usar `skip = n` para omitir las primeras n líneas; o use `comment = "#"` para eliminar todas las líneas que comienzan con (p. ej.) `#`.
+  
+```{r  read_3, echo=TRUE}
+  read_csv("The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3", skip = 2)
+
+  read_csv("# A comment I want to skip
+  x,y,z
+  1,2,3", comment = "#")
+```
+
+  2 - Es posible que los datos no tengan nombres de columna. Puedes usar `col_names = FALSE` para decirle a `read_csv()` que no trate la primera fila como encabezados y, en su lugar, los etiquete secuencialmente de `X1` a `Xn`:
+  
+```{r read_4, echo=TRUE}
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+```
+
+(`\n` es un atajo conveniente para agregar una nueva línea. Aprenderás más sobre él y otros tipos de escape de string en conceptos básicos de cadenas).
+
+Alternativamente, puede pasar `col_names` un vector de caracteres que se utilizará como nombres de columna:
+
+```{r read_5, echo=TRUE}
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+```
+
+Otra opción que comúnmente necesita ajustes es `na`: esto especifica el valor (o valores) que se utilizan para representar los valores faltantes en su archivo:
+
+```{r read_6, echo=TRUE}
+read_csv("a,b,c\n1,2,.", na = ".")
+```
+
+Esto es todo lo que necesita saber para leer aproximadamente el 75% de los archivos CSV que encontrará en la práctica. También puede adaptar fácilmente lo que ha aprendido para leer archivos separados por tabulaciones con `read_tsv()` y archivos de ancho fijo con `read_fwf()`. Para leer en archivos más desafiantes, necesitarás aprender más sobre cómo `readr` analiza cada columna, convirtiéndolas en vectores R.
+
+### Comparado con R base
+
+Si haz utilizado R antes, es posible que se pregunte por qué no usamos `read.csv()`. Hay algunas buenas razones para favorecer las funciones de lectura sobre los equivalentes básicos:
+
+Por lo general, son mucho más rápidos (~ 10x) que sus equivalentes básicos. Los trabajos de ejecución prolongada tienen una barra de progreso para que pueda ver lo que está sucediendo. Si está buscando velocidad bruta, pruebe con `data.table::fread()`. No encaja tan bien en el **tidyverse**, pero puede ser bastante más rápido.
+
+Producen tibbles, no convierten vectores de caracteres en factores, no usan nombres de filas ni modifican los nombres de columnas. Estas son fuentes comunes de frustración con las funciones base R.
+
+Son más reproducibles. Las funciones de **R Base** heredan algún comportamiento de su sistema operativo y de las variables de entorno, por lo que el código de importación que funciona en su computadora podría no funcionar en el de otra persona.
+
+### Ejercicios
+
+1 - ¿Qué función usarías para leer un archivo donde los campos estuvieran separados con "|"?
+```{r ejercicio7, exercise=TRUE}
+funcion(file, ____)
+```
+<div id="ejercicio7-hint">
+**Hint:** Utilice la función `read_delim()` con el argumento delim = "|". 
+</div>
+
+```{r ejercicio7-solution}
+read_delim(file, delim = "|")
+```
+
+```{r ejercicio7-check}
+grade_this_code()
+```
+
+2 - Aparte de `file`, `skip` y `comment`, ¿Qué otros argumentos tienen en común `read_csv()` y `read_tsv()`? 
+Tienen los siguientes argumentos en común:
+```{r ejercicio8, echo=TRUE}
+#intersect(names(formals(___ )), names(formals( ___)))
+```
+
+<div id="ejercicio8-hint">
+**Hint:**  Inserta las funciones `read_csv` y `read_tsv`.
+</div>
+
+```{r ejercicio8-solution}
+intersect(names(formals(read_csv)), names(formals(read_tsv)))
+```
+
+```{r ejercicio8-check}
+grade_this_code()
+```
+
+3 - 
+
+```{r quiz4, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Cuáles son los argumentos más importantes para read_fwf()?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+4 - A veces, las cadenas de un archivo CSV contienen comas. Para evitar que causen problemas, deben estar rodeados por un carácter entre comillas, como "o '. Por defecto, read_csv () asume que el carácter entre comillas será". 
+
+```{r read_7, echo=TRUE}
+x <- "x,y\n1,'a,b'"
+read_delim(x, ",", quote = "'")
+```
+
+```{r quiz5, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Qué argumento para read_csv() necesita especificar para leer el siguiente texto en un dataframe?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+5 - Identifica lo que está mal con cada uno de los siguientes archivos CSV en línea. 
+
+```{r ejercicio9, exercise=TRUE}
+read_csv("a,b\n1,2,3\n4,5,6")
+read_csv("a,b,c\n1,2\n1,2,3,4")
+read_csv("a,b\n\"1")
+read_csv("a,b\n1,2\na,b")
+read_csv("a;b\n1;3")
+```
+
+```{r quiz6, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Qué sucede cuando ejecuta el código?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+### Analizando un vector
+
+Antes de entrar en los detalles de cómo `readr` lee los archivos del disco, debemos desviarnos un poco para hablar sobre las funciones `parse_*()`. Estas funciones toman un vector de caracteres y devuelven un vector más especializado como lógico, entero o fecha:
+
+```{r analizevect-1, echo=TRUE}
+str(parse_logical(c("TRUE", "FALSE", "NA")))
+
+str(parse_integer(c("1", "2", "3")))
+
+str(parse_date(c("2010-01-01", "1979-10-14")))
+```
+
+Estas funciones son útiles en sí mismas, pero también son un componente importante para `readr`. Una vez que hayas aprendido cómo funcionan los analizadores individuales en esta sección, volveremos y veremos cómo encajan para analizar un archivo completo en la siguiente sección.
+
+Como todas las funciones en tidyverse, las funciones `parse_*()` son uniformes: el primer argumento es un vector de caracteres para analizar, y el argumento `NA` especifica qué cadenas deben tratarse como faltantes:
+
+```{r analizevect-2, echo=TRUE}
+parse_integer(c("1", "231", ".", "456"), na = ".")
+```
+
+Si el análisis falla, recibirá una advertencia:
+
+```{r analizevect-3, echo=TRUE}
+x <- parse_integer(c("123", "345", "abc", "123.45"))
+```
+
+Y faltarán las fallas en la salida:
+
+```{r analizevect-4, echo=TRUE}
+x
+```
+
+Si hay muchas fallas de análisis, necesitará usar `problem()` para obtener el conjunto completo. Esto devuelve un tibble, que luego puede manipular con `dplyr`.
+
+```{r analizevect-5, echo=TRUE}
+problems(x)
+```
+
+El uso de parsers (o analizadores) es principalmente una cuestión de comprender qué está disponible y cómo manejan los diferentes tipos de entrada. Hay ocho analizadores particularmente importantes:
+
+  * `parse_logical()` y `parse_integer()` analizan lógicos y enteros respectivamente. Básicamente, no hay nada que pueda salir mal con estos analizadores, por lo que no los describiré aquí con más detalle.
+
+  * `parse_double()` es un analizador numérico estricto y `parse_number()` es un analizador numérico flexible. Estos son más complicados de lo que cabría esperar porque diferentes partes del mundo escriben números de diferentes maneras.
+
+  * `parse_character()` parece tan simple que no debería ser necesario. Pero una complicación lo hace bastante importante: las codificaciones de caracteres.
+
+  * `parse_factor()` crea factores, la estructura de datos que R usa para representar variables categóricas con valores fijos y conocidos.
+
+  * `parse_datetime()`, `parse_date()` y `parse_time()` le permiten analizar varias especificaciones de fecha y hora. Estos son los más complicados porque hay muchas formas diferentes de escribir fechas.
+

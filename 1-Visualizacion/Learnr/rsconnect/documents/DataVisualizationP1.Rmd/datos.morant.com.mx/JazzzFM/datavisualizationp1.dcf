@@ -1,0 +1,14 @@
+name: datavisualizationp1
+title: DataVisualizationP1
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 136
+bundleId: 24340
+url: https://datos.morant.com.mx:443/visualizacion_1/
+when: 1622151991.74645
+lastSyncTime: 1622151991.74649
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: DataVisualization_Completo.Rmd
