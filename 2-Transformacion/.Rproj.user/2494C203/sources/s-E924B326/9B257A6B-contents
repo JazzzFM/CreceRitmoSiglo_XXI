@@ -1,0 +1,23 @@
+library(tidyverse)
+
+data <- tibble(
+  name= c("Único", "Masificado", "Repartido"),
+  value =  c(7, 12, 7.5),
+  sd=c(1,1,0.5)
+) 
+
+
+ggplot(data) +
+  geom_col( aes(x=name, y=value, fill = name), fill="skyblue", alpha= 0.7) +
+  geom_errorbar( aes(x=name, ymin=value-sd, ymax=value+sd), width=0.4, colour="gray", alpha=0.9, size=1.3) +
+  theme_classic() +
+  labs(title = "", caption = "", x = "Prueba inmediata", y = "Cantidad de unidades de idea retiradas") +
+  theme(
+    text = element_text(family = "Avenir Next", size = 13),
+    plot.title = element_text(size = 15,
+                              colour =  "#13384D",
+                              hjust = 0),
+    panel.grid.major.y = element_blank(),
+    legend.title = element_blank(),
+    panel.grid = element_blank()
+  )

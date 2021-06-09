@@ -1,0 +1,15 @@
+name: transformationparte
+title: TransformationParte
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 150
+bundleId: 24414
+url: https://datos.morant.com.mx:443/content/150/
+when: 1623050369.16724
+lastSyncTime: 1623050369.16726
+asMultiple: FALSE
+asStatic: FALSE
+additionalFiles: renv.lock
+ignoredFiles: Transformation.Rmd

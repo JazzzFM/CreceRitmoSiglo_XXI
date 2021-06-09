@@ -1,0 +1,7 @@
+"0","tidy4a <- table4a %>% "
+"0","  pivot_longer(c(`1999`, `2000`), names_to = ""year"", values_to = ""cases"")"
+"0","tidy4b <- table4b %>% "
+"0","  pivot_longer(c(`1999`, `2000`), names_to = ""year"", values_to = ""population"")"
+"0","left_join(tidy4a, tidy4b)"
+"2","Joining, by = c(""country"", ""year"")
+"

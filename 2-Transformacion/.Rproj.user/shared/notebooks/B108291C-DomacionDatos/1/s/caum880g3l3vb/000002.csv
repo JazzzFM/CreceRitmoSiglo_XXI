@@ -1,0 +1,19 @@
+"0","challenge <- read_csv(readr_example(""challenge.csv""))"
+"2","
+[36m──[39m [1m[1mColumn specification[1m[22m [36m───────────────────────────────────────────────────────────────────────────────[39m
+cols(
+  x = [32mcol_double()[39m,
+  y = [33mcol_logical()[39m
+)
+
+"
+"2","1000 parsing failures.
+ row col           expected     actual                                                                                                                                        file
+1001   y 1/0/T/F/TRUE/FALSE 2015-01-16 '/home/devel/.local/share/renv/cache/v5/R-4.0/x86_64-pc-linux-gnu/readr/1.4.0/2639976851f71f330264a9c9c3d43a61/readr/extdata/challenge.csv'
+1002   y 1/0/T/F/TRUE/FALSE 2018-05-18 '/home/devel/.local/share/renv/cache/v5/R-4.0/x86_64-pc-linux-gnu/readr/1.4.0/2639976851f71f330264a9c9c3d43a61/readr/extdata/challenge.csv'
+1003   y 1/0/T/F/TRUE/FALSE 2015-09-05 '/home/devel/.local/share/renv/cache/v5/R-4.0/x86_64-pc-linux-gnu/readr/1.4.0/2639976851f71f330264a9c9c3d43a61/readr/extdata/challenge.csv'
+1004   y 1/0/T/F/TRUE/FALSE 2012-11-28 '/home/devel/.local/share/renv/cache/v5/R-4.0/x86_64-pc-linux-gnu/readr/1.4.0/2639976851f71f330264a9c9c3d43a61/readr/extdata/challenge.csv'
+1005   y 1/0/T/F/TRUE/FALSE 2020-01-13 '/home/devel/.local/share/renv/cache/v5/R-4.0/x86_64-pc-linux-gnu/readr/1.4.0/2639976851f71f330264a9c9c3d43a61/readr/extdata/challenge.csv'
+.... ... .................. .......... ...........................................................................................................................................
+See problems(...) for more details.
+"

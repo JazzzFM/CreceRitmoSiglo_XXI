@@ -1,0 +1,4 @@
+"0",""
+"0","# Número de casos de cómputo por año"
+"0","table1 %>% "
+"0","  count(year, wt = cases)"

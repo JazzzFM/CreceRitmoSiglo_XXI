@@ -1,0 +1,6 @@
+"0","  "
+"0","# Visualiza los cambios a lo largo del tiempo"
+"0","library(ggplot2)"
+"0","ggplot(table1, aes(year, cases)) + "
+"0","  geom_line(aes(group = country), colour = ""grey50"") + "
+"0","  geom_point(aes(colour = country))"
