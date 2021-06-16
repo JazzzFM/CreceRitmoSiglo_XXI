@@ -1,0 +1,14 @@
+name: modelacion
+title: Modelacion
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 151
+bundleId: 24426
+url: https://datos.morant.com.mx:443/content/151/
+when: 1623874389.26036
+lastSyncTime: 1623874389.26039
+asMultiple: FALSE
+asStatic: FALSE
+additionalFiles: renv.lock

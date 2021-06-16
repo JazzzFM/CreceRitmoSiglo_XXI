@@ -1154,7 +1154,7 @@ library(tidyr)
 
 Puede representar los mismos datos subyacentes de varias formas. El siguiente ejemplo muestra los mismos datos organizados de cuatro formas diferentes. Cada conjunto de datos muestra los mismos valores de cuatro variables país, año, población y casos, pero cada conjunto de datos organiza los valores de una manera diferente.
 
-```{r tidy-2, echo=TRUE}
+```{r tidy-21, echo=TRUE}
 table1
 
 table2
@@ -1210,7 +1210,7 @@ ggplot(table1, aes(year, cases)) +
   geom_point(aes(colour = country))
 ```
 
-### Ejercicios
+### Ejercicios 1
 
 1 - Describa cómo se organizan las variables y observaciones en cada una de las tablas de muestra.
 
@@ -1298,4 +1298,144 @@ left_join(tidy4a, tidy4b)
 ### Ampliar (Wider)
 
 `pivot_wider()` es lo opuesto a `pivot_longer()`. Se usa cuando una observación está dispersa en varias filas. Por ejemplo, tome la `tabla2`: una observación es un país en un año, pero cada observación se distribuye en dos filas.
+
+```{r tidy-7, echo=TRUE}
+table2
+```
+
+Para arreglar esto, primero analizamos la representación de manera similar a `pivot_longer()`. Esta vez, sin embargo, solo necesitamos dos parámetros:
+
+  * La columna de la que se tomarán los nombres de las variables. Aquí, es `type`.
+  * La columna de la que se tomarán los valores. Aquí es `count`.
+
+Una vez que lo hayamos descubierto, podemos usar `pivot_wider()`, como se muestra programáticamente a continuación, y visualmente se ilustra como:
+
+```{r stormtrooper-5, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%"}
+knitr::include_graphics("images/tidy-8.png")
+```
+
+```{r tidy-8, echo=TRUE}
+table2 %>%
+    pivot_wider(names_from = type, values_from = count)
+```
+
+Como habrás adivinado por sus nombres, `pivot_wider()` y `pivot_longer()` son complementos, `pivot_longer()` hace que las tablas anchas sean más estrechas y largas; `pivot_wider()` hace que las tablas largas sean más cortas y más anchas.
+
+### Ejercicios 2
+
+1 - ¿Por qué `pivot_longer()` y `pivot_wider()` no son perfectamente simétricos?
+Considere detenidamente el siguiente ejemplo:
+
+```{r tidy-9, echo=TRUE}
+stocks <- tibble(
+  year   = c(2015, 2015, 2016, 2016),
+  half  = c(   1,    2,     1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
+stocks %>% 
+  pivot_wider(names_from = year, values_from = return) %>% 
+  pivot_longer(`2015`:`2016`, names_to = "year", values_to = "return")
+```
+
+(Sugerencia: observe los tipos de variables y piense en los nombres de las columnas).
+`pivot_longer()` tiene un argumento `names_ptypes`, p. ej. `names_ptypes = list(year = double())`. ¿Qué hace?
+
+2 - ¿Por qué falla este código?
+
+```{r tidy-10, echo=TRUE}
+table4a %>% 
+  pivot_longer(c("1999", "2000"), names_to = "year", values_to = "cases")
+```
+
+3 - ¿Qué pasaría si amplías esta tabla? ¿Por qué? ¿Cómo podría agregar una nueva columna para identificar de manera única cada valor?
+
+```{r tidy-11, echo=TRUE}
+people <- tribble(
+  ~name,             ~names,  ~values,
+  #-----------------|--------|------
+  "Phillip Woods",   "age",       45,
+  "Phillip Woods",   "height",   186,
+  "Phillip Woods",   "age",       50,
+  "Jessica Cordero", "age",       37,
+  "Jessica Cordero", "height",   156
+)
+```
+
+4 - Ordena el tibble simple de abajo. ¿Necesitas ensancharlo o alargarlo? ¿Cuáles son las variables?
+
+```{r tidy-12, echo=TRUE}
+preg <- tribble(
+  ~pregnant, ~male, ~female,
+  "yes",     NA,    10,
+  "no",      20,    12
+)
+```
+
+### Separar y unir
+
+Hasta ahora, haz aprendido a ordenar `table2` y `table4`, pero no `table3`, `table3` tiene un problema diferente: tenemos una columna (`rate`) que contiene dos variables (`cases` y `population`). Para solucionar este problema, necesitaremos la función `separate()`. También aprenderá sobre el complemento de `separate()`: `unite()`, que usa si una sola variable se distribuye en varias columnas.
+
+### Separar
+
+`separete()` separa una columna en varias columnas, dividiendo donde aparece un carácter separador. Tome `table3`:
+
+```{r tidy-13, echo=TRUE}
+table3
+```
+
+La columna `rate` contiene tanto `cases` como variables de `population`, y debemos dividirla en dos variables, `separate()` toma el nombre de la columna para separar y los nombres de las columnas para separar, como se muestra en la figura y el código a continuación.
+
+```{r tidy-14, echo=TRUE}
+table3 %>% 
+  separate(rate, into = c("cases", "population"))
+```
+
+```{r stormtrooper-6, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%"}
+knitr::include_graphics("images/tidy-17.png")
+```
+
+De forma predeterminada, `separate()` dividirá los valores siempre que vea un carácter no alfanumérico (es decir, un carácter que no sea un número o una letra). Por ejemplo, en el código anterior, `separate()` divide los valores de `rate` en los caracteres de barra diagonal. Si desea utilizar un carácter específico para separar una columna, puede pasar el carácter al argumento sep de `separate()`. Por ejemplo, podríamos reescribir el código anterior como:
+
+```{r tidy-15, echo=TRUE}
+table3 %>% 
+  separate(rate, into = c("cases", "population"), sep = "/")
+```
+
+(Formalmente, `sep` es una expresión regular, sobre la que aprenderá más en **strings**).
+
+Mire detenidamente los tipos de columnas: notará que los casos y la población son columnas de caracteres. Este es el comportamiento predeterminado en `separate()`: deja el tipo de columna como está. Aquí, sin embargo, no es muy útil ya que en realidad son números. Podemos pedir a `separate()` que intente convertir a mejores tipos usando `convert = TRUE`.
+
+```{r tidy-16, echo=TRUE}
+table3 %>% 
+  separate(rate, into = c("cases", "population"), convert = TRUE)
+```
+
+También puede pasar un vector de enteros a `sep`. `separete()` interpretará los números enteros como posiciones para dividir. Los valores positivos comienzan en 1 en el extremo izquierdo de las cadenas; el valor negativo comienza en -1 en el extremo derecho de las cadenas. Cuando se usan números enteros para separar cadenas, la longitud de sep debe ser uno menos que el número de nombres.
+
+Puedes utilizar 
+este arreglo para separar los dos últimos dígitos de cada año. Esto hace que estos datos estén menos ordenados, pero es útil en otros casos, como verá más adelante.
+
+```{r tidy-17, echo=TRUE}
+table3 %>% 
+  separate(year, into = c("century", "year"), sep = 2)
+```
+
+### Unite
+
+`unite()` es el inverso de `separate()`: combina varias columnas en una sola columna. Lo necesitará con mucha menos frecuencia que por `separate()`, pero sigue siendo una herramienta útil para tener en su bolsillo trasero.
+
+```{r stormtrooper-7, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%"}
+knitr::include_graphics("images/tidy-18.png")
+```
+
+Podemos usar `unite()` para volver a unir las columnas de siglo y año que creamos en el último ejemplo.
+
+Esos datos se guardan como `tidyr::table5`, `unite()` toma un dataframe, el nombre de la nueva variable para crear y un conjunto de columnas para combinar, nuevamente especificado en el estilo `dplyr::select()`:
+
+```{r tidy-18, echo=TRUE}
+table5 %>% 
+  unite(new, century, year)
+```
+
+
 
