@@ -1,0 +1,535 @@
+---
+title: "Ejercicios de Análisis Exploratorio"
+author: "Emilio Morones"
+output: html_document
+---
+
+```{r set-up, echo = FALSE}
+library("tidyverse")
+library("hexbin")
+library("nycflights13")
+library("ggbeeswarm")
+library("lvplot")
+library("ggstance")
+```
+# Sección: Preguntas.
+
+1 -¿Qué sucede con los valores perdidos en un histograma? ¿Qué sucede con los valores perdidos en un gráfico de barras? ¿Por qué hay una diferencia?
+
+  * Primero, calcula las estadísticas de resumen para estas variables y trazar sus distribuciones.
+
+```{r ex_1, echo=TRUE}
+summary(select(diamonds, ___, ___, ___))
+```
+
+```{r ex_2, echo=TRUE}
+ggplot(diamonds) +
+  geom_histogram(mapping = aes(x = ___), binwidth = 0.01)
+```
+
+```{r ex_3, echo=TRUE}
+ggplot(diamonds) +
+  geom_histogram(mapping = aes(x = ___), binwidth = 0.01)
+```
+
+```{r ex_4, echo=TRUE}
+ggplot(diamonds) +
+  geom_histogram(mapping = aes(x = ___), binwidth = 0.01)
+```
+
+  * Hay varias características notables de las distribuciones:
+  * x e y son más grandes que z.
+  * Hay valores atípicos, todos están a la derecha sesgados.
+  * Son multimodal o "puntiagudo".
+  
+  * Los valores típicos de `x` e `y` son más grandes que `z`, con `x` e `y` que tienen rangos inter-cuartil de 4.7-6,5, mientras que `z` tiene un rango inter-cuartil de 2.9-4.0.
+
+  * Hay dos tipos de valores atípicos en estos datos. Algunos diamantes tienen valores de cero y algunos tienen valores anormalmente grandes de `x`, `y`, o `z`.
+  
+```{r ex_5, echo=TRUE}
+summary(select(diamonds, ___, ___, ___))
+```
+
+  * Estos parecen ser errores de entrada de datos, o un convenio indocumentado en el conjunto de datos para indicar valores faltantes. Una hipótesis alternativa sería que los valores de cero son el resultado de valores de redondeo como 0.002 hacia abajo, pero como no hay diamantes con valores de 0.01, que no parece ser el caso.
+
+```{r ex_6, echo=TRUE}
+filter(diamonds, ___ == 0 | ___ == 0 | ___ == 0)
+```
+
+  * También hay algunos diamantes con valores de `y` y `z` que son anormalmente grandes. Hay diamantes con `y == 58.9` e `y == 31.8`, y uno con `z == 31.8`. Estos son probablemente errores de datos, ya que los valores no parecen en línea con los valores de las otras variables.
+
+```{r ex_7, echo=TRUE}
+diamonds %>%
+  arrange(desc(__)) %>%
+  head()
+```
+
+```{r ex_8, echo=TRUE}
+diamonds %>%
+  arrange(desc(___)) %>%
+  head()
+```
+
+  * Inicialmente, solo consideré los valores atípicos univariados. Sin embargo, para verificar la plausibilidad de los valores atípicos, consideraría informalmente cuán consistentes son sus valores con los valores de las otras variables. En este caso, dispersar las gráficas de cada combinación de `x`, `y`, y `z` muestran estos valores atípicos mucho más claramente.
+
+```{r ex_9, echo=TRUE}
+  ggplot(diamonds, aes(x = ___, y = ___)) +
+  geom_point()
+```
+
+```{r ex_10, echo=TRUE}
+ggplot(diamonds, aes(x = ___, y = ___)) +
+  geom_point()
+```
+
+```{r ex_11, echo=TRUE}
+ggplot(diamonds, aes(x = ___, y = ____)) +
+  geom_point()
+```
+
+2 - Explore la distribución de price ¿Descubres algo inusual o sorprendente? (Sugerencia: piense detenidamente en el `binwidth` y asegúrese de probar una amplia gama de valores).
+
+  * Los datos de precios tienen muchos picos, pero no puedo decir de qué corresponde cada espiga. 
+  * Las siguientes gráficas no muestran mucha diferencia en las distribuciones en los últimos dos dígitos.
+  * No hay diamantes con un precio de $ 1,500 (entre $ 1,455 y $ 1,545, incluyendo).
+  * Hay un bulto en la distribución alrededor de $ 750.
+
+```{r ex_12, echo=TRUE}
+ggplot(filter(____, price < ____), aes(x = ___)) +
+  geom_histogram(_____ = 10, center = 0)
+```
+
+```{r ex_13, echo=TRUE}
+ggplot(filter(____, ____), aes(x = ______)) +
+  geom_histogram(binwidth = 100, center = 0)
+```
+
+  * Los últimos dígitos de los precios a menudo no se distribuyen de manera uniforme. A menudo son redondos, terminan en 0 o 5 (por la mitad). Otro patrón común está terminado en 99, como en $ 1999. Si trazamos la distribución de los últimos y dos dígitos de los precios, ¿observamos los patrones como ese?
+  
+```{r ex_14, echo=TRUE}
+diamonds %>%
+  mutate(ending = ____ %% 10) %>%
+  ggplot(aes(x = ____)) +
+  geom_histogram(binwidth = 1, center = 0)
+```
+
+```{r ex_15, echo=TRUE}
+diamonds %>%
+  mutate(ending = ____ %% 100) %>%
+  ggplot(aes(x = ____)) +
+  geom_histogram(binwidth = 1)
+```
+
+```{r ex_16, echo=TRUE}
+diamonds %>%
+  mutate(ending = ____ %% 1000) %>%
+  filter(____ >= 500, ____ <= 800) %>%
+  ggplot(aes(x = ____)) +
+  geom_histogram(binwidth = 1)
+```
+
+3 - ¿Cuántos diamantes son 0,99 quilates? ¿Cuántos son 1 quilate? ¿Cuál crees que es la causa de la diferencia?
+
+  * Hay más de 70 veces más diamantes de 1 quilates como 0,99 quilates.
+
+```{r ex_17, echo=TRUE}
+diamonds %>%
+  filter(___ >= 0.99, ___ <= 1) %>%
+  count(____)
+```
+
+  * No sé exactamente el proceso detrás de cómo se miden `carat`, pero de alguna manera u otro valores de quilates de diamantes se están "redondeados", presumiblemente, existe una prima para un diamante de 1 quilates vs un diamante de 0.99 quilates más allá del aumento esperado en precio debido a un aumento de 0.01 quilates.
+
+  * Para verificar esta intuición, querríamos ver el número de diamantes en cada rango de quilates para ver si hay un número inusualmente bajo de 0,99 diamantes de quilates, y un número anormalmente grande de diamantes de 1 quilates.
+  
+```{r ex_18, echo=TRUE}
+diamonds %>%
+  filter(____ >= 0.9, ___ <= 1.1) %>%
+  count(___) %>%
+  print(n = Inf)
+```
+
+4 - Compara y contraste `coord_cartesian()` vs `xlim()` o `ylim()` al hacer zoom en un histograma. ¿Qué sucede si deja `binwidth` sin configurar? ¿Qué sucede si intentas hacer zoom para que solo se muestre la mitad de una barra?
+
+  * La función `coord_cartesian()` se acerca al área especificada por los límites, después de haber calculado y dibujado los `geoms`. Dado que los contenedores de histograma ya se han calculado, no se ve afectado.
+  
+```{r ex_19, echo=TRUE}
+ggplot(___) +
+  geom_histogram(mapping = aes(x = ___)) +
+  coord_cartesian(xlim = c(100, 5000), ylim = c(0, 3000))
+```
+
+  * Sin embargo, las funciones `xlim()` y `ylim()` influyen en las acciones antes del cálculo de las estadísticas relacionadas con el histograma. Por lo tanto, se eliminen cualquier valor fuera de los límites `x-` y `y-` antes de calcular los anchos de contenedor y los conteos. Esto puede influir en cómo se ve el histograma.
+  
+```{r ex_20, echo=TRUE}
+  ggplot(___) +
+  geom_histogram(mapping = aes(x = ___)) +
+  xlim(100, 5000) +
+  ylim(0, 3000)
+```
+
+# Sección: Valores no encontrados.
+
+1 - Explore la distribución de cada una de las variables x, y y z en diamantes. ¿Qué aprendes? Piense en un diamante y en cómo podría decidir qué dimensión es la longitud, el ancho y la profundidad.
+
+  * Se eliminan los valores faltantes cuando se calcula el número de observaciones en cada bandeja. Consulte el mensaje de advertencia: `warning message: Removed 9 rows containing non-finite values (stat_bin)`
+  
+```{r ex_21, echo=TRUE}
+diamonds2 <- diamonds %>%
+  mutate(y = ifelse(x >= 3 & x <= 20, x , NA))
+
+ggplot(diamonds2, aes(x = y)) +
+  geom_histogram()
+```
+
+  * En la función `geom_bar()`, `NA` se trata como otra categoría. La estética `x` en `geom_bar()` requiere una variable discreta (categórica), y valores faltantes actúan como otra categoría.
+
+```{r ex_22, echo=TRUE}
+diamonds %>%
+  mutate(___ = if_else(runif(n()) < 0.1, NA_character_, as.character(___))) %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = ___))
+```
+
+  * En un histograma, la variable estética `x` debe ser numérica, y `stat_bin()` agrupa las observaciones por rangos en contenedores. Dado que el valor numérico de las observaciones de `NA` es desconocido, no se pueden colocar en un contenedor en particular, y se caen.
+
+2 - ¿Qué hace `na.rm = TRUE` en `mean()` y `sum()`?
+
+  * Esta opción elimina los valores de `NA` del vector antes de calcular la media y la `sum()`.
+
+```{r ex_23, echo=TRUE}
+  mean(____, na.rm = TRUE)
+  sum(____, na.rm = TRUE)
+```
+
+# Sección: Valores no encontrados.
+
+1 - Utilice lo que ha aprendido para mejorar la visualización de las horas de salida de los vuelos cancelados frente a los no cancelados.
+
+  * En lugar de un `freqplot` usa un `box-plot`.
+  
+```{r ex_24, echo=TRUE}
+  nycflights13::flights %>%
+  mutate(
+    cancelled = is.na(____),
+    sched_hour = ____ %/% 100,
+    sched_min = ____ %% 100,
+    sched_dep_time = ____ + ___ / 60
+  ) %>%
+  ggplot() +
+  geom_boxplot(mapping = aes(y = ___, x = ____))
+```
+
+2 - ¿Qué variable del conjunto de datos de `diamonds` es más importante para predecir el precio de un diamante? ¿Cómo se correlaciona esa variable con `cut`? ¿Por qué la combinación de esas dos relaciones hace que los diamantes de menor calidad sean más caros?
+
+  * ¿Cuáles son las relaciones generales de cada variable con el precio de los diamantes? Consideraré las variables: `carat`, `clarity`, `color`, y `cut`. Ignoro las dimensiones del diamante desde el tamaño de las medidas de `carat`, y así incorpora la mayor parte de la información contenida en estas variables.
+
+  * Dado que ambos `price` y `carat` son variables continuas, uso un complot de dispersión para visualizar su relación.
+
+```{r ex_25, echo=TRUE}
+ggplot(____, aes(x = ____, y = ____)) +
+  geom_point()
+```
+
+  * Sin embargo, dado que hay una gran cantidad de puntos en los datos, usaré un cuadro de `binning carat`, como se sugiere en el capítulo:
+
+```{r ex_26, echo=TRUE}
+ggplot(data = ____, mapping = aes(x = ___, y = ___)) +
+  geom_boxplot(mapping = aes(group = cut_width(___, 0.1)), orientation = "x")
+```
+
+  * Ten en cuenta que la elección del ancho de binning es importante, como si fuera demasiado grande, ocultaría cualquier relación, y si fuera demasiado pequeño, los valores en los contenedores podrían ser demasiado variables para revelar las tendencias subyacentes.
+
+  * La versión 3.3.0 de `ggplot2` introdujo cambios a los boxplots que pueden afectar la orientación.
+
+  * Este `geom` trata a cada eje de manera diferente y, por lo tanto, puede tener dos orientaciones. A menudo, la orientación es fácil deducir de una combinación de las asignaciones dadas y los tipos de escalas posicionales en uso. Por lo tanto, `ggplot2` será de forma predeterminada, intente adivinar qué orientación debe tener la capa. Bajo circunstancias raras, la orientación es ambigua y adivina que puede fallar
+
+  * Si está obteniendo algo diferente con su código, marque la versión de `ggplot2`. Use la orientación = `x` (cuadros verticales) u orientación = `y` (cuadros de caja horizontal) para especificar explícitamente cómo el `geom` debe tratar estos ejes.
+
+  * Las variables de color y claridad se ordenan variables categóricas. El capítulo sugiere visualizar una variable categórica y continua utilizando polígonos de frecuencia o boxlpot. En este caso, usaré una trama de caja ya que será mejor que muestre una relación entre las variables.
+
+  * Hay una relación negativa débil entre el `color` y `price`. La escala del color del diamante va de D (mejor) a J (peor). Actualmente, los niveles de `diamonds$color` están en el orden incorrecto. Antes de planear, revertiré el orden de los niveles de color para que estén en un orden de calidad cada vez mayor en el eje X. La columna de `color` es un ejemplo de una variable de factor, que se cubre en el capítulo "Factores" de R4DS.
+  
+```{r ex_27, echo=TRUE}
+  diamonds %>%
+  mutate(___ = fct_rev(___)) %>%
+  ggplot(aes(x = ___, y = ___)) +
+  geom_boxplot()
+```
+
+  * También hay una relación negativa débil entre `clarity` y `price`. La escala de claridad va de I1 (peor) a IF (lo mejor).
+
+```{r ex_28, echo=TRUE}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = ___, y = ____))
+```
+
+  * Para la `clarity` y el `color`, hay una cantidad de variación mucho mayor dentro de cada categoría que entre las categorías. Carat es claramente el mejor predictor de los precios de diamantes.
+
+  * Ahora que hemos establecido que la quilates parece ser el mejor predictor de precio, ¿cuál es la relación entre ella y la corte? Dado que este es un ejemplo de una variable continua(`carat`) y categórica(`cut`), se puede visualizar con una trama de caja.
+ 
+```{r ex_29, echo=TRUE}
+  ggplot(diamonds, aes(x = ___, y = ___)) +
+  geom_boxplot()
+```
+
+  * Hay una gran variabilidad en la distribución de tamaños de quilates dentro de cada categoría de corte. Hay una ligera relación negativa entre `carat` y `cut`. Notablemente, los diamantes de quilates más grandes tienen un corte de "Fair" (la más baja).
+
+  * Esta relación negativa puede deberse a la forma en que se seleccionan los diamantes para la venta. Un diamante más grande se puede vender de manera rentable con un corte de menor calidad, mientras que un diamante más pequeño requiere un corte mejor.
+  
+3 - Instale el paquete `ggstance` y cree un diagrama de caja horizontal. ¿Cómo se compara esto con el uso de `coord_flip()`?
+
+  * Anteriormente, creamos esta gráfica de boxplot horizontal de la distribución `hwy` por clase, utilizando  `geom_boxplot()` y `coord_flip()`:
+  
+```{r ex_30, echo=TRUE}
+  ggplot(data = ___) +
+  geom_boxplot(mapping = aes(x = reorder(___, ___, FUN = median), y = ___)) +
+  coord_flip()
+```
+
+  * En este caso, la salida se ve igual, pero las estéticas `x` e `y` se vuelan.
+
+```{r ex_31, echo=TRUE}
+library("ggstance")
+
+ggplot(data = ___) +
+  geom_boxploth(mapping = aes(y = reorder(___, ___, FUN = median), x = ___))
+```
+
+  * Las versiones actuales de `ggplot2` (desde la versión 3.3.0) no requieren `coord_flip()`. Todos los `geoms` pueden elegir la dirección. La dirección se infiere del mapeo estético. En este caso, cambiar `x` e `y` produce una gráfica de boxplot horizontal.
+
+```{r ex_32, echo=TRUE}
+ggplot(data = ___) +
+  geom_boxplot(mapping = aes(y = reorder(___, ___, FUN = median), x = ___))
+```
+
+  * El argumento de `orientation` se utiliza para especificar explícitamente la orientación del eje de la trama.
+  
+```{r ex_33, echo=TRUE}
+ggplot(data = ___) +
+  geom_boxplot(mapping = aes(y = reorder(___, ___, FUN = median), x = ___), orientation = "y")
+```
+
+4 - Un problema con los diagramas de caja es que se desarrollaron en una era de conjuntos de datos mucho más pequeños y tienden a mostrar una cantidad prohibitivamente grande de "valores periféricos". Un enfoque para remediar este problema es la gráfica del valor de las letras. Instale el paquete `lvplot` e intente usar `geom_lv()` para mostrar la distribución de precio frente a corte. ¿Qué aprendes? ¿Cómo interpretas las tramas?
+
+  * Al igual que las graficas, las cajas de la trama de valor de letra corresponden a los cuantiles. Sin embargo, incorporan muchos más cuantiles que las gráficas. Son útiles para conjuntos de datos más grandes porque:
+
+  * 1 - Los conjuntos de datos más grandes pueden dar estimaciones precisas de los cuantiles más allá de los cuartiles.
+  * 2 - En expectativa, los conjuntos de datos más grandes deben tener más valores atípicos (en números absolutos).
+  
+```{r ex_34, echo=TRUE}
+ggplot(, aes(x = cut, y = price)) +
+  geom_lv()
+```
+
+5 - Compare y contraste `geom_violin()` con un `geom_histogram()` facetado, o un `geom_freqpoly()` de color. ¿Cuáles son los pros y los contras de cada método?
+
+  * El `geom_freqpoly()` es mejor para la búsqueda: lo que significa que se le da un precio, es fácil saber qué `cut` tiene la mayor densidad.
+  
+  * Sin embargo, las líneas superpuestas dificulta distinguir cómo las distribuciones generales se relacionan entre sí. El `geom_violin()` y Faceted `geom_histogram()` tienen fortalezas y debilidades similares. Es fácil distinguir visualmente las diferencias en la forma general de las distribuciones (sesgo, valores centrales, varianza, etc.). Sin embargo, dado que no podemos comparar fácilmente los valores verticales de la distribución, es difícil buscar qué categoría tiene la mayor densidad por un precio determinado. Todos estos métodos dependen de ajustar los parámetros para determinar el nivel de suavidad de la distribución.
+  
+```{r ex_35, echo=TRUE}
+ggplot(data = ___, mapping = aes(x = ___, y = ..____..)) +
+  geom_freqpoly(mapping = aes(color = ____), binwidth = 500)
+```
+
+```{r ex_36, echo=TRUE}
+ggplot(data = ____, mapping = aes(x = ____)) +
+  geom_histogram() +
+  facet_wrap(~___, ncol = 1, scales = "free_y")
+``` 
+  
+```{r ex_37, echo=TRUE}
+  ggplot(data = ___, mapping = aes(x = ___, y = ___)) +
+  geom_violin() +
+  coord_flip()
+```
+
+6 - Si tiene un conjunto de datos pequeño, a veces es útil usar `geom_jitter()` para ver la relación entre una variable continua y categórica. El paquete `ggbeeswarm` proporciona varios métodos similares a `geom_jitter()`. Enumere y describa brevemente lo que hace cada uno.
+
+  * Hay dos métodos:
+
+  * `geom_quasirandom()` produce graficas que son una mezcla de jitter and violin plots. Hay varios métodos diferentes que determinan exactamente cómo se genera la ubicación aleatoria de los puntos.
+  
+  * `geom_beeswarm()` produce una gráfica similar a un violin plot, pero al compensar los puntos.
+
+Usaré el ejemplo de la gráfica `boxplot` mpg, ya que estos métodos muestran puntos individuales, son más adecuados para conjuntos de datos más pequeños.
+
+```{r ex_38, echo=TRUE}
+ggplot(data = ___) +
+  geom_quasirandom(mapping = aes(
+    x = reorder(___, ___, FUN = median),
+    y = ____
+  ))
+```
+
+```{r ex_39, echo=TRUE}
+ggplot(data = ___) +
+  geom_beeswarm(mapping = aes(
+    x = reorder(___, ___, FUN = median),
+    y = ___
+  ))
+```
+
+# Sección: Dos variables categóricas.
+
+1 - ¿Cómo podría cambiar la escala del conjunto de datos de conteo anterior para mostrar más claramente la distribución del corte dentro del color o el color dentro del corte?
+
+  * Para mostrar claramente la distribución de `cut` dentro del `color`, calcule un nuevo accesorio variable que es `prop` de cada corte dentro de `color`. Esto se hace utilizando un mutado agrupado.
+  
+```{r ex_40, echo=TRUE}
+  diamonds %>%
+  count(___, ___) %>%
+  group_by(____) %>%
+  mutate(prop = ___/sum(___)) %>%
+  ggplot(mapping = aes(x = ____, y = ___)) +
+  geom_tile(mapping = aes(fill = ___))
+```
+
+  * Del mismo modo, a escalar por la distribución de `color` dentro de `cut`.
+  
+```{r ex_41, echo=TRUE}
+diamonds %>%
+  count(___, ___) %>%
+  group_by(___) %>%
+  mutate(prop = ___/sum(___)) %>%
+  ggplot(mapping = aes(x = ___, y = ___)) +
+  geom_tile(mapping = aes(fill = ____))
+```
+
+  * Agrego límit = c(0, 1) para poner la escala de color entre (0, 1). Estos son los límites lógicos de las proporciones. Esto hace posible comparar cada celda a su valor real, y mejoraría las comparaciones en múltiples gráficas. Sin embargo, termina limitando los colores y hace que sea más difícil comparar dentro del conjunto de datos. Sin embargo, el uso de los límites predeterminados de los valores mínimos y máximos hace que sea más fácil comparar dentro del conjunto de datos que enfatizan las diferencias relativas, pero más difícil de comparar a través de los conjuntos de datos.
+
+2 - Utilice `geom_tile()` junto con `dplyr` para explorar cómo las demoras promedio de los vuelos varían según el destino y el mes del año. ¿Qué hace que la trama sea difícil de leer? ¿Cómo podrías mejorarlo?
+
+  * Usa `geom_tile()` junto con `dplyr` para explorar cómo los retrasos promedio de vuelo varían según el destino y el mes del año. ¿Qué hace que la trama sea difícil de leer? ¿Cómo podría mejorarlo?
+  
+```{r ex_42, echo=TRUE}
+  flights %>%
+  group_by(___, ___) %>%
+  summarise(dep_delay = mean(___, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(___), y = dest, fill = ___)) +
+  geom_tile() +
+  labs(x = "Month", y = "Destination", fill = "Departure Delay")
+```
+
+  * Hay varias cosas que se podrían hacer para mejorarlo:
+  * 1 - Ordenar los destinos por una cantidad significativa (distancia, número de vuelos, retraso promedio).
+  * 2 - Eliminar valores faltantes.
+  
+  * Como tratar los valores faltantes es difícil. En este caso, los valores faltantes corresponden a los aeropuertos que no tienen vuelos regulares (al menos un vuelo cada mes) desde NYC. Estos son probablemente aeropuertos más pequeños (con mayor varianza en su promedio debido a menos observaciones). Cuando agrupamos todos los pares de (`month`, `dest`) nuevamente por `dest`, deberíamos tener un recuento total de 12 (uno por cada mes) por grupo (`dest`). Esto hace que sea fácil filtrar.
+3 - ¿Por qué es un poco mejor usar `aes(x = color, y = cut)` en lugar de `aes(x = cut, y = color)` en el ejemplo anterior?
+
+```{r ex_43, echo=TRUE}
+flights %>%
+  group_by(___, ___) %>%                                 
+  summarise(____ = mean(___, na.rm = TRUE)) %>%
+  group_by(____) %>%                                        
+  filter(n() == 12) %>%                                    
+  ungroup() %>%
+  mutate(dest = reorder(___, ___)) %>%
+  ggplot(aes(x = factor(___), y = ___, fill = ___)) +
+  geom_tile() +
+  labs(x = "Month", y = "Destination", fill = "Departure Delay")
+```
+
+3 - ¿Por qué es un poco mejor usar `aes(x = color, y = cut)` en lugar de `aes(x = cut, y = color)` en el ejemplo anterior?
+
+  * Por lo general, es mejor usar la variable categórica con un número mayor de categorías o las etiquetas más largas en el eje `y`. Si es posible, las etiquetas deben ser horizontales porque es más fácil de leer.
+
+  * Sin embargo, cambiar el pedido no resulta en etiquetas superpuestas.
+
+```{r ex_44, echo=TRUE}
+diamonds %>%
+  count(___, ___) %>%
+  ggplot(mapping = aes(y = ___, x = ___)) +
+  geom_tile(mapping = aes(fill = ___))
+```
+
+  * Otra justificación, para cambiar el orden es que los números más grandes están en la parte superior cuando x = `color` y y = `cut`, y eso reduce la carga cognitiva de interpretar la trama.
+  
+# Sección: Dos variables continuas.
+
+1 - En lugar de resumir la distribución condicional con una gráfica de caja, podría usar un polígono de frecuencia. ¿Qué debe tener en cuenta al usar `cut_width()` vs `cut_number()`? ¿Cómo afecta eso a la visualización de la distribución 2d de `carat` y `price`?
+
+  * Tanto  `cut_width()` y `cut_number()` dividieron una variable en grupos. Cuando se usa `cut_width()`, debemos elegir el ancho, y el número de contenedores se calculará automáticamente. Cuando se usa `cut_number()`, necesitamos especificar el número de contenedores, y los anchos se calcularán automáticamente.
+
+  * En cualquier caso, queremos elegir los anchos y el número del contenedor para ser lo suficientemente grandes como para agregar observaciones para eliminar el ruido, pero no tan grandes como para eliminar toda la señal.
+
+  * Si se usan colores categóricos, no se deben usar más de ocho colores para mantenerlos distintos. Usando `cut_number()`, dividiré los quilates en cuantiles (cinco grupos).
+
+```{r ex_45, echo=TRUE}
+ggplot(
+  data = ___,
+  mapping = aes(color = cut_number(___, 5), x = ___)
+) +
+  geom_freqpoly() +
+  labs(x = "Price", y = "Count", color = "Carat")
+```
+
+  * Alternativamente, podría usar `cut_width()` para especificar los anchos para cortar. Elegiré anchos de 1 quilates. Dado que hay muy pocos diamantes más grandes que 2-quilates, esto no es tan informativo. Sin embargo, el uso de un ancho de 0.5 quilates crea demasiados grupos, y la división en números no enteros es poco atractivo.
+
+```{r ex_46, echo=TRUE}
+ggplot(
+  data = ___,
+  mapping = aes(color = cut_width(___, 1, boundary = 0), x = ___)
+) +
+  geom_freqpoly() +
+  labs(x = "Price", y = "Count", color = "Carat")
+```
+
+2 - Visualice la distribución de `carat`, dividida por `price`.
+
+  * Trazado con una gráfica de caja con 10 contenedores con un número igual de observaciones y el ancho determinado por el número de observaciones.
+  
+```{r ex_46_2, echo=TRUE}
+ggplot(___, aes(x = cut_number(___, 10), y = ___)) +
+  geom_boxplot() +
+  coord_flip() +
+  xlab("Price")
+```
+  * Trazado con un diagrama de caja con 10 contenedores de igual ancho de `$2,000` . El argumento `boundary = 0` asegura que el primer intervalo sea de `$0 a $2000`.
+  
+```{r ex_48, echo=TRUE}
+ggplot(___, aes(x = cut_width(___, 2000, boundary = 0), y = ___)) +
+  geom_boxplot(varwidth = TRUE) +
+  coord_flip() +
+  xlab("Price")
+```
+
+3 - ¿Cómo se compara la distribución de precios de los diamantes muy grandes con la de los diamantes pequeños? ¿Es como esperabas o te sorprende?
+
+ * La distribución de diamantes muy grandes es más variable. No es una sorprensa, ya que se sabía poco sobre los precios de los diamantes. Después del hecho, no parece sorprendente (como hacen muchas cosas). 
+ 
+ * Se pude suponer que esto se debe a la forma en que se seleccionan los diamantes para las ventas minoristas. Suponga que alguien que vende un diamante solo encuentra rentable venderlo si alguna combinación de tamaño, corte, claridad y color está por encima de cierto umbral. Los diamantes más pequeños solo son rentables para vender si son excepcionales en todos los demás factores (corte, claridad y color), por lo que los diamantes pequeños vendidos tienen características similares. Sin embargo, los diamantes más grandes pueden ser rentables independientemente de los valores de los otros factores. Así, observaremos diamantes grandes con una variedad más amplia de corte, claridad y color y, por lo tanto, más variabilidad en los precios
+
+4 - Combine dos de las técnicas que ha aprendido para visualizar la distribución combinada de `cut`, `carat` y `price`.
+  
+  * Hay muchas opciones para probar, por lo que sus soluciones pueden variar. Aquí hay algunas opciones que se pueden probar. 
+  
+```{r ex_49, echo=TRUE}
+ggplot(___, aes(x = ___, y = ___)) +
+  geom_hex() +
+  facet_wrap(~___, ncol = 1)
+```
+
+```{r ex_50, echo=TRUE}
+ggplot(___, aes(x = cut_number(___, 5), y = ___, colour = ___)) +
+  geom_boxplot()
+```
+
+```{r ex_51, echo=TRUE}
+ggplot(___, aes(colour = cut_number(___, 5), y = ___, x = ___)) +
+  geom_boxplot()
+```
+
+5 - Los gráficos bidimensionales revelan valores atípicos que no son visibles en los gráficos unidimensionales. Por ejemplo, algunos puntos en la gráfica siguiente tienen una combinación inusual de valores `x` e `y`, lo que hace que los puntos sean atípicos aunque sus valores `x` e `y` parezcan normales cuando se examinan por separado.
+
+```{r ex_52, echo=TRUE}
+ggplot(data = ___) +
+  geom_point(mapping = aes(x = ___, y = ___)) +
+  coord_cartesian(xlim = c(4, 11), ylim = c(4, 11))
+```
+
+  * ¿Por qué una gráfica de dispersión es una mejor visualización que una gráfica agrupada en este caso?
+
+  * En este caso, existe una fuerte relación entre `x` e `y`. Los valores atípicos en este caso no son extremos ni en `x` ni en `y`. Una gráfica agrupada no revelaría estos valores atípicos y puede llevarnos a concluir que el valor más grande de `x` fue un valor atípico, aunque parece ajustarse bien al patrón bivariado.

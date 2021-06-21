@@ -20,6 +20,12 @@ gradethis::gradethis_setup()
 knitr::opts_chunk$set(exercise.checker = gradethis::grade_learnr)
 ```
 
+<style type="text/css">
+  body{
+  font-size: 13pt;
+}
+</style>
+
 ```{r stormtrooper, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%", fig.cap="Ilustración por Emilio Morones."}
 knitr::include_graphics("images/visualizacion.png")
 ```

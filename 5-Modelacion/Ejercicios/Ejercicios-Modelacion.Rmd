@@ -1,0 +1,510 @@
+---
+title: "Ejercicios de Modelación"
+author: "Emilio Morones"
+output: html_document
+---
+
+```{r set-up, echo = FALSE}
+library("tidyverse")
+library("hexbin")
+library("nycflights13")
+library("modelr")
+library("lvplot")
+options(na.action = na.warn)
+```
+
+# Sección: Un modelo simple. 
+
+1 - Una desventaja del modelo lineal es que es sensible a valores inusuales porque la distancia incorpora un término al cuadrado. Ajuste un modelo lineal a los datos simulados a continuación y visualice los resultados. Vuelva a ejecutar varias veces para generar diferentes conjuntos de datos simulados. ¿Qué notas sobre el modelo?
+
+```{r ex_1, echo=TRUE}
+sim1a <- tibble(
+  x = rep(___, each = ___),
+  y = x * 1.5 + 6 + rt(length(___), df = __)
+)
+```
+
+  * Ejecútalo una vez y grafiquemos los resultados:
+
+```{r ex_2, echo=TRUE}
+ggplot(sim1a, aes(x = ___, y = ____)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+  * También podemos hacer esto de manera más sistemática, generando varias simulaciones y trazando la línea.
+
+```{r ex_3, echo=TRUE}
+simt <- function(i) {
+  tibble(
+    x = rep(1:10, each = 3),
+    y = x * 1.5 + 6 + rt(length(x), df = 2),
+    .id = i
+  )
+}
+
+sims <- map_df(1:12, ___)
+
+ggplot(sims, aes(x = ___, y = ___)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "red") +
+  facet_wrap(~.id, ncol = 4)
+```
+
+  * ¿Y si hiciéramos lo mismo con distribuciones normales?
+
+```{r ex_4, echo=TRUE}
+sim_norm <- function(i) {
+  tibble(
+    x = rep(1:10, each = 3),
+    y = x * 1.5 + 6 + rnorm(length(x)),
+    .id = i
+  )
+}
+
+simdf_norm <- map_df(1:12, ____)
+
+ggplot(simdf_norm, aes(x = ___, y = ___)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "red") +
+  facet_wrap(~.id, ncol = 4)
+```
+
+
+  * No hay grandes valores atípicos y las pendientes son más similares.
+
+  * La razón de esto es que la t-distribución de Student, de la cual tomamos muestras con `rt()` tiene colas más pesadas que la distribución normal (`rnorm()`).
+  
+  * Esto significa que la t-distribución de Student asigna una probabilidad mayor a los valores más alejados del centro de la distribución.
+
+
+```{r ex_5, echo=TRUE}
+tibble(
+  x = seq(-5, 5, length.out = 100),
+  normal = dnorm(___),
+  student_t = dt(___, df = 2)
+) %>%
+  pivot_longer(-___, names_to="distribution", values_to="density") %>%
+  ggplot(aes(x = ___, y = ____, colour = ____)) +
+  geom_line()
+```
+
+  * Para una distribución normal con media cero y desviación estándar uno, la probabilidad de ser mayor que 2 es:
+
+```{r ex_6, echo=TRUE}
+pnorm(2, lower.tail = ___)
+```
+
+  * Para una t-distribución de Student con grados de libertad = 2, es más de 3 veces mayor:
+
+```{r ex_7, echo=TRUE}
+pt(2, df = 2, lower.tail = ___)
+```
+
+
+2 - Una forma de hacer que los modelos lineales sean más robustos es utilizar una medida de distancia diferente. Por ejemplo, en lugar de la distancia de la raíz cuadrada media, puede usar la distancia media absoluta:
+
+```{r ex_8, echo=TRUE}
+measure_distance <- function(mod, data) {
+  diff <- data$y - make_prediction(___, ___)
+  mean(abs(____))
+}
+```
+
+  * Para que la función anterior funcione, necesitamos definir una función, `make_prediction()`, que toma un vector numérico de longitud dos (la intersección y la pendiente) y devuelve las predicciones:
+
+```{r ex_9, echo=TRUE}
+make_prediction <- function(mod, data) {
+  mod[1] + mod[2] * data$x
+}
+```
+
+  * Usando los datos de `sim1a`, los mejores parámetros de la menor desviación absoluta es:
+
+```{r ex_10, echo=TRUE}
+best <- optim(c(0, 0), ___, data = sim1a)
+best$par
+```
+
+  * Utilizando los datos de `sim1a`, mientras que los parámetros que minimizan la función objetivo de mínimos cuadrados son:
+
+```{r ex_11, echo=TRUE}
+measure_distance_ls <- function(mod, data) {
+  diff <- data$y - (mod[1] + mod[2] * data$x)
+  sqrt(mean(diff^2))
+}
+
+best <- optim(c(0, 0), ____, data = sim1a)
+best$par
+```
+
+  * En la práctica, sugiero no usar `optim()` para ajustar este modelo y, en su lugar, usar una implementación existente. Las funciones `rlm()` y `lqs()` en `MASS` se ajustan a modelos lineales robustos y resistentes.
+
+
+3 - Un desafío al realizar la optimización numérica es que solo se garantiza que se encuentre un óptimo local. ¿Cuál es el problema de optimizar un modelo de tres parámetros como este?
+
+```{r ex_12, echo=TRUE}
+model3 <- function(a, data) {
+  a[1] + data$x * a[2] + a[3]
+}
+```
+
+  * El problema es que para cualquier valor `a[1] = a1` y `a[3] = a3`, cualquier otro valor de `a[1]` y `a[3]` donde `a[1] + a[3] == (a1 + a3)` tendrá el mismo ajuste.
+
+```{r ex_13, echo=TRUE}
+measure_distance_3 <- function(a, data) {
+  diff <- data$y - model3(____, ___)
+  sqrt(mean(diff^2))
+}
+```
+
+  * Dependiendo de nuestros puntos de partida, podemos encontrar diferentes valores óptimos:
+
+```{r ex_14, echo=TRUE}
+best3a <- optim(c(0, 0, 0), ____, data = ___)
+best3a$par
+```
+
+```{r ex_15, echo=TRUE}
+best3b <- optim(c(0, 0, 1), ___, data = ___)
+best3b$par
+```
+
+```{r ex_16, echo=TRUE}
+best3c <- optim(c(0, 0, 5), ____, data = ___)
+best3c$par
+```
+
+  * De hecho, hay un número infinito de valores óptimos para este modelo.
+
+
+# Sección: Visualización de modelos
+
+
+1 - En lugar de usar `lm()` para ajustar una línea recta, puede usar `loess()` para ajustar una curva suave. Repita el proceso de ajuste del modelo, generación de cuadrículas, predicciones y visualización en `sim1` usando `loess()` en lugar de `lm()`. ¿Cómo se compara el resultado con geom_smooth ()?
+
+  * Usaremos `add_predictions()` y `add_residuals()` para agregar las predicciones y los residuos de una regresión de loess a los datos `sim1`.
+
+```{r ex_17, echo=TRUE}
+sim1_loess <- loess(___ ~ ____, data = ____)
+sim1_lm <- lm(___ ~ ___, data = ____)
+
+grid_loess <- ____ %>%
+  add_predictions(____)
+
+sim1 <- ___ %>%
+  add_residuals(___) %>%
+  add_predictions(____) %>%
+  add_residuals(____, var = "resid_loess") %>%
+  add_predictions(____, var = "pred_loess")
+```
+
+  * Esto traza las predicciones de loess. El loess produce una línea suave y no lineal a través de los datos.
+
+```{r ex_18, echo=TRUE}
+plot_sim1_loess <-
+  ggplot(sim1, aes(x = ___, y = ___)) +
+  geom_point() +
+  geom_line(aes(x = ___, y = ____), data = grid_loess, colour = "red")
+plot_sim1_loess
+```
+
+  * Las predicciones de loess son las mismas que las del método predeterminado para `geom_smooth()` porque `geom_smooth()` usa `loess()` por defecto; el mensaje incluso nos dice eso.
+
+```{r ex_19, echo=TRUE}
+plot_sim1_loess +
+  geom_smooth(method = "loess", colour = "blue", se = FALSE, alpha = 0.20)
+```
+
+  * Podemos graficar los residuos (rojo) y compararlos con los residuos de `lm()` (negro).
+
+  * En general, el modelo de loess tiene residuos más pequeños dentro de la muestra (fuera de la muestra es un problema diferente y no hemos considerado la incertidumbre de estas estimaciones).
+
+```{r ex_192, echo=TRUE}
+ggplot(sim1, aes(x = ___)) +
+  geom_ref_line(h = 0) +
+  geom_point(aes(y = resid)) +
+  geom_point(aes(y = resid_loess), colour = "red")
+```
+
+2 - `add_predictions()` está emparejado con `collect_predictions()` y `spread_predictions()`. ¿En qué se diferencian estas tres funciones?
+
+  * Las funciones `collect_predictions()` y `spread_predictions()` permiten agregar predicciones de múltiples modelos a la vez. Tomando el ejemplo de `sim1_mod`:
+
+```{r ex_20, echo=TRUE}
+sim1_mod <- lm(___ ~ ___, data = ___)
+grid <- ___ %>%
+  data_grid(___)
+```
+
+  * La función `add_predictions()` agrega solo un modelo a la vez. Para agregar dos modelos:
+
+```{r ex_21, echo=TRUE}
+____ %>%
+  add_predictions(sim1_mod, var = "pred_lm") %>%
+  add_predictions(sim1_loess, var = "pred_loess")
+```
+
+  * La función `collect_predictions()` agrega predicciones de múltiples modelos al apilar los resultados y agregar una columna con el nombre del modelo:
+
+```{r ex_22, echo=TRUE}
+____ %>%
+  gather_predictions(____, ____)
+```
+
+  * La función `spread_predictions()` agrega predicciones de múltiples modelos agregando múltiples columnas (adjuntas al nombre del modelo) con predicciones de cada modelo.
+
+```{r ex_222, echo=TRUE}
+grid %>%
+  spread_predictions(____, ____)
+```
+
+  * La función `spread_predictions()` es similar al ejemplo que ejecuta `add_predictions()` para cada modelo, y es equivalente a ejecutar `spread()` después de ejecutar `collect_predictions()`:
+
+```{r ex_23, echo=TRUE}
+____ %>%
+  gather_predictions(____, ____) %>%
+  spread(___, ___)
+```
+
+
+3 - ¿Qué hace `geom_ref_line()`? ¿De qué paquete viene? ¿Por qué es útil e importante mostrar una línea de referencia en los gráficos que muestran los residuos?
+
+
+  * El **geom** `geom_ref_line()` agrega como línea de referencia a un gráfico.
+
+  * Es equivalente a ejecutar `geom_hline()` o `geom_vline()` con configuraciones predeterminadas que son útiles para visualizar modelos. Poner una línea de referencia en cero para los residuos es importante porque los buenos modelos (generalmente) deben tener residuos centrados en cero, con aproximadamente la misma varianza (o distribución) sobre el soporte de `x`, `y` sin correlación. Una línea de referencia cero facilita la evaluación visual de estas características. 
+
+4 - ¿Por qué querrías mirar un polígono de frecuencia de residuos absolutos? ¿Cuáles son los pros y los contras en comparación con observar los residuos sin procesar?
+
+  * Mostrar los valores absolutos de los residuos facilita la visualización de la dispersión de los residuos. El modelo asume que los residuos tienen una media de cero, y el uso de los valores absolutos de los residuos duplica efectivamente el número de residuos.
+  
+```{r ex_24, echo=TRUE}
+sim1_mod <- lm(y ~ ___, data = ___)
+
+sim1 <- sim1 %>%
+  add_residuals(____)
+
+ggplot(___, aes(x = abs(___))) +
+  geom_freqpoly(binwidth = 0.5)
+```
+
+  * Sin embargo, el uso de los valores absolutos de los residuos arroja información sobre el signo, lo que significa que el polígono de frecuencia no puede mostrar si el modelo sobreestima o subestima sistemáticamente los residuos.
+  
+  
+# Sección: Fórmulas y familias de modelos
+
+1 - ¿Qué sucede si repites el análisis de sim2 usando un modelo sin una intersección? ¿Qué sucede con la ecuación del modelo? ¿Qué pasa con las predicciones?
+
+  * Para ejecutar un modelo sin una intersección, agregue `- 1` o `+ 0` al lado derecho de la fórmula:
+
+```{r ex_25, echo=TRUE}
+  mod2a <- lm(___ ~ ___ - 1, data = ____)
+```
+
+```{r ex_26, echo=TRUE}
+mod2 <- lm(___ ~ ___, data = ___)
+```
+
+Las predicciones son exactamente las mismas en los modelos con y sin intersección:
+
+```{r ex_27, echo=TRUE}
+grid <- ____ %>%
+  data_grid(___) %>%
+  spread_predictions(___, ___)
+grid
+```
+
+2 - Utilice `model_matrix()` para explorar las ecuaciones generadas para los modelos que ajusto a `sim3` y `sim4`. ¿Por qué `*` es una buena forma abreviada de interacción?
+
+  * Para `x1 * x2` cuando `x2` es una variable categórica produce las variables indicadoras `x2b`, `x2c`, `x2d` y las variables `x1`: `x2b`, `x1`: `x2c` y `x1`: `x2d` que son los productos de las variables `x1` y `x2 *`:
+
+```{r ex_28, echo=TRUE}
+x3 <- model_matrix(___ ~ ___ * ___, data = ___)
+x3
+```
+
+  * Podemos confirmar que las variables `x1: x2b` es el producto de `x1` y `x2b`:
+
+```{r ex_29, echo=TRUE}
+all(___[["x1:x2b"]] == (___[["x1"]] * ___[["x2b"]]))
+```
+
+  * Y de manera similar para `x1: x2c` y `x2c`, y `x1: x2d` y `x2d`:
+
+```{r ex_292, echo=TRUE}
+all(___[["x1:x2c"]] == (x3[["x1"]] * x3[["x2c"]]))
+
+all(___[["x1:x2d"]] == (x3[["x1"]] * x3[["x2d"]]))
+```
+
+  * Para `x1 * x2` donde tanto `x1` como `x2` son variables continuas, `model_matrix()` crea las variables `x1`, `x2` y `x1: x2`:
+
+```{r ex_30, echo=TRUE}
+x4 <- model_matrix(___ ~ ___ * ___, data = ___)
+x4
+```
+
+  * Confirme que `x1: x2` es el producto de `x1` y `x2`:
+
+```{r ex_31, echo=TRUE}
+all(___[["x1"]] * ___[["x2"]] == __[["x1:x2"]])
+```
+
+  * El asterisco `*` es una buena forma abreviada de una interacción, ya que una interacción entre `x1` y `x2` incluye términos para `x1`, `x2` y el producto de `x1` y `x2`.
+
+3 - Usando los principios básicos, convierta las fórmulas en los siguientes dos modelos en funciones. (Sugerencia: comience por convertir la variable categórica en variables 0-1).
+
+```{r ex_32, echo=TRUE}
+mod1 <- lm(y ~ ___ + __, data = sim3)
+mod2 <- lm(y ~ ___ * ___, data = sim3)
+```
+
+  * El problema es convertir las fórmulas de los modelos en funciones. Asumiremos que la función solo maneja la conversión del lado derecho de la fórmula en una matriz modelo. 
+
+
+  * Las funciones tomarán un argumento, un marco de datos con columnas `x1` y `x2`, y devolverán un marco de datos. En otras palabras, las funciones serán casos especiales de la función `model_matrix()`.
+
+  * Considere el lado derecho de la primera fórmula, `~x1 + x2`. En el marco de datos `sim3`, la columna `x1` es un número entero y la variable `x2` es un factor con cuatro niveles.
+
+```{r ex_33, echo=TRUE}
+levels(sim3$x2)
+```
+
+  * Dado que `x1` es numérico, no se modifica. Dado que `x2` es un factor, se reemplaza con columnas de variables indicadoras para todos menos uno de sus niveles. Primero consideraré el caso especial en el que `x2` solo toma los niveles de `x2` en `sim3`. En este caso, "a" se considera el nivel de referencia y se omite, y se crean nuevas columnas para "b", "c" y "d".
+
+
+```{r ex_34, echo=TRUE}
+model_matrix_mod1 <- function(.data) {
+  mutate(.data,
+    x2b = as.numeric(x2 == "b"),
+    x2c = as.numeric(x2 == "c"),
+    x2d = as.numeric(x2 == "d"),
+    `(Intercept)` = 1
+  ) %>%
+    select(`(___)`, x1, x2b, x2c, x2d)
+}
+```
+
+```{r ex_35, echo=TRUE}
+model_matrix_mod1(___)
+```
+
+Una función más general para `~x1 + x2` no codificaría los niveles específicos en `x2`:
+
+```{r ex_36, echo=TRUE}
+model_matrix_mod1b <- function(.data) {
+  # los niveles de x2
+  lvls <- levels(.data$___)
+  # baja el primer nivel
+  # esto supone que hay al menos dos niveles
+  lvls <- lvls[2:length(___)]
+  # crea una variable indicadora para cada nivel de x2
+  for (___ in ___) {
+    # nuevo nombre de columna x2 + nombre de nivel
+    varname <- str_c("x2", ___)
+    # agregar variable indicadora para lvl
+    .data[[___]] <- as.numeric(.data$x2 == ___)
+  }
+  # generar la lista de variables para mantener
+  x2_variables <- str_c("x2", ___)
+  # Agregar una intersección
+  .data[["(Intercept)"]] <- 1
+  # mantener las variables indicadoras x1 y x2
+  select(.data, `(Intercept)`, x1, all_of(____))
+}
+```
+
+```{r ex_37, echo=TRUE}
+model_matrix_mod1b(____)
+```
+
+  * Considere el lado derecho de la primera fórmula, `~x1 * x2`. El marco de datos de salida constará de `x1`, columnas con variables indicadoras para cada nivel (excepto el nivel de referencia) de `x2` y columnas con las variables indicadoras `x2` multiplicadas por `x1`.
+
+  * Al igual que con la fórmula anterior, primero escribiré una función que codifique los niveles de `x2`.
+
+```{r ex_38, echo=TRUE}
+model_matrix_mod2 <- function(.data) {
+  mutate(.data,
+    `(Intercept)` = 1,
+    x2b = as.numeric(x2 == "b"),
+    x2c = as.numeric(x2 == "c"),
+    x2d = as.numeric(x2 == "d"),
+    `x1:x2b` = x1 * x2b,
+    `x1:x2c` = x1 * x2c,
+    `x1:x2d` = x1 * x2d
+  ) %>%
+    select(`(Intercept)`, x1, x2b, x2c, x2d, `x1:x2b`, `x1:x2c`, `x1:x2d`)
+}
+```
+
+```{r ex_39, echo=TRUE}
+model_matrix_mod2(____)
+```
+
+  * Para una función más general que manejará niveles arbitrarios en `x2`, extenderé la función `model_matrix_mod1b()` que escribí anteriormente.
+
+```{r ex_40, echo=TRUE}
+model_matrix_mod2b <- function(.data) {
+  # obtener un conjunto de datos con variables indicadoras x1 y x2
+  out <- model_matrix_mod1b(.data)
+  # obtener los nombres de las columnas del indicador x2
+  x2cols <- str_subset(colnames(out), "^x2")
+  # crear interacciones entre las columnas del indicador x1 y x2
+  for (varname in x2cols) {
+  # nombre de la variable de interacción
+    newvar <- str_c("x1:", varname)
+    out[[newvar]] <- out$x1 * out[[varname]]
+  }
+  out
+}
+```
+
+```{r ex_41, echo=TRUE}
+model_matrix_mod2b(___)
+```
+
+  * Estas funciones podrían generalizarse aún más para permitir que `x1` y `x2` sean numéricos o factores. Sin embargo, generalizando mucho más que eso, pronto comenzaremos a reimplementar toda la función `matrix_model()`.
+  
+4 - Para `sim4`, ¿cuál de `mod1` y `mod2` es mejor? Creo que `mod2` hace un trabajo un poco mejor eliminando patrones, pero es bastante sutil. ¿Puedes pensar en un plan para respaldar mi afirmación?
+
+  * Estimar modelos `mod1` y `mod2` en `sim4`:
+  
+```{r ex_42, echo=TRUE}
+mod1 <- lm(y ~ ___ + ___, data = ___)
+mod2 <- lm(y ~ ___ * ____, data = ___)
+```
+
+  * Y agregua los residuos de estos modelos a los datos de `sim4`:
+  
+```{r ex_43, echo=TRUE}
+sim4_mods <- gather_residuals(____, ____, ____)
+```
+
+  * Gráficos de frecuencia de ambos residuos:
+  
+```{r ex_44, echo=TRUE}
+  ggplot(___, aes(x = ___, colour = ___)) +
+  geom_freqpoly(binwidth = 0.5) +
+  geom_rug()
+```
+
+  * Y los valores absolutos de los residuos:
+  
+```{r ex_45, echo=TRUE}
+ggplot(_____, aes(x = abs(____), colour = ___)) +
+  geom_freqpoly(binwidth = 0.5) +
+  geom_rug()
+```
+  
+  * No muestra mucha diferencia en los residuos entre los modelos. Sin embargo, `mod2` parece tener menos residuos en las colas de la distribución entre 2.5 y 5 (aunque los residuos más extremos son de `mod2`).
+
+  * Esto se confirma al verificar la desviación estándar de los residuos de estos modelos:
+  
+```{r ex_46, echo=TRUE}
+____ %>%
+  group_by(____) %>%
+  summarise(resid = sd(___))
+```
+
+La desviación estándar de los residuos de `mod2` es menor que la de `mod1`.
