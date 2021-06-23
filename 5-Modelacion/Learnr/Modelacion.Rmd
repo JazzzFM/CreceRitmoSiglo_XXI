@@ -80,7 +80,7 @@ Esta partición le permite explorar los datos de entrenamiento, generando ocasio
 
 (Tenga en cuenta que incluso cuando realice un modelo confirmatorio, deberá realizar una EDA. Si no realiza ninguna EDA, permanecerá ciego a los problemas de calidad con sus datos).
 
-## Conceptos básicos de    modelos
+## Conceptos básicos de modelos
 
 ### Introducción
 
