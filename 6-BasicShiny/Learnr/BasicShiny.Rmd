@@ -478,10 +478,10 @@ ui <- fluidPage(
 )
 ```
 
-
 ```{r echo = FALSE, out.width = "90%", message = FALSE}
 knitr::include_graphics("images/numeric.png")
 ```
+
 
 ## Enviar Ejercicios
 
