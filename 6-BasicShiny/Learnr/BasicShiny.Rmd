@@ -17,7 +17,6 @@ library(gradethis)
 library(learnrhash)
 library(tidyverse)
 gradethis::gradethis_setup()
-remotes::install_github("rstudio/gradethis")
 ```
 
 <style type="text/css">
@@ -480,6 +479,103 @@ ui <- fluidPage(
 
 ```{r echo = FALSE, out.width = "90%", message = FALSE}
 knitr::include_graphics("images/numeric.png")
+```
+
+En general, se recomienda usar solo controles deslizantes para rangos pequeños o casos en los que el valor preciso no sea tan importante. ¡Intentar seleccionar con precisión un número en un pequeño control deslizante es un ejercicio de frustración!
+
+Los controles deslizantes son extremadamente personalizables y hay muchas formas de modificar su apariencia. Consulta `?SliderInput` y https://shiny.rstudio.com/articles/sliders.html para obtener más detalles.
+
+
+### Fechas
+
+Recopila un solo día con `dateInput()` o un rango de dos días con `dateRangeInput()`. 
+
+Estos proporcionan un selector de calendario conveniente y argumentos adicionales como `datedisabled` y `daysofweekdisabled` le permiten restringir el conjunto de entradas válidas.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  dateInput("dob", "When were you born?"),
+  dateRangeInput("holiday", "When do you want to go on vacation next?")
+)
+```
+
+```{r echo = FALSE, out.width = "90%", message = FALSE}
+knitr::include_graphics("images/date.png")
+```
+
+El formato de fecha, el idioma y el día en que comienza la semana se ajustan de forma predeterminada a los estándares de EE.UU.
+
+Si estás creando una aplicación con una audiencia internacional, establezca el formato, el idioma y el inicio de la semana para que las fechas sean naturales para sus usuarios.
+
+### Selectores
+
+Hay dos enfoques diferentes que permiten al usuario elegir entre un conjunto de opciones preespecificado: `selectInput()` y `radioButtons()`.
+
+```{r, echo=TRUE, eval=FALSE}
+animals <- c("dog", "cat", "mouse", "bird", "other", "I hate animals")
+
+ui <- fluidPage(
+  selectInput("state", "What's your favourite state?", state.name),
+  radioButtons("animal", "What's your favourite animal?", animals)
+)
+```
+
+```{r echo = FALSE, out.width = "90%", message = FALSE}
+knitr::include_graphics("images/limited-choices.png")
+```
+
+Los `radioButtons()` tienen dos características interesantes: muestran todas las opciones posibles, lo que las hace adecuadas para listas cortas y, a través de los argumentos `choiceNames`/`choiceValues`, pueden mostrar opciones distintas al texto sin formato.
+
+`choiceNames` determina lo que se muestra al usuario; `choiceValues` determina lo que se devuelve en la función de tu servidor.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  radioButtons("rb", "Choose one:",
+    choiceNames = list(
+      icon("angry"),
+      icon("smile"),
+      icon("sad-tear")
+    ),
+    choiceValues = list("angry", "happy", "sad")
+  )
+)
+```
+
+```{r echo = FALSE, out.width = "90%", message = FALSE}
+knitr::include_graphics("images/radio-icon.png")
+```
+
+Los menús desplegables creados con `selectInput()` ocupan la misma cantidad de espacio, independientemente del número de opciones, lo que los hace más adecuados para opciones más largas. 
+
+También puede establecer `multiple = TRUE` para permitir que el usuario seleccione varios elementos. 
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  selectInput(
+    "state", "What's your favourite state?", state.name,
+    multiple = TRUE
+  )
+)
+```
+
+```{r echo = FALSE, out.width = "60%", message = FALSE}
+knitr::include_graphics("images/multi-select.png")
+```
+
+Si tienes un conjunto muy grande de opciones posibles, es posible que desee utilizar `selectInput()` del "lado del servidor" para que el conjunto completo de opciones posibles no esté incrustado en la interfaz de usuario (lo que puede hacer que la carga sea lenta), sino enviado según sea necesario por el servidor. 
+
+Puedes obtener más información sobre este tema avanzado en https://shiny.rstudio.com/articles/selectize.html#server-side-selectize.
+
+No hay forma de seleccionar varios valores con botones de opción, pero existe una alternativa que es conceptualmente similar: `checkboxGroupInput()`.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  checkboxGroupInput("animal", "What animals do you like?", animals)
+)
+```
+
+```{r echo = FALSE, out.width = "90%", message = FALSE}
+knitr::include_graphics("images/multi-radio.png")
 ```
 
 
