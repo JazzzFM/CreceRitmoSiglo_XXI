@@ -15,13 +15,13 @@ resource_files:
 library(learnr)
 library(gradethis)
 library(learnrhash)
-library(tidyverse)
+#library(tidyverse)
 gradethis::gradethis_setup()
 ```
 
 <style type="text/css">
   body{
-  font-size: 13pt;
+  font-size: 12pt;
 }
 </style>
 
@@ -32,6 +32,7 @@ knitr::include_graphics("images/data-science-model.png")
 ## Introducción
 
 ### ¿Qué es Shiny?
+
 Shiny es un paquete de R que te permite crear fácilmente aplicaciones web, interactivas interactivas.
 
 Shiny te permite tomar tu trabajo en R y exponerlo a través de un navegador web para que cualquiera pueda usarlo. Shiny te hace lucir increíble haciendo que sea fácil producir aplicaciones web pulidas con una cantidad mínima de dolor.
@@ -133,7 +134,7 @@ Hay varias formas de ejecutar esta aplicación:
   * Si no está usando RStudio, puedes usar (`source()`) a todo el documento, o llamar a `shiny::runApp()` con la ruta al directorio que contiene `app.R`.
   
 
-```{r run-app, out.width = NULL, echo = FALSE, fig.cap = "El botón Ejecutar aplicación se puede encontrar en la parte superior derecha del panel de origen."}
+```{r run-app,  fig.align="center", out.width = NULL, echo = FALSE, fig.cap = "El botón Ejecutar aplicación se puede encontrar en la parte superior derecha del panel de origen."}
 knitr::include_graphics("images/run-app.png")
 ```
 
@@ -141,7 +142,7 @@ knitr::include_graphics("images/run-app.png")
 Elije una de estas opciones y comprueba que ve la misma aplicación que en la imagen siguiente ¡Felicidades! Has creado tu primera aplicación Shiny.
 
 
-```{r hello-world, out.width = NULL, echo = FALSE, fig.cap = "La aplicación shiny muy básica que verá cuando ejecute el código anterior."}
+```{r hello-world,  fig.align="center",  out.width = NULL, echo = FALSE, fig.cap = "La aplicación shiny muy básica que verá cuando ejecute el código anterior."}
 knitr::include_graphics("images/hello-world.png")
 ```
 
@@ -230,7 +231,7 @@ Por ejemplo, en esta aplicación, `renderPrint()` se empareja con `verbatimTextO
 
 Ejecuta la aplicación nuevamente y juegue, observando lo que sucede con la salida cuando cambia una entrada. A continuación muestra lo que deberías ver cuando abre la aplicación.
 
-```{r basic-server, echo = FALSE, out.width = "90%", fig.cap="Ahora que proporcionamos una función de servidor que conecta salidas y entradas, tenemos una aplicación completamente funcional.", message = FALSE}
+```{r basic-server,  fig.align="center", echo = FALSE, out.width = "90%", fig.cap="Ahora que proporcionamos una función de servidor que conecta salidas y entradas, tenemos una aplicación completamente funcional.", message = FALSE}
 knitr::include_graphics("images/server.png")
 ```
 
@@ -457,7 +458,7 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "90%", message = FALSE}
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
 knitr::include_graphics("images/free-text.png")
 ```
 
@@ -477,7 +478,7 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "90%", message = FALSE}
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
 knitr::include_graphics("images/numeric.png")
 ```
 
@@ -499,7 +500,7 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "90%", message = FALSE}
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
 knitr::include_graphics("images/date.png")
 ```
 
@@ -520,7 +521,7 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "90%", message = FALSE}
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
 knitr::include_graphics("images/limited-choices.png")
 ```
 
@@ -541,7 +542,7 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "90%", message = FALSE}
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
 knitr::include_graphics("images/radio-icon.png")
 ```
 
@@ -558,7 +559,7 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "60%", message = FALSE}
+```{r echo = FALSE,  fig.align="center", out.width = "60%", message = FALSE}
 knitr::include_graphics("images/multi-select.png")
 ```
 
@@ -574,9 +575,420 @@ ui <- fluidPage(
 )
 ```
 
-```{r echo = FALSE, out.width = "90%", message = FALSE}
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
 knitr::include_graphics("images/multi-radio.png")
 ```
+
+Si deseas una sola casilla de verificación para una sola pregunta de sí/no, usa `checkboxInput()`:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  checkboxInput("cleanup", "Clean up?", value = TRUE),
+  checkboxInput("shutdown", "Shutdown?")
+)
+```
+
+```{r echo = FALSE,  fig.align="center", out.width = "90%", message = FALSE}
+knitr::include_graphics("images/yes-no.png")
+```
+
+### Cargas de archivos
+
+También es posible que el usuario cargue un archivo con `fileInput()`:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  fileInput("upload", NULL)
+)
+```
+
+```{r echo = FALSE, fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/upload.png")
+```
+
+`fileInput()` requiere un manejo especial en el lado del servidor y se analizará con detalle posteriormente. 
+
+### Botones de acción
+
+Deja que el usuario realice una acción con `actionButton()` o `actionLink()`:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  actionButton("click", "Click me!"),
+  actionButton("drink", "Drink me!", icon = icon("cocktail"))
+)
+```
+
+```{r echo = FALSE, fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/action.png")
+```
+
+Los enlaces y botones de acciones se emparejan de forma más natural con `observeEvent()` o `eventReactive()` en la función de su servidor. Estas funcioes tienen un posterior tratamiento. 
+
+Puedes personalizar la apariencia usando el argumento de clase usando uno de `btn-primary`, `btn-success`, `btn-info`, `btn-warning` o `btn-danger`. 
+
+También puedes cambiar el tamaño con `btn-lg`, `btn-sm`, `btn-xs`.
+
+Finalmente, puede hacer que los botones abarquen todo el ancho del elemento en el que están incrustados usando `btn-block`.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  fluidRow(
+    actionButton("click", "Click me!", class = "btn-danger"),
+    actionButton("drink", "Drink me!", class = "btn-lg btn-success")
+  ),
+  fluidRow(
+    actionButton("eat", "Eat me!", class = "btn-block")
+  )
+)
+```
+
+```{r echo = FALSE,  fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/action-css.png")
+```
+
+El argumento `class` funciona estableciendo el atributo de clase del HTML subyacente, lo que afecta el estilo del elemento. Para ver otras opciones, puede leer la documentación de Bootstrap, el sistema de diseño CSS utilizado por Shiny: <http://bootstrapdocs.com/v3.3.6/docs/css/#buttons>.
+
+### Ejercicios
+  * 1 - Cuando el espacio es escaso, es útil etiquetar los cuadros de texto con un marcador de posición que aparece dentro del área de entrada de texto. ¿Cómo se llama a `textInput()` para generar la interfaz de usuario a continuación?
+
+```{r echo = FALSE,  fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/placeholder.png")
+```
+
+  * 2 - Lee atentamente la documentación de `sliderInput()` para descubrir cómo crear un control deslizante de fecha, como se muestra a continuación.
+  
+```{r echo = FALSE,  fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/date-slider.png")
+```
+  
+  * 3 - Crea una entrada de control deslizante para seleccionar valores entre 0 y 100 donde el intervalo entre cada valor seleccionable en el control deslizante es 5. Luego, agrega animación al widget de entrada para que cuando el usuario presione reproducir, el widget de entrada se desplaza por el rango automáticamente.
+  
+  * 4 - Si tienes una lista moderadamente larga en un `selectInput()`, es útil crear subtítulos que dividan la lista en pedazos. Lee la documentación para descubrir cómo. (Sugerencia: el HTML subyacente se llama <optgroup>). 
+  
+  
+###  Salidas
+
+Los resultados en la interfaz de usuario crean marcadores de posición que luego se rellenan con la función del servidor. Al igual que las entradas, las salidas toman una ID única como primer argumento: si la especificación de la interfaz de usuario crea una salida con la ID `plot`, accederás a ella en la función del servidor con la `output$plot`.
+
+Cada función de `output` en el front-end está acoplada con una función de `render` en el back-end. Hay tres tipos principales de resultados, que se corresponden con las tres cosas que suele incluir en un informe: texto, tablas y gráficos. 
+
+Las siguientes secciones le muestran los conceptos básicos de las funciones de salida en el front-end, junto con las funciones de `render` correspondientes en el back-end.
+  
+### Texto
+
+Salida de texto regular con `textOutput()` y código fijo y salida de consola con `verbatimTextOutput()`.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  textOutput("text"),
+  verbatimTextOutput("code")
+)
+server <- function(input, output, session) {
+  output$text <- renderText({ 
+    "Hello friend!" 
+  })
+  output$code <- renderPrint({ 
+    summary(1:10) 
+  })
+}
+```
+
+```{r echo = FALSE,  fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/output-text.png")
+```
+
+Ten en cuenta que los `{ }` solo son necesarios en las funciones de renderizado si es necesario ejecutar varias líneas de código. Como aprenderá en breve, debe realizar el menor cálculo posible en sus funciones de renderizado, lo que significa que a menudo puede omitirlas. 
+
+Así es como se vería la función del servidor anterior si se escribiera de manera más compacta:
+
+```{r, echo=TRUE, eval=FALSE}
+server <- function(input, output, session) {
+  output$text <- renderText("Hello friend!")
+  output$code <- renderPrint(summary(1:10))
+}
+```
+
+Ten en cuenta que hay dos funciones de renderizado que se comportan de forma ligeramente diferente:
+
+  * `renderText()` combina el resultado en una sol string, y generalmente se empareja con `textOutput()`
+  * `renderPrint()` imprime el resultado, como si estuviera en una consola R, y normalmente se empareja con `verbatimTextOutput()`.
+
+Podemos ver la diferencia con una aplicación:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  textOutput("text"),
+  verbatimTextOutput("print")
+)
+server <- function(input, output, session) {
+  output$text <- renderText("hello!")
+  output$print <- renderPrint("hello!")
+}
+```
+
+```{r echo = FALSE, fig.align="center", out.width = "70%", message = FALSE}
+knitr::include_graphics("images/text-vs-print.png")
+```
+
+Esto es equivalente a la diferencia entre `cat()` e `print()` en la base R.
+
+### Tablas
+
+Hay dos opciones para mostrar marcos de datos en tablas:
+
+  * `tableOutput()` y `renderTable()` representan una tabla estática de datos, mostrando todos los datos a la vez.
+
+  * `dataTableOutput()` y `renderDataTable()` representan una tabla dinámica, mostrando un número fijo de filas junto con controles para cambiar qué filas son visibles.
+
+`tableOutput()` es más útil para resúmenes pequeños y fijos (por ejemplo, coeficientes de modelo); `dataTableOutput()` es más apropiado si desea exponer un marco de datos completo al usuario. 
+
+Si deseas un mayor control sobre la salida de `dataTableOutput()`, te recomiendo encarecidamente el paquete `reactable` de Greg Lin.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  tableOutput("static"),
+  dataTableOutput("dynamic")
+)
+server <- function(input, output, session) {
+  output$static <- renderTable(head(mtcars))
+  output$dynamic <- renderDataTable(mtcars, options = list(pageLength = 5))
+}
+```
+
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
+knitr::include_graphics("images/output-table.png")
+```
+
+### Gráficas
+
+Puede mostrar cualquier tipo de gráfico R (base, ggplot2 u otro) con `plotOutput()` y `renderPlot()`:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  plotOutput("plot", width = "400px")
+)
+server <- function(input, output, session) {
+  output$plot <- renderPlot(plot(1:5), res = 96)
+}
+```
+
+```{r echo = FALSE, fig.align="center", out.width = "90%", message = FALSE}
+knitr::include_graphics("images/output-plot.png")
+```
+
+Por defecto, `plotOutput()` ocupará todo el ancho de su contenedor (más sobre eso en breve) y tendrá 400 píxeles de alto. Puede anular estos valores predeterminados con los argumentos de alto y ancho. Recomendamos establecer siempre `res = 96`, ya que eso hará que sus gráficos Shiny coincidan lo más posible con lo que ve en RStudio.
+
+Los gráficos son especiales porque son salidas que también pueden actuar como entradas.
+
+`plotOutput()` tiene varios argumentos como `click`, `dblclick` y `hover`. Si les pasa una cadena, como `click = "plot_click"`, crearán una entrada reactiva (`input$lot_click`) que puede usar para manejar la interacción del usuario en la gráfica, p. Ej. haciendo clic en la gráfica.
+
+### Descargas
+
+Puedes hacer que el usuario descargue un archivo con `downloadButton()` o `downloadLink()`. Estos requieren nuevas técnicas en la función del servidor las cuales veremos más adelante.
+
+### Ejercicios
+
+  * 1 - ¿Con cuál de `textOutput()` y `verbatimTextOutput()` se debe emparejar cada una de las siguientes funciones de renderizado?
+
+    * a) `renderPrint(summary(mtcars))`
+    * b) `renderText("Good morning!")`
+    * c) `renderPrint(t.test(1:5, 2:6))`
+    * d) `renderText(str(lm(mpg ~ wt, data = mtcars)))`
+    
+  * 2 - Vuelve a crear la aplicación Shiny de la Sección de **Gráficas**, esta vez configurando la altura en `300px` y el ancho en `700px`. Establezca el texto "alt" de la gráfica para que un usuario con discapacidad visual pueda saber que es una gráfica de dispersión de cinco números aleatorios.
+
+  * 3 - Actualiza las opciones en la llamada a `renderDataTable()` a continuación para que se muestren los datos, pero todos los demás controles estén suprimidos (es decir, elimina los comandos de búsqueda, orden y filtrado). Deberás leer `?RenderDataTable` y revisar las opciones en https://datatables.net/reference/option/.
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  dataTableOutput("table")
+)
+server <- function(input, output, session) {
+  output$table <- renderDataTable(mtcars, options = list(pageLength = 5))
+}
+```
+
+  * 4 - Alternativamente, lee sobre reactable y convierte la aplicación anterior para usarla en su lugar. 
+
+### Resumen
+
+Este sección le ha presentado las principales funciones de entrada y salida que componen la interfaz de una aplicación Shiny. Este fue un gran volcado de información, así que no esperes recordar todo después de una sola lectura. En su lugar, vuelve a esta sección cuando esté buscando un componente específico: puede escanear rápidamente las figuras y luego encontrar el código que necesita.
+
+En la próxima sección, pasaremos al **back-end** de una aplicación Shiny: el código R que hace que su interfaz de usuario cobre vida.
+
+## Reactividad: El servidor
+
+En Shiny, expresas la **lógica de tu servidor** mediante **programación reactiva**. La programación reactiva es un paradigma de programación elegante y poderoso, pero puede ser desorientador al principio porque es un paradigma muy diferente al de escribir un guión.
+
+La idea clave de la programación reactiva es especificar un gráfico de dependencias para que cuando cambie una entrada, todas las salidas relacionadas se actualicen automáticamente. Esto simplifica considerablemente el flujo de una aplicación, pero lleva un tiempo entender cómo encaja todo.
+
+Esta sección se proporcionará una introducción suave a la programación reactiva, enseñándote los conceptos básicos de las construcciones reactivas más comunes que usará en las aplicaciones Shiny. 
+
+Comenzaremos con una encuesta de la función del servidor, discutiendo con más detalle cómo funcionan los argumentos de entrada y salida. A continuación, revisaremos la forma más simple de reactividad (donde las entradas se conectan directamente a las salidas) y luego analizaremos cómo las expresiones reactivas le permiten eliminar el trabajo duplicado.
+
+Terminaremos revisando algunos obstáculos comunes que encuentran los usuarios más nuevos de Shiny.
+
+### La función de servidor
+
+Como has visto, las entrañas de cada aplicación Shiny se ven así:
+
+```{r, echo=TRUE, eval=FALSE}
+library(shiny)
+
+ui <- fluidPage(
+  # front end interface
+)
+
+server <- function(input, output, session) {
+  # back end logic
+}
+
+shinyApp(ui, server)
+```
+
+
+El capítulo anterior cubrió los conceptos básicos de la interfaz, el objeto de `ui` que contiene el HTML presentado a cada usuario de su aplicación. La interfaz de usuario es simple porque todos los usuarios obtienen el mismo HTML. El `server` es más complicado porque cada usuario necesita obtener una versión independiente de la aplicación; cuando el usuario A mueve un control deslizante, el usuario B no debería ver cambiar sus resultados.
+
+Para lograr esta independencia, Shiny invoca su función `server()` cada vez que se inicia una nueva sesión. Al igual que cualquier otra función de R, cuando se llama a la función de servidor, crea un nuevo entorno local que es independiente de cualquier otra invocación de la función. Esto permite que cada sesión tenga un estado único, además de aislar las variables creadas dentro de la función. Es por eso que casi toda la programación reactiva que harás en Shiny estará dentro de la función del `server`. 
+
+Las funciones del servidor toman tres parámetros: `input`, `output`, y `session`. Debido a que nunca llamas a la función del servidor, nunca crearás estos objetos tu mismo. 
+
+En cambio, son creados por Shiny cuando comienza la sesión, conectándose de nuevo a una sesión específica. Por el momento, nos centraremos en los argumentos de `input` y `output`, y dejaremos la `session` para posteriormente.
+
+### Input
+
+El argumento de `input` es un objeto similar a una lista que contiene todos los datos de entrada enviados desde el navegador, nombrados de acuerdo con el ID de entrada. Por ejemplo, si tu interfaz de usuario contiene un control de entrada numérico con un ID de entrada de `count`, así:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100)
+)
+```
+
+Luego puede acceder al valor de ese `input` con `input$count`. Inicialmente contendrá el valor 100 y se actualizará automáticamente a medida que el usuario cambie el valor en el navegador.
+
+A diferencia de una lista típica, los objetos de `input` son de solo lectura. Si intenta modificar una `input` dentro de la función del servidor, obtendrá un error:
+
+```{r, echo=TRUE, eval=FALSE}
+server <- function(input, output, session) {
+  input$count <- 10  
+}
+
+shinyApp(ui, server)
+#> Error: Can't modify read-only reactive value 'count'
+```
+
+Este error se produce porque la entrada refleja lo que está sucediendo en el navegador, y el navegador es la "única fuente de verdad" de Shiny. Si pudieras modificar el valor en R, podría introducir inconsistencias, donde el control deslizante de entrada decía una cosa en el navegador, y `input$count` decía algo diferente en R. ¡Eso haría que la programación fuera un desafío! 
+
+Más adelante, veremos como usar funciones como `updateNumericInput()` para modificar el valor en el navegador, y luego la `input$count` se actualizará en consecuencia.
+
+Una cosa más importante sobre el `input`: es selectiva sobre quién puede leerla. Para leer desde una entrada, debe estar en un **contexto reactivo** creado por una función como `renderText()` o `reactive()`.
+
+Volveremos a esa idea muy pronto, pero es una restricción importante que permite que las salidas se actualicen automáticamente cuando cambia una entrada. Este código ilustra el error que verás si cometes este error:
+
+```{r, echo=TRUE, eval=FALSE}
+server <- function(input, output, session) {
+  message("The value of input$count is ", input$count)
+}
+
+shinyApp(ui, server)
+#> Error: Can't access reactive value 'count' outside of reactive consumer.
+#> ℹ Do you need to wrap inside reactive() or observer()?
+```
+
+###  Output
+
+El `output` es muy similar aL `input`: también es un objeto similar a una lista nombrada de acuerdo con el ID de salida. La principal diferencia es que lo usa para enviar salida en lugar de recibir entrada. Siempre usa el objeto de salida junto con una función de renderizado, como en el siguiente ejemplo simple:
+
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  textOutput("greeting")
+)
+
+server <- function(input, output, session) {
+  output$greeting <- renderText("Hello human!")
+}
+```
+
+(Tenga en cuenta que la ID se cita en la interfaz de usuario, pero no en el servidor).
+
+La función de render hace dos cosas:
+
+  * Establece un contexto reactivo especial que rastrea automáticamente las entradas que utiliza la salida.
+
+  * Convierte la salida de su código R en HTML adecuado para mostrar en una página web.
+
+Al igual que la entrada, la salida es exigente con la forma en que la usa. Obtendrás un error si:
+
+  * Olvidas la función de renderizado.
+  
+```{r, echo=TRUE, eval=FALSE}
+server <- function(input, output, session) {
+  output$greeting <- "Hello human"
+}
+shinyApp(ui, server)
+#> Error: Unexpected character object for output$greeting
+#> ℹ Did you forget to use a render function?
+```
+
+  * Intentas leer de una salida.
+  
+```{r, echo=TRUE, eval=FALSE}
+server <- function(input, output, session) {
+  message("The greeting is ", output$greeting)
+}
+shinyApp(ui, server)
+#> Error: Reading from shinyoutput object is not allowed
+```
+
+### Programación reactiva
+
+Una aplicación será bastante aburrida si solo tiene entradas o solo salidas. La verdadera magia de Shiny ocurre cuando tienes una aplicación con ambos. Veamos un ejemplo sencillo:
+
+```{r, echo=TRUE, eval=FALSE}
+ui <- fluidPage(
+  textInput("name", "What's your name?"),
+  textOutput("greeting")
+)
+
+server <- function(input, output, session) {
+  output$greeting <- renderText({
+    paste0("Hello ", input$name, "!")
+  })
+}
+```
+
+Es difícil mostrar cómo funciona esto, pero puede observar la figura siguiente. Si ejecutas la aplicación y escribes en el cuadro de nombre, verá que el saludo se actualiza automáticamente a medida que escribe.
+
+
+```{r connection, fig.cap="La reactividad significa que las salidas se actualizan automáticamente a medida que cambian las entradas, como en esta aplicación donde escribo "J", "o", "e". Véalo en vivo en https://hadley.shinyapps.io/ms-connection.", echo = FALSE, out.width = "25%", fig.show="hold", fig.align = "center", message = FALSE}
+knitr::include_graphics("images/connection-1.png")
+knitr::include_graphics("images/connection-2.png")
+knitr::include_graphics("images/connection-3.png")
+```
+
+Esta es la gran idea en Shiny: no necesitas decirle a una salida cuándo actualizar, porque Shiny lo averigua automáticamente por ti. ¿Como funciona? ¿Qué está sucediendo exactamente en el cuerpo de la función? Pensemos en el código dentro de la función del servidor con más precisión:
+
+```{r, echo=TRUE, eval=FALSE}
+output$greeting <- renderText({
+  paste0("Hello ", input$name, "!")
+})
+```
+
+Es fácil leer esto como "pegar" hola "y el nombre del usuario, luego enviarlo a la `salida$saludo`.
+
+Pero este modelo mental está equivocado de una manera sutil, pero importante. 
+
+Piénsalo: con este modelo, solo emite la instrucción una vez. Pero Shiny realiza la acción cada vez que actualizamos la `input$name`, por lo que debe haber algo más.
+
+La aplicación funciona porque el código no le dice a Shiny que cree la cadena y la envíe al navegador, sino que le informa a Shiny cómo podría crear el string si es necesario.
+
+Depende de Shiny cuándo (¡e incluso si!) Se debe ejecutar el código. Es posible que se ejecute tan pronto como se inicie la aplicación, puede que sea un poco más tarde; ¡Puede que se ejecute muchas veces o que nunca se ejecute! 
+
+Esto no implica que Shiny sea caprichoso, solo que es responsabilidad de Shiny decidir cuándo se ejecuta el código, no la tuya. Piense en su aplicación como si le proporcionara recetas a Shiny, no como si le diera comandos.
+
 
 
 ## Enviar Ejercicios

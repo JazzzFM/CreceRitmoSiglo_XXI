@@ -106,7 +106,7 @@ if (window.hljs) {
 
 <style type="text/css">
   body{
-  font-size: 13pt;
+  font-size: 12pt;
 }
 </style>
 <p><img src="images/data-science-model.png" width="100%" /></p>
@@ -185,14 +185,14 @@ shinyApp(ui, server)</code></pre>
 <li><p>Use un atajo de teclado: Cmd/Ctrl + Shift + Enter.</p></li>
 <li><p>Si no está usando RStudio, puedes usar (<code>source()</code>) a todo el documento, o llamar a <code>shiny::runApp()</code> con la ruta al directorio que contiene <code>app.R</code>.</p></li>
 </ul>
-<div class="figure">
+<div class="figure" style="text-align: center">
 <img src="images/run-app.png" alt="El botón Ejecutar aplicación se puede encontrar en la parte superior derecha del panel de origen." width="772" />
 <p class="caption">
 El botón Ejecutar aplicación se puede encontrar en la parte superior derecha del panel de origen.
 </p>
 </div>
 <p>Elije una de estas opciones y comprueba que ve la misma aplicación que en la imagen siguiente ¡Felicidades! Has creado tu primera aplicación Shiny.</p>
-<div class="figure">
+<div class="figure" style="text-align: center">
 <img src="images/hello-world.png" alt="La aplicación shiny muy básica que verá cuando ejecute el código anterior." width="550" />
 <p class="caption">
 La aplicación shiny muy básica que verá cuando ejecute el código anterior.
@@ -256,7 +256,7 @@ La aplicación de datasets con interfaz de usuario.
 <p>El lado derecho de la asignación usa una <strong>función de renderización</strong> específica para envolver algún código que proporciones. Cada función de <code>render{Type}</code> está diseñada para producir un tipo particular de salida (por ejemplo, texto, tablas y gráficos) y, a menudo, se empareja con una función de <code>{type}Output</code>.</p>
 <p>Por ejemplo, en esta aplicación, <code>renderPrint()</code> se empareja con <code>verbatimTextOutput()</code> para mostrar un resumen estadístico con texto de ancho fijo (literal), y <code>renderTable()</code> se empareja con <code>tableOutput()</code> para mostrar los datos de entrada en una tabla.</p>
 <p>Ejecuta la aplicación nuevamente y juegue, observando lo que sucede con la salida cuando cambia una entrada. A continuación muestra lo que deberías ver cuando abre la aplicación.</p>
-<div class="figure">
+<div class="figure" style="text-align: center">
 <img src="images/server.png" alt="Ahora que proporcionamos una función de servidor que conecta salidas y entradas, tenemos una aplicación completamente funcional." width="90%" />
 <p class="caption">
 Ahora que proporcionamos una función de servidor que conecta salidas y entradas, tenemos una aplicación completamente funcional.
@@ -440,7 +440,7 @@ shinyApp(ui, server)</code></pre>
   passwordInput(&quot;password&quot;, &quot;What&#39;s your password?&quot;),
   textAreaInput(&quot;story&quot;, &quot;Tell me about yourself&quot;, rows = 3)
 )</code></pre>
-<p><img src="images/free-text.png" width="90%" /></p>
+<p><img src="images/free-text.png" width="90%" style="display: block; margin: auto;" /></p>
 <p>Si desea asegurarse de que el texto tenga ciertas propiedades, puede usar <code>validate()</code>.</p>
 </div>
 <div id="section-entradas-numéricas" class="section level3">
@@ -452,7 +452,7 @@ shinyApp(ui, server)</code></pre>
   sliderInput(&quot;num2&quot;, &quot;Number two&quot;, value = 50, min = 0, max = 100),
   sliderInput(&quot;rng&quot;, &quot;Range&quot;, value = c(10, 20), min = 0, max = 100)
 )</code></pre>
-<p><img src="images/numeric.png" width="90%" /></p>
+<p><img src="images/numeric.png" width="90%" style="display: block; margin: auto;" /></p>
 <p>En general, se recomienda usar solo controles deslizantes para rangos pequeños o casos en los que el valor preciso no sea tan importante. ¡Intentar seleccionar con precisión un número en un pequeño control deslizante es un ejercicio de frustración!</p>
 <p>Los controles deslizantes son extremadamente personalizables y hay muchas formas de modificar su apariencia. Consulta <code>?SliderInput</code> y <a href="https://shiny.rstudio.com/articles/sliders.html" class="uri">https://shiny.rstudio.com/articles/sliders.html</a> para obtener más detalles.</p>
 </div>
@@ -464,7 +464,7 @@ shinyApp(ui, server)</code></pre>
   dateInput(&quot;dob&quot;, &quot;When were you born?&quot;),
   dateRangeInput(&quot;holiday&quot;, &quot;When do you want to go on vacation next?&quot;)
 )</code></pre>
-<p><img src="images/date.png" width="90%" /></p>
+<p><img src="images/date.png" width="90%" style="display: block; margin: auto;" /></p>
 <p>El formato de fecha, el idioma y el día en que comienza la semana se ajustan de forma predeterminada a los estándares de EE.UU.</p>
 <p>Si estás creando una aplicación con una audiencia internacional, establezca el formato, el idioma y el inicio de la semana para que las fechas sean naturales para sus usuarios.</p>
 </div>
@@ -477,7 +477,7 @@ ui &lt;- fluidPage(
   selectInput(&quot;state&quot;, &quot;What&#39;s your favourite state?&quot;, state.name),
   radioButtons(&quot;animal&quot;, &quot;What&#39;s your favourite animal?&quot;, animals)
 )</code></pre>
-<p><img src="images/limited-choices.png" width="90%" /></p>
+<p><img src="images/limited-choices.png" width="90%" style="display: block; margin: auto;" /></p>
 <p>Los <code>radioButtons()</code> tienen dos características interesantes: muestran todas las opciones posibles, lo que las hace adecuadas para listas cortas y, a través de los argumentos <code>choiceNames</code>/<code>choiceValues</code>, pueden mostrar opciones distintas al texto sin formato.</p>
 <p><code>choiceNames</code> determina lo que se muestra al usuario; <code>choiceValues</code> determina lo que se devuelve en la función de tu servidor.</p>
 <pre class="r"><code>ui &lt;- fluidPage(
@@ -490,7 +490,7 @@ ui &lt;- fluidPage(
     choiceValues = list(&quot;angry&quot;, &quot;happy&quot;, &quot;sad&quot;)
   )
 )</code></pre>
-<p><img src="images/radio-icon.png" width="90%" /></p>
+<p><img src="images/radio-icon.png" width="90%" style="display: block; margin: auto;" /></p>
 <p>Los menús desplegables creados con <code>selectInput()</code> ocupan la misma cantidad de espacio, independientemente del número de opciones, lo que los hace más adecuados para opciones más largas.</p>
 <p>También puede establecer <code>multiple = TRUE</code> para permitir que el usuario seleccione varios elementos.</p>
 <pre class="r"><code>ui &lt;- fluidPage(
@@ -499,14 +499,295 @@ ui &lt;- fluidPage(
     multiple = TRUE
   )
 )</code></pre>
-<p><img src="images/multi-select.png" width="60%" /></p>
+<p><img src="images/multi-select.png" width="60%" style="display: block; margin: auto;" /></p>
 <p>Si tienes un conjunto muy grande de opciones posibles, es posible que desee utilizar <code>selectInput()</code> del “lado del servidor” para que el conjunto completo de opciones posibles no esté incrustado en la interfaz de usuario (lo que puede hacer que la carga sea lenta), sino enviado según sea necesario por el servidor.</p>
 <p>Puedes obtener más información sobre este tema avanzado en <a href="https://shiny.rstudio.com/articles/selectize.html#server-side-selectize" class="uri">https://shiny.rstudio.com/articles/selectize.html#server-side-selectize</a>.</p>
 <p>No hay forma de seleccionar varios valores con botones de opción, pero existe una alternativa que es conceptualmente similar: <code>checkboxGroupInput()</code>.</p>
 <pre class="r"><code>ui &lt;- fluidPage(
   checkboxGroupInput(&quot;animal&quot;, &quot;What animals do you like?&quot;, animals)
 )</code></pre>
-<p><img src="images/multi-radio.png" width="90%" /></p>
+<p><img src="images/multi-radio.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Si deseas una sola casilla de verificación para una sola pregunta de sí/no, usa <code>checkboxInput()</code>:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  checkboxInput(&quot;cleanup&quot;, &quot;Clean up?&quot;, value = TRUE),
+  checkboxInput(&quot;shutdown&quot;, &quot;Shutdown?&quot;)
+)</code></pre>
+<p><img src="images/yes-no.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="section-cargas-de-archivos" class="section level3">
+<h3>Cargas de archivos</h3>
+<p>También es posible que el usuario cargue un archivo con <code>fileInput()</code>:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  fileInput(&quot;upload&quot;, NULL)
+)</code></pre>
+<p><img src="images/upload.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><code>fileInput()</code> requiere un manejo especial en el lado del servidor y se analizará con detalle posteriormente.</p>
+</div>
+<div id="section-botones-de-acción" class="section level3">
+<h3>Botones de acción</h3>
+<p>Deja que el usuario realice una acción con <code>actionButton()</code> o <code>actionLink()</code>:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  actionButton(&quot;click&quot;, &quot;Click me!&quot;),
+  actionButton(&quot;drink&quot;, &quot;Drink me!&quot;, icon = icon(&quot;cocktail&quot;))
+)</code></pre>
+<p><img src="images/action.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Los enlaces y botones de acciones se emparejan de forma más natural con <code>observeEvent()</code> o <code>eventReactive()</code> en la función de su servidor. Estas funcioes tienen un posterior tratamiento.</p>
+<p>Puedes personalizar la apariencia usando el argumento de clase usando uno de <code>btn-primary</code>, <code>btn-success</code>, <code>btn-info</code>, <code>btn-warning</code> o <code>btn-danger</code>.</p>
+<p>También puedes cambiar el tamaño con <code>btn-lg</code>, <code>btn-sm</code>, <code>btn-xs</code>.</p>
+<p>Finalmente, puede hacer que los botones abarquen todo el ancho del elemento en el que están incrustados usando <code>btn-block</code>.</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  fluidRow(
+    actionButton(&quot;click&quot;, &quot;Click me!&quot;, class = &quot;btn-danger&quot;),
+    actionButton(&quot;drink&quot;, &quot;Drink me!&quot;, class = &quot;btn-lg btn-success&quot;)
+  ),
+  fluidRow(
+    actionButton(&quot;eat&quot;, &quot;Eat me!&quot;, class = &quot;btn-block&quot;)
+  )
+)</code></pre>
+<p><img src="images/action-css.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>El argumento <code>class</code> funciona estableciendo el atributo de clase del HTML subyacente, lo que afecta el estilo del elemento. Para ver otras opciones, puede leer la documentación de Bootstrap, el sistema de diseño CSS utilizado por Shiny: <a href="http://bootstrapdocs.com/v3.3.6/docs/css/#buttons" class="uri">http://bootstrapdocs.com/v3.3.6/docs/css/#buttons</a>.</p>
+</div>
+<div id="section-ejercicios-1" class="section level3">
+<h3>Ejercicios</h3>
+<ul>
+<li>1 - Cuando el espacio es escaso, es útil etiquetar los cuadros de texto con un marcador de posición que aparece dentro del área de entrada de texto. ¿Cómo se llama a <code>textInput()</code> para generar la interfaz de usuario a continuación?</li>
+</ul>
+<p><img src="images/placeholder.png" width="70%" style="display: block; margin: auto;" /></p>
+<ul>
+<li>2 - Lee atentamente la documentación de <code>sliderInput()</code> para descubrir cómo crear un control deslizante de fecha, como se muestra a continuación.</li>
+</ul>
+<p><img src="images/date-slider.png" width="70%" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>3 - Crea una entrada de control deslizante para seleccionar valores entre 0 y 100 donde el intervalo entre cada valor seleccionable en el control deslizante es 5. Luego, agrega animación al widget de entrada para que cuando el usuario presione reproducir, el widget de entrada se desplaza por el rango automáticamente.</p></li>
+<li><p>4 - Si tienes una lista moderadamente larga en un <code>selectInput()</code>, es útil crear subtítulos que dividan la lista en pedazos. Lee la documentación para descubrir cómo. (Sugerencia: el HTML subyacente se llama <optgroup>).</p></li>
+</ul>
+</div>
+<div id="section-salidas" class="section level3">
+<h3>Salidas</h3>
+<p>Los resultados en la interfaz de usuario crean marcadores de posición que luego se rellenan con la función del servidor. Al igual que las entradas, las salidas toman una ID única como primer argumento: si la especificación de la interfaz de usuario crea una salida con la ID <code>plot</code>, accederás a ella en la función del servidor con la <code>output$plot</code>.</p>
+<p>Cada función de <code>output</code> en el front-end está acoplada con una función de <code>render</code> en el back-end. Hay tres tipos principales de resultados, que se corresponden con las tres cosas que suele incluir en un informe: texto, tablas y gráficos.</p>
+<p>Las siguientes secciones le muestran los conceptos básicos de las funciones de salida en el front-end, junto con las funciones de <code>render</code> correspondientes en el back-end.</p>
+</div>
+<div id="section-texto" class="section level3">
+<h3>Texto</h3>
+<p>Salida de texto regular con <code>textOutput()</code> y código fijo y salida de consola con <code>verbatimTextOutput()</code>.</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  textOutput(&quot;text&quot;),
+  verbatimTextOutput(&quot;code&quot;)
+)
+server &lt;- function(input, output, session) {
+  output$text &lt;- renderText({ 
+    &quot;Hello friend!&quot; 
+  })
+  output$code &lt;- renderPrint({ 
+    summary(1:10) 
+  })
+}</code></pre>
+<p><img src="images/output-text.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Ten en cuenta que los <code>{ }</code> solo son necesarios en las funciones de renderizado si es necesario ejecutar varias líneas de código. Como aprenderá en breve, debe realizar el menor cálculo posible en sus funciones de renderizado, lo que significa que a menudo puede omitirlas.</p>
+<p>Así es como se vería la función del servidor anterior si se escribiera de manera más compacta:</p>
+<pre class="r"><code>server &lt;- function(input, output, session) {
+  output$text &lt;- renderText(&quot;Hello friend!&quot;)
+  output$code &lt;- renderPrint(summary(1:10))
+}</code></pre>
+<p>Ten en cuenta que hay dos funciones de renderizado que se comportan de forma ligeramente diferente:</p>
+<ul>
+<li><code>renderText()</code> combina el resultado en una sol string, y generalmente se empareja con <code>textOutput()</code></li>
+<li><code>renderPrint()</code> imprime el resultado, como si estuviera en una consola R, y normalmente se empareja con <code>verbatimTextOutput()</code>.</li>
+</ul>
+<p>Podemos ver la diferencia con una aplicación:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  textOutput(&quot;text&quot;),
+  verbatimTextOutput(&quot;print&quot;)
+)
+server &lt;- function(input, output, session) {
+  output$text &lt;- renderText(&quot;hello!&quot;)
+  output$print &lt;- renderPrint(&quot;hello!&quot;)
+}</code></pre>
+<p><img src="images/text-vs-print.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Esto es equivalente a la diferencia entre <code>cat()</code> e <code>print()</code> en la base R.</p>
+</div>
+<div id="section-tablas" class="section level3">
+<h3>Tablas</h3>
+<p>Hay dos opciones para mostrar marcos de datos en tablas:</p>
+<ul>
+<li><p><code>tableOutput()</code> y <code>renderTable()</code> representan una tabla estática de datos, mostrando todos los datos a la vez.</p></li>
+<li><p><code>dataTableOutput()</code> y <code>renderDataTable()</code> representan una tabla dinámica, mostrando un número fijo de filas junto con controles para cambiar qué filas son visibles.</p></li>
+</ul>
+<p><code>tableOutput()</code> es más útil para resúmenes pequeños y fijos (por ejemplo, coeficientes de modelo); <code>dataTableOutput()</code> es más apropiado si desea exponer un marco de datos completo al usuario.</p>
+<p>Si deseas un mayor control sobre la salida de <code>dataTableOutput()</code>, te recomiendo encarecidamente el paquete <code>reactable</code> de Greg Lin.</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  tableOutput(&quot;static&quot;),
+  dataTableOutput(&quot;dynamic&quot;)
+)
+server &lt;- function(input, output, session) {
+  output$static &lt;- renderTable(head(mtcars))
+  output$dynamic &lt;- renderDataTable(mtcars, options = list(pageLength = 5))
+}</code></pre>
+<p><img src="images/output-table.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="section-gráficas" class="section level3">
+<h3>Gráficas</h3>
+<p>Puede mostrar cualquier tipo de gráfico R (base, ggplot2 u otro) con <code>plotOutput()</code> y <code>renderPlot()</code>:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  plotOutput(&quot;plot&quot;, width = &quot;400px&quot;)
+)
+server &lt;- function(input, output, session) {
+  output$plot &lt;- renderPlot(plot(1:5), res = 96)
+}</code></pre>
+<p><img src="images/output-plot.png" width="90%" style="display: block; margin: auto;" /></p>
+<p>Por defecto, <code>plotOutput()</code> ocupará todo el ancho de su contenedor (más sobre eso en breve) y tendrá 400 píxeles de alto. Puede anular estos valores predeterminados con los argumentos de alto y ancho. Recomendamos establecer siempre <code>res = 96</code>, ya que eso hará que sus gráficos Shiny coincidan lo más posible con lo que ve en RStudio.</p>
+<p>Los gráficos son especiales porque son salidas que también pueden actuar como entradas.</p>
+<p><code>plotOutput()</code> tiene varios argumentos como <code>click</code>, <code>dblclick</code> y <code>hover</code>. Si les pasa una cadena, como <code>click = "plot_click"</code>, crearán una entrada reactiva (<code>input$lot_click</code>) que puede usar para manejar la interacción del usuario en la gráfica, p. Ej. haciendo clic en la gráfica.</p>
+</div>
+<div id="section-descargas" class="section level3">
+<h3>Descargas</h3>
+<p>Puedes hacer que el usuario descargue un archivo con <code>downloadButton()</code> o <code>downloadLink()</code>. Estos requieren nuevas técnicas en la función del servidor las cuales veremos más adelante.</p>
+</div>
+<div id="section-ejercicios-2" class="section level3">
+<h3>Ejercicios</h3>
+<ul>
+<li><p>1 - ¿Con cuál de <code>textOutput()</code> y <code>verbatimTextOutput()</code> se debe emparejar cada una de las siguientes funciones de renderizado?</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li><code>renderPrint(summary(mtcars))</code></li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li><code>renderText("Good morning!")</code></li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li><code>renderPrint(t.test(1:5, 2:6))</code></li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li><code>renderText(str(lm(mpg ~ wt, data = mtcars)))</code></li>
+</ol></li>
+</ul></li>
+<li><p>2 - Vuelve a crear la aplicación Shiny de la Sección de <strong>Gráficas</strong>, esta vez configurando la altura en <code>300px</code> y el ancho en <code>700px</code>. Establezca el texto “alt” de la gráfica para que un usuario con discapacidad visual pueda saber que es una gráfica de dispersión de cinco números aleatorios.</p></li>
+<li><p>3 - Actualiza las opciones en la llamada a <code>renderDataTable()</code> a continuación para que se muestren los datos, pero todos los demás controles estén suprimidos (es decir, elimina los comandos de búsqueda, orden y filtrado). Deberás leer <code>?RenderDataTable</code> y revisar las opciones en <a href="https://datatables.net/reference/option/" class="uri">https://datatables.net/reference/option/</a>.</p></li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  dataTableOutput(&quot;table&quot;)
+)
+server &lt;- function(input, output, session) {
+  output$table &lt;- renderDataTable(mtcars, options = list(pageLength = 5))
+}</code></pre>
+<ul>
+<li>4 - Alternativamente, lee sobre reactable y convierte la aplicación anterior para usarla en su lugar.</li>
+</ul>
+</div>
+<div id="section-resumen-1" class="section level3">
+<h3>Resumen</h3>
+<p>Este sección le ha presentado las principales funciones de entrada y salida que componen la interfaz de una aplicación Shiny. Este fue un gran volcado de información, así que no esperes recordar todo después de una sola lectura. En su lugar, vuelve a esta sección cuando esté buscando un componente específico: puede escanear rápidamente las figuras y luego encontrar el código que necesita.</p>
+<p>En la próxima sección, pasaremos al <strong>back-end</strong> de una aplicación Shiny: el código R que hace que su interfaz de usuario cobre vida.</p>
+</div>
+</div>
+<div id="section-reactividad-el-servidor" class="section level2">
+<h2>Reactividad: El servidor</h2>
+<p>En Shiny, expresas la <strong>lógica de tu servidor</strong> mediante <strong>programación reactiva</strong>. La programación reactiva es un paradigma de programación elegante y poderoso, pero puede ser desorientador al principio porque es un paradigma muy diferente al de escribir un guión.</p>
+<p>La idea clave de la programación reactiva es especificar un gráfico de dependencias para que cuando cambie una entrada, todas las salidas relacionadas se actualicen automáticamente. Esto simplifica considerablemente el flujo de una aplicación, pero lleva un tiempo entender cómo encaja todo.</p>
+<p>Esta sección se proporcionará una introducción suave a la programación reactiva, enseñándote los conceptos básicos de las construcciones reactivas más comunes que usará en las aplicaciones Shiny.</p>
+<p>Comenzaremos con una encuesta de la función del servidor, discutiendo con más detalle cómo funcionan los argumentos de entrada y salida. A continuación, revisaremos la forma más simple de reactividad (donde las entradas se conectan directamente a las salidas) y luego analizaremos cómo las expresiones reactivas le permiten eliminar el trabajo duplicado.</p>
+<p>Terminaremos revisando algunos obstáculos comunes que encuentran los usuarios más nuevos de Shiny.</p>
+<div id="section-la-función-de-servidor" class="section level3">
+<h3>La función de servidor</h3>
+<p>Como has visto, las entrañas de cada aplicación Shiny se ven así:</p>
+<pre class="r"><code>library(shiny)
+
+ui &lt;- fluidPage(
+  # front end interface
+)
+
+server &lt;- function(input, output, session) {
+  # back end logic
+}
+
+shinyApp(ui, server)</code></pre>
+<p>El capítulo anterior cubrió los conceptos básicos de la interfaz, el objeto de <code>ui</code> que contiene el HTML presentado a cada usuario de su aplicación. La interfaz de usuario es simple porque todos los usuarios obtienen el mismo HTML. El <code>server</code> es más complicado porque cada usuario necesita obtener una versión independiente de la aplicación; cuando el usuario A mueve un control deslizante, el usuario B no debería ver cambiar sus resultados.</p>
+<p>Para lograr esta independencia, Shiny invoca su función <code>server()</code> cada vez que se inicia una nueva sesión. Al igual que cualquier otra función de R, cuando se llama a la función de servidor, crea un nuevo entorno local que es independiente de cualquier otra invocación de la función. Esto permite que cada sesión tenga un estado único, además de aislar las variables creadas dentro de la función. Es por eso que casi toda la programación reactiva que harás en Shiny estará dentro de la función del <code>server</code>.</p>
+<p>Las funciones del servidor toman tres parámetros: <code>input</code>, <code>output</code>, y <code>session</code>. Debido a que nunca llamas a la función del servidor, nunca crearás estos objetos tu mismo.</p>
+<p>En cambio, son creados por Shiny cuando comienza la sesión, conectándose de nuevo a una sesión específica. Por el momento, nos centraremos en los argumentos de <code>input</code> y <code>output</code>, y dejaremos la <code>session</code> para posteriormente.</p>
+</div>
+<div id="section-input" class="section level3">
+<h3>Input</h3>
+<p>El argumento de <code>input</code> es un objeto similar a una lista que contiene todos los datos de entrada enviados desde el navegador, nombrados de acuerdo con el ID de entrada. Por ejemplo, si tu interfaz de usuario contiene un control de entrada numérico con un ID de entrada de <code>count</code>, así:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  numericInput(&quot;count&quot;, label = &quot;Number of values&quot;, value = 100)
+)</code></pre>
+<p>Luego puede acceder al valor de ese <code>input</code> con <code>input$count</code>. Inicialmente contendrá el valor 100 y se actualizará automáticamente a medida que el usuario cambie el valor en el navegador.</p>
+<p>A diferencia de una lista típica, los objetos de <code>input</code> son de solo lectura. Si intenta modificar una <code>input</code> dentro de la función del servidor, obtendrá un error:</p>
+<pre class="r"><code>server &lt;- function(input, output, session) {
+  input$count &lt;- 10  
+}
+
+shinyApp(ui, server)
+#&gt; Error: Can&#39;t modify read-only reactive value &#39;count&#39;</code></pre>
+<p>Este error se produce porque la entrada refleja lo que está sucediendo en el navegador, y el navegador es la “única fuente de verdad” de Shiny. Si pudieras modificar el valor en R, podría introducir inconsistencias, donde el control deslizante de entrada decía una cosa en el navegador, y <code>input$count</code> decía algo diferente en R. ¡Eso haría que la programación fuera un desafío!</p>
+<p>Más adelante, veremos como usar funciones como <code>updateNumericInput()</code> para modificar el valor en el navegador, y luego la <code>input$count</code> se actualizará en consecuencia.</p>
+<p>Una cosa más importante sobre el <code>input</code>: es selectiva sobre quién puede leerla. Para leer desde una entrada, debe estar en un <strong>contexto reactivo</strong> creado por una función como <code>renderText()</code> o <code>reactive()</code>.</p>
+<p>Volveremos a esa idea muy pronto, pero es una restricción importante que permite que las salidas se actualicen automáticamente cuando cambia una entrada. Este código ilustra el error que verás si cometes este error:</p>
+<pre class="r"><code>server &lt;- function(input, output, session) {
+  message(&quot;The value of input$count is &quot;, input$count)
+}
+
+shinyApp(ui, server)
+#&gt; Error: Can&#39;t access reactive value &#39;count&#39; outside of reactive consumer.
+#&gt; ℹ Do you need to wrap inside reactive() or observer()?</code></pre>
+</div>
+<div id="section-output" class="section level3">
+<h3>Output</h3>
+<p>El <code>output</code> es muy similar aL <code>input</code>: también es un objeto similar a una lista nombrada de acuerdo con el ID de salida. La principal diferencia es que lo usa para enviar salida en lugar de recibir entrada. Siempre usa el objeto de salida junto con una función de renderizado, como en el siguiente ejemplo simple:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  textOutput(&quot;greeting&quot;)
+)
+
+server &lt;- function(input, output, session) {
+  output$greeting &lt;- renderText(&quot;Hello human!&quot;)
+}</code></pre>
+<p>(Tenga en cuenta que la ID se cita en la interfaz de usuario, pero no en el servidor).</p>
+<p>La función de render hace dos cosas:</p>
+<ul>
+<li><p>Establece un contexto reactivo especial que rastrea automáticamente las entradas que utiliza la salida.</p></li>
+<li><p>Convierte la salida de su código R en HTML adecuado para mostrar en una página web.</p></li>
+</ul>
+<p>Al igual que la entrada, la salida es exigente con la forma en que la usa. Obtendrás un error si:</p>
+<ul>
+<li>Olvidas la función de renderizado.</li>
+</ul>
+<pre class="r"><code>server &lt;- function(input, output, session) {
+  output$greeting &lt;- &quot;Hello human&quot;
+}
+shinyApp(ui, server)
+#&gt; Error: Unexpected character object for output$greeting
+#&gt; ℹ Did you forget to use a render function?</code></pre>
+<ul>
+<li>Intentas leer de una salida.</li>
+</ul>
+<pre class="r"><code>server &lt;- function(input, output, session) {
+  message(&quot;The greeting is &quot;, output$greeting)
+}
+shinyApp(ui, server)
+#&gt; Error: Reading from shinyoutput object is not allowed</code></pre>
+</div>
+<div id="section-programación-reactiva" class="section level3">
+<h3>Programación reactiva</h3>
+<p>Una aplicación será bastante aburrida si solo tiene entradas o solo salidas. La verdadera magia de Shiny ocurre cuando tienes una aplicación con ambos. Veamos un ejemplo sencillo:</p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  textInput(&quot;name&quot;, &quot;What&#39;s your name?&quot;),
+  textOutput(&quot;greeting&quot;)
+)
+
+server &lt;- function(input, output, session) {
+  output$greeting &lt;- renderText({
+    paste0(&quot;Hello &quot;, input$name, &quot;!&quot;)
+  })
+}</code></pre>
+<p>Es difícil mostrar cómo funciona esto, pero puede observar la figura siguiente. Si ejecutas la aplicación y escribes en el cuadro de nombre, verá que el saludo se actualiza automáticamente a medida que escribe.</p>
+<div class="figure">
+<img src="images/connection-1.png" alt="Reactivity means that outputs automatically update as inputs change, as in this app where I type 'J', 'o', 'e'." width="25%" /><img src="images/connection-2.png" alt="Reactivity means that outputs automatically update as inputs change, as in this app where I type 'J', 'o', 'e'." width="25%" /><img src="images/connection-3.png" alt="Reactivity means that outputs automatically update as inputs change, as in this app where I type 'J', 'o', 'e'." width="25%" />
+<p class="caption">
+Reactivity means that outputs automatically update as inputs change, as in this app where I type ‘J’, ‘o’, ‘e’.
+</p>
+</div>
 </div>
 </div>
 <div id="section-enviar-ejercicios" class="section level2">
@@ -588,7 +869,7 @@ envíalo usando el siguiente formulario:
 library(learnr)
 library(gradethis)
 library(learnrhash)
-library(tidyverse)
+#library(tidyverse)
 gradethis::gradethis_setup()
 </script>
  
@@ -608,17 +889,12 @@ session$onSessionEnded(function() {
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_setup_chunk("__setup__", c("library(learnr)", "library(gradethis)", "library(learnrhash)", 
-"library(tidyverse)", "gradethis::gradethis_setup()"), overwrite = FALSE)
+"#library(tidyverse)", "gradethis::gradethis_setup()"), overwrite = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_setup_chunk("__setup__", c("library(learnr)", "library(gradethis)", "library(learnrhash)", 
-"library(tidyverse)", "gradethis::gradethis_setup()"), overwrite = FALSE)
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_setup_chunk("__setup__", c("library(learnr)", "library(gradethis)", "library(learnrhash)", 
-"library(tidyverse)", "gradethis::gradethis_setup()"), overwrite = FALSE)
+"#library(tidyverse)", "gradethis::gradethis_setup()"), overwrite = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -631,7 +907,7 @@ learnrhash::encoder_logic()
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","broom","bslib","cellranger","checkmate","cli","colorspace","compiler","crayon","curl","datasets","DBI","dbplyr","digest","dplyr","ellipsis","evaluate","fansi","fastmap","forcats","fs","generics","ggplot2","glue","gradethis","graphics","grDevices","grid","gtable","haven","highr","hms","htmltools","htmlwidgets","httpuv","httr","jpeg","jquerylib","jsonlite","knitr","later","learnr","learnrhash","lifecycle","lubridate","magrittr","markdown","methods","mime","modelr","munsell","pillar","pkgconfig","png","promises","purrr","R6","Rcpp","readr","readxl","reprex","rlang","rmarkdown","rprojroot","rstudioapi","rvest","sass","scales","shiny","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","tools","utf8","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.2.1","4.0.5","0.7.7","0.2.5.1","1.1.0","2.0.0","2.5.0","2.0-1","4.0.5","1.4.1","4.3.1","4.0.5","1.1.1","2.1.1","0.6.27","1.0.6","0.3.2","0.14","0.5.0","1.1.0","0.5.1","1.5.0","0.1.0","3.3.4","1.4.2","0.2.3.9001","4.0.5","4.0.5","4.0.5","0.3.0","2.4.1","0.9","1.1.0","0.5.1.1","1.5.3","1.6.1","1.4.2","0.1-8.1","0.1.4","1.7.2","1.33","1.2.0","0.10.1.9009","0.1.0.9000","1.0.0","1.7.10","2.0.1","1.1","4.0.5","0.10","0.1.8","0.5.0","1.6.1","2.0.3","0.1-7","1.2.0.1","0.3.4","2.5.0","1.0.6","1.4.0","1.3.1","2.0.0","0.4.11","2.9","2.0.2","0.13","1.0.0","0.4.0","1.1.1","1.6.0","4.0.5","1.6.2","1.4.0","3.1.2","1.1.3","1.1.1","1.3.1","4.0.5","1.2.1","4.0.5","0.3.8","2.4.2","0.24","1.3.2","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","bslib","checkmate","compiler","crayon","curl","datasets","DBI","digest","dplyr","ellipsis","evaluate","fansi","fastmap","generics","glue","gradethis","graphics","grDevices","highr","htmltools","htmlwidgets","httpuv","jpeg","jquerylib","jsonlite","knitr","later","learnr","learnrhash","lifecycle","magrittr","markdown","methods","mime","pillar","pkgconfig","png","promises","purrr","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","stats","stringi","stringr","tibble","tidyselect","tools","utf8","utils","vctrs","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.2.1","4.0.5","0.2.5.1","2.0.0","4.0.5","1.4.1","4.3.1","4.0.5","1.1.1","0.6.27","1.0.6","0.3.2","0.14","0.5.0","1.1.0","0.1.0","1.4.2","0.2.3.9001","4.0.5","4.0.5","0.9","0.5.1.1","1.5.3","1.6.1","0.1-8.1","0.1.4","1.7.2","1.33","1.2.0","0.10.1.9009","0.1.0.9000","1.0.0","2.0.1","1.1","4.0.5","0.10","1.6.1","2.0.3","0.1-7","1.2.0.1","0.3.4","2.5.0","1.0.6","0.4.11","2.9","2.0.2","0.4.0","1.6.0","4.0.5","1.6.2","1.4.0","3.1.2","1.1.1","4.0.5","1.2.1","4.0.5","0.3.8","2.4.2","0.24","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>
