@@ -386,7 +386,6 @@ tokens("Great website: http://textasdata.com?page=123.", what = "character",
 y las oraciones:
 
 ```{r, eval=TRUE, echo=TRUE, fig.align='center'}
-# sentence level         
 tokens(c("dijo Kurt Vongeut; solo los idiotas usan punto y coma.",
            "Hoy es jueves en Canberra: es ayer en Londres",
            "En el caso de que no puedas ir con ellos, ¿quieres ir con nosotros?"),
@@ -702,8 +701,33 @@ grade_this_code()
 ```
 
 
-  * 2 - 
-  
+  * 2 - ¿Cómo podrías realizar una nube de palabras por tema? Realiza el corpus subset dividiendo por los presidentes Obama y Trump.
+
+```{r ejercicio10, exercise=TRUE}
+dfmat2 <- dfm(corpus_subset(data_corpus_inaugural,
+  President %in% c("___", "____")),
+  remove = stopwords("____"), remove_punct = TRUE, groups = "____") %>%
+  dfm_trim(min_termfreq = ___)
+
+textplot_wordcloud(dfmat2, ____ = TRUE,
+  max_words = ___, color = c("___", "___"))
+```
+<div id="ejercicio10-hint">
+**Hint:** Revisa en que grupos quieres hacer la matriz y revisa el parametro comparison de textplot_wordcloud.
+</div>
+```{r ejercicio10-solution}
+dfmat2 <- dfm(corpus_subset(data_corpus_inaugural,
+  President %in% c("Obama", "Trump")),
+  remove = stopwords("english"), remove_punct = TRUE, groups = "President") %>%
+  dfm_trim(min_termfreq = 3)
+
+textplot_wordcloud(dfmat2, comparison = TRUE,
+  max_words = 300, color = c("blue", "red"))
+```
+```{r ejercicio10-check}
+grade_this_code()
+```
+
 ## Análisis Estadístico 
 
 
