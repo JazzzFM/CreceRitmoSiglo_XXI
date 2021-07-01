@@ -820,6 +820,7 @@ Este sección le ha presentado las principales funciones de entrada y salida que
 
 En la próxima sección, pasaremos al **back-end** de una aplicación Shiny: el código R que hace que su interfaz de usuario cobre vida.
 
+
 ## Reactividad: El servidor
 
 En Shiny, expresas la **lógica de tu servidor** mediante **programación reactiva**. La programación reactiva es un paradigma de programación elegante y poderoso, pero puede ser desorientador al principio porque es un paradigma muy diferente al de escribir un guión.
