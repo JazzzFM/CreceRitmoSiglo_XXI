@@ -1,4 +1,5 @@
-# Clase 1
+# Clase 1 -----------------------------------------------------------------
+
 ## Introducción
 ### ¿Qué es Shiny?
 "
@@ -286,10 +287,10 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 
-"
-# Clase 2
-## Conceptos de UI
+# Clase 2 -----------------------------------------------------------------
 
+## Conceptos de UI
+"
 podemos comenzar a explorar los detalles 
 
 (**front-end**) 
@@ -581,7 +582,7 @@ Ten en cuenta que hay dos funciones de renderizado :
   
 * `renderPrint()` y se empareja con `verbatimTextOutput()`.
 
-La diferencia
+La diferencia entre ellos
 "
 
 ui <- fluidPage(
@@ -654,7 +655,7 @@ veremos más adelante.
 * 1 - ¿Con cuál de `textOutput()` y `verbatimTextOutput()` se debe
   emparejar cada una de las siguientes funciones de renderizado?
   
-  * a) `renderPrint(summary(mtcars))`
+* a) `renderPrint(summary(mtcars))`
 * b) `renderText('Good morning!')`
 * c) `renderPrint(t.test(1:5, 2:6))`
 * d) `renderText(str(lm(mpg ~ wt, data = mtcars)))`
@@ -683,18 +684,16 @@ anterior para usarla en su lugar.
 "
 ### Resumen
 "
-Este sección le ha presentado las principales funciones de entrada y salida
-que componen la interfaz de una aplicación Shiny. Este fue un gran volcado de
-información, así que no esperes recordar todo después de una sola lectura.
+En su lugar, vuelve a esta sección cuando estés buscando un componente específico:
 
-En su lugar, vuelve a esta sección cuando esté buscando un componente específico:
-puede escanear rápidamente las figuras y luego encontrar el código que necesita.
-
-En la próxima sección, pasaremos al **back-end** de una aplicación Shiny: 
-el código R que hace que su interfaz de usuario cobre vida.
+En la próxima sección, pasaremos al **back-end** de una aplicación Shiny
 "
 
+# Clase 3 -----------------------------------------------------------------
+
+
 ## Reactividad: El servidor
+
 "
 En Shiny, expresas la **lógica de tu servidor** mediante
 **programación reactiva**. 
@@ -702,8 +701,8 @@ En Shiny, expresas la **lógica de tu servidor** mediante
 Es un paradigma de programación elegante y poderoso, muy diferente
 
 La idea clave de la programación reactiva es especificar un grafo de
-dependencias para que cuando cambie una entrada, todas las salidas relacionadas
-se actualicen automáticamente. 
+dependencias para que cuando cambie una entrada, 
+todas las salidas relacionadas se actualicen automáticamente. 
 "
 ### La función de servidor
 
@@ -729,23 +728,19 @@ interfaz de usuario
 La interfaz de usuario es simple porque todos los usuarios
 obtienen el mismo HTML. 
 
-El `server` es más complicado porque cada usuario necesita obtener
-una versión independiente de la aplicación; cuando el usuario
-mueve un control deslizante, el usuario B no debería ver cambiar sus resultados.
+El `server` es más complicado porque ...
 
 Para lograr esta independencia, Shiny invoca su función `server()`
-cada vez que se inicia una nueva sesión. 
+cada vez que se inicia una nueva sesión .... 
 
 Al igual que cualquier otra función de R, 
 cuando se llama a la función de servidor,
 crea un nuevo entorno local que es independiente
 de cualquier otra invocación de la función. 
 
-Esto permite que cada sesión tenga un estado único, 
-además de aislar las variables creadas dentro de la función. 
+Cada sesión tenga un estado único, 
 
-Es por eso que casi toda la programación reactiva que harás
-en Shiny estará dentro de la función del `server`. 
+Aislar las variables creadas dentro de la función. 
 
 Las funciones del servidor toman tres parámetros: `
 input`, `output`, y `session`. 
@@ -758,13 +753,11 @@ y `output`, y dejaremos la `session` para posteriormente.
 "
 
 ### Input
-"
-El argumento de `input` es un objeto similar a una lista que
-contiene todos los datos de entrada enviados desde el navegador,
-nombrados de acuerdo con el ID de entrada. 
 
-Por ejemplo, si tu interfaz de usuario contiene un control de
-entrada numérico con un ID de entrada de `count`, así:
+"
+El argumento de `input` es un objeto ...
+
+Por ejemplo,  un control con un ID de entrada de `count`, así:
 " 
 
 ui <- fluidPage(
@@ -777,7 +770,7 @@ Luego puede acceder al valor de ese `input` con `input$count`.
 Inicialmente contendrá el valor 100 y se actualizará automáticamente
 a medida que el usuario cambie el valor en el navegador.
 
-A diferencia de una lista típica, los objetos de `input` son de solo lectura.
+Los objetos de `input` son de solo lectura.
 
 Si intenta modificar una `input` dentro de la función del servidor,
 obtendrá un error:
@@ -790,27 +783,17 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 #> Error: Can't modify read-only reactive value 'count'
 "
-Este error se produce porque la entrada refleja lo que está sucediendo
-en el navegador, y el navegador es la 'única fuente de verdad' de Shiny.
+el navegador es la 'única fuente de verdad' de Shiny.
 
 Si pudieras modificar el valor en R, podría introducir inconsistencias,
-donde el control deslizante de entrada decía una cosa en el navegador, 
-y `input$count` decía algo diferente en R. 
-
 
 Más adelante, veremos como usar funciones como `updateNumericInput()` 
-para modificar el valor en el navegador, 
-y luego la `input$count` se actualizará en consecuencia.
 
 Una cosa más importante sobre el `input`: 
 es selectiva sobre quién puede leerla. 
 
 Para leer desde una entrada, debe estar en un **contexto reactivo** 
 creado por una función como `renderText()` o `reactive()`.
-
-Volveremos a esa idea muy pronto, pero es una restricción importante 
-que permite que las salidas se actualicen automáticamente cuando
-cambia una entrada.
 
 Este código ilustra el error que verás si cometes este error:
 "  
@@ -829,11 +812,9 @@ shinyApp(ui, server)
 El `output` es muy similar al `input`: 
 también es un objeto similar a una lista nombrada de acuerdo con el ID de salida.
 
-La principal diferencia es que lo usa para enviar salida en lugar de recibir
-entrada. 
+La principal diferencia es que ...
 
-Siempre usa el objeto de salida junto con una función de renderizado, 
-como en el siguiente ejemplo simple:
+Siempre usa el objeto de salida junto con una función de renderizado:
 "
   
 ui <- fluidPage(
@@ -849,11 +830,8 @@ pero no en el servidor).
 
 La función de render hace dos cosas:
   
-  * Establece un contexto reactivo especial que rastrea automáticamente 
-  las entradas que utiliza la salida.
-
-  * Convierte la salida de su código R en HTML adecuado para mostrar
-    en una página web.
+  * Establece un contexto reactivo 
+  * Convierte la salida de su código R en HTML
 
 Al igual que la entrada, la salida es exigente con la forma en que la usa.
 Obtendrás un error si:
@@ -880,15 +858,9 @@ shinyApp(ui, server)
 
 
 ### Programación reactiva
-"
-Una aplicación será bastante aburrida si solo tiene entradas o solo salidas.
-
-La verdadera magia de Shiny ocurre cuando tienes una aplicación con ambos. 
-Veamos un ejemplo sencillo:
-" 
 
 ui <- fluidPage(
-  textInput("name", "What's your name?"),
+  textInput("name", "¿Cuál es tu nombre?"),
   textOutput("greeting")
 )
 
@@ -899,7 +871,6 @@ server <- function(input, output, session) {
 }
 
 "
-Es difícil mostrar cómo funciona esto, pero puede observar la figura siguiente. 
 Si ejecutas la aplicación y escribes en el cuadro de `name`,
 verás que el saludo se actualiza automáticamente a medida que escribe.
 "
@@ -907,9 +878,7 @@ verás que el saludo se actualiza automáticamente a medida que escribe.
 "
 Esta es la gran idea en Shiny:
   no necesitas decirle a una salida cuándo actualizar,
-  porque Shiny lo averigua automáticamente por ti. ¿Como funciona?
-  ¿Qué está sucediendo exactamente en el cuerpo de la función? 
-  Pensemos en el código dentro de la función del servidor con más precisión:
+  porque Shiny lo averigua automáticamente por ti
 "  
 
 output$greeting <- renderText({
@@ -925,65 +894,43 @@ pero importante.
 
 Piénsalo: con este modelo, solo emite la instrucción una vez. 
 
-Pero Shiny realiza la acción cada vez que actualizamos la `input$name`, 
-por lo que debe haber algo más.
+Pero Shiny realiza la acción cada vez que actualizamos la `input$name`
 
-La aplicación funciona porque el código no le dice a Shiny que cree 
-el string y la envíe al navegador, sino que le informa a Shiny cómo
+La aplicación funciona porque le informa a Shiny cómo
 podría crear el string si es necesario.
 
 Depende de Shiny cuándo (¡e incluso si!) Se debe ejecutar el código. 
 
 Esto no implica que Shiny sea caprichoso, 
-solo que es responsabilidad de Shiny decidir cuándo se ejecuta el código, 
-no la tuya.
-
-Piensa en su aplicación como si le proporcionara recetas a Shiny,
-no como si le diera comandos.
+solo que es responsabilidad de Shiny decidir cuándo se ejecuta el código
 "
 
 ### Programación imperativa vs declarativa
 "
-Esta diferencia entre comandos y recetas es una de las
-diferencias clave entre dos estilos importantes de programación:
+Diferencias clave entre dos estilos importantes de programación:
 
-  * En la **programación imperativa**,
-    emite un comando específico y se ejecuta de inmediato.
-    Este es el estilo de programación al que está acostumbrado en tus scripts
-    de análisis: 
-    ordenas a R que cargue sus datos, los transforme, los visualice y
-    guarde los resultados en el disco.
+  * En la **programación imperativa** (usual)
 
-  * En la **programación declarativa**, tu expresas objetivos de
-    alto nivel o describe limitaciones importantes, y confía en alguien
-    más para decidir cómo y/o cuándo traducir eso en acción. 
-    Este es el estilo de programación que usa en Shiny.
+  * En la **programación declarativa** (shiny), tu expresas objetivos de
+    y confía en alguien más para decidir cómo y/o cuándo traducir eso en acción. 
 
 Con código imperativo dices “Hazme un sándwich”.
+
 Con el código declarativo, dice 
 'Asegúrese de que haya un sándwich en el refrigerador cada vez que mire dentro'.
 
 El código imperativo es asertivo; el código declarativo es pasivo-agresivo.
 
 La mayoría de las veces, la programación declarativa es tremendamente liberadora:
-tu describes tus objetivos generales y el software descubre cómo lograrlos 
-sin más intervención. 
 
-La desventaja es el momento ocasional en el que sabe exactamente lo que quiere,
-pero no puede descubrir cómo enmarcarlo de una manera que el sistema declarativo
-entienda. 
+La desventaja es el momento ocasional en el que sabe exactamente lo que quiere
 "
 
 ### Laziness
 "
-Una de las fortalezas de la programación declarativa en Shiny es que
-permite que las aplicaciones sean extremadamente perezosas. 
-
 Una aplicación Shiny solo hará la cantidad mínima de trabajo necesaria
 para actualizar los controles de salida que puede ver actualmente.
 
-Esta pereza, sin embargo, viene con una desventaja importante que debes
-tener en cuenta. 
 ¿Puedes detectar lo que está mal con la función del servidor a continuación?
 "
 
@@ -993,75 +940,55 @@ server <- function(input, output, session) {
   })
 }
 "
-Si miras de cerca, es posible que notes que he escrito greting 
-en lugar de greeting. 
-
 Esto no generará un error en Shiny, pero no hará lo que desea.
 
 La salida greting no existe, por lo que el código dentro de `renderText()`
 nunca se ejecutará.
-
-Si está trabajando en una aplicación Shiny y simplemente no puedes
-entender por qué su código nunca se ejecuta, 
-verifica que la interfaz de usuario y las funciones del servidor
-estén usando los mismos identificadores.
 "
 
-### El gráfico reactivo
+### El grafo reactivo
 "
-La pereza de Shiny tiene otra propiedad importante. 
 En la mayoría de los códigos R, puedes comprender 
 el orden de ejecución leyendo el código de arriba a abajo.
 
-Eso no funciona en Shiny, porque el código solo se ejecuta cuando es necesario.
+Eso no funciona en Shiny, 
+porque el código solo se ejecuta cuando es necesario.
 
 Para comprender el orden de ejecución, 
 debe mirar el grafo reactivo, 
 que describe cómo se conectan las entradas y las salidas.
 
-El grafo reactivo de la aplicación anterior es muy simple y se
-muestra en la imagen siguiente.
+El grafo reactivo de la aplicación anterior es muy simple 
 
 ---------- Ver imagen en la seccion 3 learnr sobre el grafo reactivo ----
 
 El grafo reactivo contiene un símbolo para cada entrada y salida, y conectamos 
 una entrada a una salida cada vez que la salida accede a la entrada.
 
-Este grafoo le indica que será necesario volver a calcular `greeting` 
+Este grafo le indica que será necesario volver a calcular `greeting` 
 cada vez que se cambie el `name`. 
-
-A menudo describiremos esta relación como `greeting` tiene una dependencia
-reactiva del nombre.
 
 Ten en cuenta las convenciones gráficas que usamos para las entradas y salidas:
 la entrada de `name` encaja naturalmente en la salida de saludo.
 
-Podríamos dibujarlos muy juntos, para enfatizar la forma en que encajan;
-normalmente no lo hacemos porque solo funciona con las aplicaciones más simples.
+Podríamos dibujarlos muy juntos, para enfatizar la forma en que encajan
 
 ---------- Ver imagen en la seccion 3 learnr sobre el grafo reactivo ----
 
-El gráfico reactivo es una herramienta poderosa para comprender cómo
-funciona tu aplicación.
+El gráfico reactivo es una herramienta poderosa
 
-A medida que su aplicación se vuelve más complicada, 
-a menudo es útil hacer un bosquejo rápido de alto nivel del grafo reactivo
-para recordarle cómo encajan todas las piezas.
-
-A lo largo de esta sección, le mostraremos el gráfico reactivo para ayudarte
-a comprender cómo funcionan los ejemplos.
+A medida que su aplicación se vuelve más complicada, es útil ...
 "
 
 ### Expresiones reactivas
 "
-Hay un componente más importante que verás en el gráfico reactivo: 
-la expresión reactiva.
+la expresión reactiva
 
 Por ahora, piensa en ellos como una herramienta que reduce la duplicación
-en tu código reactivo al introducir nodos adicionales en el grafo reactivo.
+en tu código
 
 No necesitamos una expresión reactiva en nuestra aplicación muy simple,
-pero agregaré una de todos modos para que pueda ver cómo afecta el gráfico reactivo.
+pero hagamoslo
 "
 
 server <- function(input, output, session) {
@@ -1070,9 +997,6 @@ server <- function(input, output, session) {
 }
 
 "
-Las expresiones reactivas toman entradas y producen salidas para que tengan 
-una forma que combine características tanto de entradas como de salidas. 
-
 Con suerte, las formas te ayudarán a recordar cómo encajan los componentes.
 "
 
@@ -1081,11 +1005,9 @@ Con suerte, las formas te ayudarán a recordar cómo encajan los componentes.
 Es importante comprender que el orden en que se ejecuta el código está
 determinado únicamente por el grafo reactivo. 
 
-Esto es diferente de la mayoría de los códigos R donde el orden de ejecución
-está determinado por el orden de las líneas. 
+Esto es diferente de la mayoría de los códigos R 
 
-Por ejemplo, podríamos cambiar el orden de las dos líneas en nuestra 
-función de servidor simple:
+Por ejemplo, podríamos cambiar el orden de las dos líneas:
 "
 
 server <- function(input, output, session) {
@@ -1096,24 +1018,17 @@ server <- function(input, output, session) {
 Podría pensar que esto produciría un error porque `output$greeting`
 se refiere a una expresión reactiva, `string`, que aún no se ha creado.
 
-Pero recuerde que Shiny es perezoso, por lo que el código solo se ejecuta 
-cuando se inicia la sesión, después de que se ha creado el `string`.
+Pero recuerde que Shiny es perezoso
 
 En cambio, este código produce el mismo grafo reactivo que el anterior, 
-por lo que el orden en el que se ejecuta el código es exactamente el mismo.
 
-Organizar tu código de esta manera es confuso para los humanos y es mejor evitarlo. 
-
-En su lugar, asegúrete de que las expresiones reactivas y las salidas solo 
+Asegúrete de que las expresiones reactivas y las salidas solo 
 se refieran a las cosas definidas anteriormente, no a las siguientes. 
 
 Esto hará que tu código sea más fácil de entender.
 
-Este concepto es muy importante y diferente a la mayoría de los demás códigos R,
-así que lo diremos de nuevo: 
-
-el orden en el que se ejecuta el código reactivo está determinado solo por el grafo reactivo,
-no por su diseño en la función del servidor.
+El orden en el que se ejecuta el código reactivo está determinado solo por
+el grafo reactivo, no por su diseño en la función del servidor.
 "
 
 ### Ejercicios
@@ -1176,6 +1091,8 @@ range <- reactive(range(var(), na.rm = TRUE))
 "  
 * ¿Por qué los nombres de range() y var() son malos para `reactive`? 
 "
+
+# Clase 4 -----------------------------------------------------------------
 
 ## Expresiones reactivas
 "
@@ -1267,6 +1184,7 @@ cuanto más código pueda extraer de su aplicación, más fácil será de entend
 
 Esta es una buena técnica de ingeniería de software porque ayuda
 a aislar las preocupaciones: 
+
 las funciones fuera de la aplicación se enfocan en el cálculo 
 para que el código dentro de la aplicación pueda enfocarse en
 responder a las acciones del usuario.
@@ -1275,24 +1193,12 @@ responder a las acciones del usuario.
 ### La aplicación
 
 "
-Usaremos estas dos herramientas para explorar rápidamente un
-montón de simulaciones. 
-
-Una aplicación Shiny es una excelente manera de hacer esto porque
-te permite evitar modificar y volver a ejecutar tediosamente el código R.
-
 Envolvemos las piezas en una aplicación Shiny donde puedemos modificar
 interactivamente las entradas.
 
 Comencemos con la interfaz de usuario. 
 No profundizaremos a lo que hacen exactamente `fluidRow()` y `column()`; 
 pero puedes adivinar su propósito por sus nombres.
-
-La primera fila tiene tres columnas para los controles de entrada
-(distribution 1, distribution 2 y controles de los gráficos).
-
-La segunda fila tiene una columna ancha para el gráfico y 
-una columna estrecha para la prueba de hipótesis.
 "
 
 ui <- fluidPage(
@@ -1350,14 +1256,14 @@ server <- function(input, output, session) {
 
 ### El grafo reactivo
 "
-Comencemos dibujando el grafo reactivo de esta aplicación. 
 Shiny es lo suficientemente inteligente como para actualizar 
 una salida solo cuando las entradas a las que se refiere cambian;
 
 no es lo suficientemente inteligente como para ejecutar solo de
 forma selectiva fragmentos de código dentro de una salida. 
 
-En otras palabras, las salidas son atómicas: se ejecutan o no como un todo.
+En otras palabras, las salidas son atómicas: 
+se ejecutan o no como un todo.
 
 Por ejemplo, tome este fragmento del servidor:
 "  
@@ -1371,38 +1277,30 @@ Como ser humano que lee este código, puede decir que solo necesitamos
 actualizar `x1` cuando cambia `n1`, `mean1` o `sd1`, y solo necesitamos
 actualizar `x2` cuando cambia `n2`, `mean2` o `sd2`.
 
-Shiny, sin embargo, solo mira la salida como un todo,por lo que actualizará
-tanto `x1` como `x2` cada vez que cambie uno de `n1`, `mean1`, `sd1`, `n2`,
-`mean2` o `sd2`. 
+Shiny, sin embargo, solo mira la salida como un todo
 
 Esto conduce al grafo reactivo que se muestra a continuación:
   
 ---------------- Ver imagen en el learnr seccion 4 ------------------------
 
 Notarás que el grafo es muy denso: 
+
 casi todas las entradas están conectadas directamente a todas las salidas. 
 Esto crea dos problemas:
   
 * La aplicación es difícil de entender porque hay muchas conexiones. 
 
 * La aplicación es ineficiente porque hace más trabajo del necesario. 
-  Por ejemplo, si cambia los cortes del gráfico, los datos se vuelven a calcular; 
-
 
 Hay otra falla importante en la aplicación:
 el polígono de frecuencia y la t-test usan sorteos aleatorios separados. 
-Esto es bastante engañoso, ya que esperaría que estuvieran trabajando 
-con los mismos datos subyacentes.
 
-Afortunadamente, podemos solucionar todos estos problemas mediante el uso
-de expresiones reactivas para extraer cálculos repetidos.
+Podemos solucionar todos estos problemas mediante el uso de expresiones reactivas 
 "
 
 ### Simplificar el grafo
 "
 Refactorizamos el código existente
-para extraer el código repetido en dos nuevas expresiones reactivas, 
-`x1` y `x2`, que simulan los datos de las dos distribuciones. 
 
 Para crear una expresión reactiva, llamamos `reactive()` y asignamos los
 resultados a una variable.
@@ -1410,6 +1308,7 @@ resultados a una variable.
 Para usar posteriormente la expresión, llamamos a la variable como si
 fuera una función.
 "
+
 server <- function(input, output, session) {
   x1 <- reactive(rnorm(input$n1, input$mean1, input$sd1))
   x2 <- reactive(rnorm(input$n2, input$mean2, input$sd2))
@@ -1438,14 +1337,11 @@ solo cambia el grafo, no los datos subyacentes.
 
 ---------------- Ver imagen en el learnr seccion 4 ------------------------
 
-Para enfatizar esta modularidad, la figura de acontinuación dibuja cuadros
-alrededor de los componentes independientes. 
+Para enfatizar esta modularidad
 
 Los módulos le permiten extraer código repetido para su reutilización,
 al tiempo que garantizan que esté aislado de todo lo demás en la aplicación.
 
-Los módulos son una técnica extremadamente útil y poderosa para aplicaciones 
-más complejas.
 
 ---------------- Ver imagen en el learnr seccion 4 ------------------------
 
@@ -1453,23 +1349,22 @@ Es posible que estés familiarizado con la 'regla de tres' de la programación:
   siempre que copie y pegue algo tres veces,
   debes averiguar cómo reducir la duplicación (normalmente escribiendo una función). 
 
-Esto es importante porque reduce la cantidad de duplicados en tu código,
-lo que lo hace más fácil de entender y más fácil de actualizar a medida que
-cambian sus requisitos.
+Esto es importante porque reduce la cantidad de duplicados en tu código
 
 En Shiny, sin embargo, creo que deberías considerar la regla de uno: 
   siempre que copie y pegue algo una vez, 
   debería considerar extraer el código repetido en una expresión reactiva. 
 
 La regla es más estricta para Shiny porque las expresiones reactivas no solo
-facilitan que los humanos entiendan el código, sino que también mejoran la
-capacidad de Shiny para volver a ejecutar el código de manera eficiente.
+facilitan que los humanos entiendan el código, 
+sino que también mejoran la capacidad de Shiny para volver a ejecutar eficientemente
 "
 
 ### ¿Por qué necesitamos expresiones reactivas?
 "
 Cuando empieces a trabajar con código reactivo, es posible que se pregunte
 por qué necesitamos expresiones reactivas. 
+
 ¿Por qué no puedes utilizar tus herramientas existentes para reducir la
 duplicación de código: crear nuevas variables y escribir funciones? 
   
@@ -1496,9 +1391,7 @@ server <- function(input, output, session) {
 Si ejecutas este código, obtendrá un error porque está intentando acceder
 a los valores de entrada fuera de un contexto reactivo. 
 
-Incluso si no recibieras ese error, aún tendrías un problema: `x1` y `x2` 
-solo se calcularían una vez, cuando comience la sesión, 
-no cada vez que se actualice una de las entradas.
+Incluso si no recibieras ese error, aún tendrías un problema: 
 
 Si intentas utilizar una función, la aplicación funcionará:
 "
@@ -1518,30 +1411,23 @@ server <- function(input, output, session) {
 
 "
 Pero tiene el mismo problema que el código original:
-cualquier entrada hará que se vuelvan a calcular todas las salidas,
-y el ttest y el polígono de frecuencia se ejecutarán en muestras separadas.
 
 Las expresiones reactivas almacenan automáticamente sus resultados en caché 
 y solo se actualizan cuando cambian sus entradas.
 
 Mientras que las variables calculan el valor solo una vez y las funciones
-calculan el valor cada vez que se llaman, las expresiones reactivas calculan
-el valor solo cuando podría haber cambiado.
+calculan el valor cada vez que se llaman,
+
+las expresiones reactivas calculan el valor solo cuando podría haber cambiado.
 "
 
 ### Controlar el momento de la evaluación
-"
-Ahora que estás familiarizado con las ideas básicas de reactividad,
-analizaremos dos técnicas más avanzadas que te permiten aumentar o disminuir
-la frecuencia con la que se ejecuta una expresión reactiva. 
 
-Para explorar las ideas básicas, vamos a simplificar la aplicación de simulación.
+"
 Usaremos una distribución con un solo parámetro y forzaremos a ambas muestras a
 compartir la misma `n`. 
 
 También eliminaremos los controles de la gráfica. 
-Esto produce un objeto de interfaz de usuario y una función de servidor más
-pequeños:
 "
 
 ui <- fluidPage(
@@ -1574,10 +1460,6 @@ muestra en la siguiente.
 
 ### Invalidación cronometrada
 "
-Imagina que quisieramos reforzar el hecho de que esto es para datos simulados
-resimulando constantemente los datos, de modo que vea una animación en lugar
-de una gráfica estática. 
-
 Podemos aumentar la frecuencia de las actualizaciones con una nueva función:
 `reactiveTimer()`.
 
@@ -1589,9 +1471,6 @@ invalide a sí misma con más frecuencia de lo que lo haría de otra manera.
 
 Por ejemplo, el siguiente código usa un intervalo de 500ms para que el gráfico
 se actualice dos veces por segundo.
-
-Esto es lo suficientemente rápido como para recordarte que está viendo una
-simulación, sin marearse con cambios rápidos. 
 
 Este cambio produce el gráfico reactivo que se muestra en la figura a continuación.
 
@@ -1635,13 +1514,10 @@ más cosas que hacer y nunca podría ponerse al día.
 El mismo problema puede suceder si alguien hace clic rápidamente en los
 botones de tu aplicación y el cálculo que está haciendo es relativamente 'caro'.
 
-Es posible crear una gran cantidad de trabajo pendiente para Shiny y,
-aunque está trabajando en la acumulación, no puede responder a ningún
-evento nuevo. Esto conduce a una mala experiencia de usuario.
+Es posible que desees solicitar el usuario que opte por realizar el costoso cálculo solicitándole que haga
+clic en un botón. 
 
-Si esta situación surge en tu aplicación, es posible que desees solicitar 
-al usuario que opte por realizar el costoso cálculo solicitándole que haga
-clic en un botón. Este es un gran caso de uso para un `actionButton()`: 
+Este es un gran caso de uso para un `actionButton()`: 
 "  
 
 ui <- fluidPage(
@@ -1681,20 +1557,14 @@ server <- function(input, output, session) {
 "
 Esto produce la aplicación de arriba y el gráfico reactivo de acontinuación. 
 
-Esto no logra nuestro objetivo porque simplemente introduce una nueva dependencia:
-  `x1()` y `x2()` se actualizarán cuando hagamos clic en el botón de simulación, 
-  pero también continuarán actualizándose cuando `lambda1`, `lambda2` o `n` 
-  cambien. Queremos reemplazar las dependencias existentes, no agregarlas.
-
+Esto no logra nuestro objetivo porque simplemente introduce una nueva dependencia
+  
+Queremos reemplazar las dependencias existentes, no agregarlas.
 
 Para resolver este problema, necesitamos una nueva herramienta: 
-  una forma de usar los valores de entrada sin tener una dependencia 
-  reactiva de ellos.
 
 Necesitamos `eventReactive()`, que tiene dos argumentos:
-  el primer argumento especifica en qué tomar una dependencia y
-  el segundo argumento especifica qué calcular. 
-  
+ 
 Eso permite que esta aplicación solo calcule `x1()`  y `x2()` 
 cuando se hace clic en `simulate`:
 "
@@ -1732,23 +1602,15 @@ actualizar una base de datos o
 (más comúnmente) imprimir un mensaje de depuración en la consola. 
 
 Estas acciones no afectan el aspecto de tu aplicación,
-por lo que no debe utilizar una salida y una función de procesamiento.
-En su lugar, debe utilizar un observador.
 
 Hay varias formas de crear un observador. 
 
-Por ahora, vamos a mostrarte cómo usar `observeEvent()`,
-porque te brinda una herramienta de depuración importante 
-cuando estás aprendiendo Shiny por primera vez.
+Por ahora, vamos a mostrarte cómo usar `observeEvent()`
 
 `observeEvent()` es muy similar a `eventReactive()`. 
 
 Tiene dos argumentos importantes: `eventExpr` y `handlerExpr`. 
-El primer argumento es la entrada o expresión de la que se va a depender; 
-el segundo argumento es el código que se ejecutará. 
-
-Por ejemplo, la siguiente modificación a `server()` significa que cada
-vez que se actualice ese nombre, se enviará un mensaje a la consola:
+p.ej.
 "  
 
 ui <- fluidPage(
@@ -1766,13 +1628,13 @@ server <- function(input, output, session) {
 }
 
 "
-
 Hay dos diferencias importantes entre `observeEvent()` y `eventReactive()`:
   
 * No puedes asignar el resultado de `observeEvent()` a una variable
 * No puedes consultarlo desde otros consumidores reactivos.
 
 Los observadores y los outputs están estrechamente relacionados. 
+
 Puedes pensar que los resultados tienen un efecto secundario especial:
 actualizar el HTML en el navegador del usuario. 
 
@@ -1791,17 +1653,13 @@ También has dado los primeros pasos para dominar el paradigma de programación
 reactiva que sustenta a Shiny. 
 
 Lo que ha aprendido aquí lo llevará muy lejos.
-La reactividad es extremadamente poderosa, pero también es muy diferente al
-estilo imperativo de programación en R al que estás más acostumbrado. 
+
+La reactividad es extremadamente poderosa, pero diferente a lo acostumbrado
 
 No te sorprendas si llevas un tiempo asimilar todas las consecuencias.
-
-Esta sección concluye nuestra descripción general de los fundamentos de Shiny.
-
-La próximo clase te ayudará a practicar el material que ha visto hasta ahora
-mediante la creación de una aplicación Shiny más grande diseñada para respaldar
-un análisis de datos.
 "
+
+# Clase 5 -----------------------------------------------------------------
 
 
 ## Caso de estudio: lesiones en urgencias
