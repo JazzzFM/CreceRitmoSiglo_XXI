@@ -1,0 +1,14 @@
+name: basicnpl
+title: BasicNPL
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 153
+bundleId: 24471
+url: https://datos.morant.com.mx:443/content/153/
+when: 1625509040.14425
+lastSyncTime: 1625509040.14427
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .Rprofile

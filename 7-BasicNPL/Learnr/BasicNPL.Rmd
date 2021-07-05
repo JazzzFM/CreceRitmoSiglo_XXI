@@ -12,6 +12,9 @@ resource_files:
 - renv.lock
 - renv.lock
 - renv.lock
+- renv.lock
+- renv.lock
+- renv.lock
 ---
 
 ```{r setup, include=FALSE}
@@ -19,6 +22,7 @@ library(learnr)
 library(gradethis)
 library(learnrhash)
 library(tidyverse)
+library(topicmodels)
 ```
 
 <style type="text/css">
