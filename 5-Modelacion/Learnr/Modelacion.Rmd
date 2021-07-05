@@ -17,6 +17,7 @@ library(learnr)
 library(gradethis)
 library(learnrhash)
 library(tidyverse)
+library(hexbin)
 library(ggplot2)
 require("maps")
 gradethis::gradethis_setup()
@@ -1066,6 +1067,156 @@ daily %>%
   * 8 - Es un poco frustrante que el domingo y el sábado estén en extremos separados de la trama. Escribe una pequeña función para establecer los niveles del factor para que la semana comience el lunes.
   
   
+## Modelo para Diamonds
+
+
+**¿Por qué los diamantes de baja calidad son más caros?**
+
+Hemos visto una relación sorprendente entre la calidad de los diamantes y su precio: los diamantes de baja calidad (cortes deficientes, malos colores y claridad inferior) tienen precios más altos.
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+ggplot(diamonds, aes(cut, price)) + geom_boxplot()
+
+ggplot(diamonds, aes(color, price)) + geom_boxplot()
+
+ggplot(diamonds, aes(clarity, price)) + geom_boxplot()
+```
+
+
+Ten en cuenta que el peor color de diamante es J (ligeramente amarillo) y la peor claridad es I1 (inclusiones visibles a simple vista).
+
+### Precio y quilates
+
+Parece que los diamantes de menor calidad tienen precios más altos porque existe una importante variable de confusión: el peso en quilates (`carat`) del diamante. El peso del diamante es el factor más importante para determinar el precio del diamante, y los diamantes de menor calidad tienden a ser más grandes.
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_hex(bins = 50)
+```
+
+Podemos hacer que sea más fácil ver cómo los otros atributos de un diamante afectan su precio relativo ajustando un modelo para separar el efecto del quilate.
+
+Pero primero, hagamos un par de ajustes en el conjunto de datos de diamantes para que sea más fácil trabajar con:
+
+  * Centrarse en diamantes de menos de 2,5 quilates (99,7% de los datos)
+  * Transformar logarítmicamente las variables de precio y quilates.
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+diamonds2 <- diamonds %>% 
+  filter(carat <= 2.5) %>% 
+  mutate(lprice = log2(price), lcarat = log2(carat))
+```
+
+Juntos, estos cambios facilitan ver la relación entre el `carat` y `price`:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+ggplot(diamonds2, aes(lcarat, lprice)) + 
+  geom_hex(bins = 50)
+```
+
+La transformación logarítmica es particularmente útil aquí porque hace que el patrón sea lineal, y los patrones lineales son los más fáciles de trabajar. Demos el siguiente paso y eliminemos ese fuerte patrón lineal. Primero hacemos explícito el patrón ajustando un modelo:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+mod_diamond <- lm(lprice ~ lcarat, data = diamonds2)
+```
+
+Luego miramos lo que nos dice el modelo sobre los datos. Ten en cuenta que vuelvo a transformar las predicciones, deshaciendo la transformación de registro, por lo que puedo superponer las predicciones en los datos sin procesar:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+grid <- diamonds2 %>% 
+  data_grid(carat = seq_range(carat, 20)) %>% 
+  mutate(lcarat = log2(carat)) %>% 
+  add_predictions(mod_diamond, "lprice") %>% 
+  mutate(price = 2 ^ lprice)
+
+ggplot(diamonds2, aes(carat, price)) + 
+  geom_hex(bins = 50) + 
+  geom_line(data = grid, colour = "red", size = 1)
+```
+
+Eso nos dice algo interesante sobre nuestros datos. Si creemos en nuestro modelo, entonces los diamantes grandes son mucho más baratos de lo esperado. Esto probablemente se deba a que ningún diamante en este conjunto de datos cuesta más de **$19,000.00**.
+
+Ahora podemos mirar los residuos, lo que verifica que hemos eliminado con éxito el patrón lineal fuerte:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+diamonds2 <- diamonds2 %>% 
+  add_residuals(mod_diamond, "lresid")
+
+ggplot(diamonds2, aes(lcarat, lresid)) + 
+  geom_hex(bins = 50)
+```
+
+Es importante destacar que ahora podemos volver a hacer nuestros gráficos de motivación utilizando esos residuos en lugar de `price`.
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+ggplot(diamonds2, aes(cut, lresid)) + geom_boxplot()
+
+ggplot(diamonds2, aes(color, lresid)) + geom_boxplot()
+
+ggplot(diamonds2, aes(clarity, lresid)) + geom_boxplot()
+```
+
+
+Ahora vemos la relación que esperamos: a medida que aumenta la calidad del diamante, también lo hace su precio relativo. Para interpretar el eje `y`, debemos pensar en lo que nos dicen los residuos y en qué escala se encuentran. Un residuo de -1 indica que `lprice` fue 1 unidad más bajo que una predicción basada únicamente en su peso.
+
+`2^-1` es 1/2, los puntos con un valor de -1 son la mitad del precio esperado y los residuos con valor 1 son el doble del precio pronosticado.
+
+
+### Un modelo más complicado
+
+Si quisiéramos, podríamos continuar construyendo nuestro modelo, moviendo los efectos que hemos observado en el modelo para hacerlos explícitos. Por ejemplo, podríamos incluyendo `color`, `cut` y `clarity` en el modelo para que también hagamos explícito el efecto de estas tres variables categóricas:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+mod_diamond2 <- lm(lprice ~ lcarat + color + cut + clarity,
+                   data = diamonds2)
+```
+
+Este modelo ahora incluye cuatro predictores, por lo que es cada vez más difícil de visualizar. Afortunadamente, actualmente todos son independientes, lo que significa que podemos trazarlos individualmente en cuatro gráficas. Para facilitar un poco el proceso, usaremos el argumento `.model` para `data_grid`:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+grid <- diamonds2 %>% 
+  data_grid(cut, .model = mod_diamond2) %>% 
+  add_predictions(mod_diamond2)
+grid
+
+ggplot(grid, aes(cut, pred)) + 
+  geom_point()
+```
+
+Si el modelo necesita variables que no ha proporcionado explícitamente, `data_grid()` las completará automáticamente con el valor "típico". Para las variables continuas, usa la mediana y las variables categóricas usa el valor más común (o valores, si hay un empate).
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+diamonds2 <- diamonds2 %>% 
+  add_residuals(mod_diamond2, "lresid2")
+
+ggplot(diamonds2, aes(lcarat, lresid2)) + 
+  geom_hex(bins = 50)
+```
+
+Este gráfico indica que hay algunos diamantes con residuos bastante grandes; recuerde que un residuo de 2 indica que el precio del diamante es 4 veces superior al que esperábamos. A menudo, es útil observar valores inusuales de forma individual:
+
+```{r, echo=TRUE, eval=TRUE, fig.align='center'}
+diamonds2 %>% 
+  filter(abs(lresid2) > 1) %>% 
+  add_predictions(mod_diamond2) %>% 
+  mutate(pred = round(2 ^ pred)) %>% 
+  select(price, pred, carat:table, x:z) %>% 
+  arrange(price)
+```
+
+Nada llama la atención aquí, pero probablemente valga la pena dedicar tiempo a considerar si esto indica un problema con nuestro modelo o si hay errores en los datos. Si hay errores en los datos, esta podría ser una oportunidad para comprar diamantes cuyo precio es bajo de manera incorrecta. 
+
+
+### Ejercicios
+
+  * 1 - En la gráfica de `lcarat` frente a `lprice`, hay algunas franjas verticales brillantes. ¿Qué representan?
+
+  * 2 - Si `log(price) = a_0 + a_1 * log(carat)`, ¿qué dice eso sobre la relación entre `price` y `carat`?
+
+  * 3 - Extrae los diamantes que tienen residuos muy altos y muy bajos. ¿Hay algo inusual en estos diamantes? ¿Son particularmente malos o buenos, o cree que se trata de errores de precios?
+
+  * 4 - ¿El modelo final, `mod_diamond2`, hace un buen trabajo al predecir los precios de los diamantes? ¿Confiaría en que le dirá cuánto gastar si está comprando un diamante?
+
 ## Enviar Ejercicios
 
 ### Material de referencia
