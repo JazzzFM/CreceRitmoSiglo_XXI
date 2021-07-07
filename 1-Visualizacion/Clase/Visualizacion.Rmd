@@ -1,0 +1,328 @@
+---
+title: "Visualización de Datos"
+author: "Emilio Morones"
+date: "6/06/2021"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+    - tamu
+    - ninjutsu
+    nature:
+      ratio: '20:10'
+      highlightLines: yes
+      highlightStyle: github
+      countIncrementalSlides: no
+resource_files:
+- renv.lock
+---
+
+```{r setup, include=FALSE}
+library(flipbookr)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(fig.height = 6, out.width = "90%", comment = " ", cache = F, dpi = 300)
+source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+<!-- Primera Clase -->
+
+
+# Introducción
+
+--
+
+El paquete ggplot2 en el lenguaje de programación R implementa la "gramática de las gráficas en capas" --- una propuesta de Leland Wilkinson y el producto del trabajo en curso de Hadley Wickham. 
+
+--
+
+install.packages("ggplot2")
+
+--
+
+install.packages("tidyverse")
+
+--
+
+Esta idea del sistema de visualización de datos es a la vez poderosa, novedosa e intuitiva. 
+
+--
+
+Es un sistema donde la visualización de datos se puede dividir en los parámetros: datos a visualizar, estética de las variables, objetos geométricos, un sistema de coordenadas, escalas específicas y transformación estadística.
+
+---
+class: inverse, middle, center
+
+
+# Explorando nuestra primera base de datos
+<!-- get flipbook that rotates through lines, my_fill -->
+---
+
+`r chunk_reveal("mpg", break_type = "rotate", widths = c(1,1), title = "### Explorando nuestra primera base de datos")`
+
+```{r mpg, eval = FALSE, echo = F}
+#'Damos un vistazo a la base'
+mpg #ROTATE
+
+#'Ayuda para saber que significa cada variable'
+?mpg #ROTATE
+#'displ - tamaño del motor'
+#'hwy - eficiencia del uso del combustible'
+```
+---
+class: inverse, center, middle
+
+
+
+# Generación de preguntas
+---
+
+¿Los autos con un motor más grande utilizan más combustible que los autos con un motor más pequeño?
+
+--
+
+¿Cómo se ve la relación entre el tamaño de un motor y el uso de combustible? 
+
+--
+
+¿Positiva, negativa, lineal, no lineal?
+
+---
+class: inverse, middle, center
+
+
+
+
+# La primer gráfica
+
+---
+
+`r chunk_reveal("my_cars",  widths = c(1,1), title = "### Nuestra primera gráfica")`
+
+```{r my_cars, include = FALSE}
+#'crea un sistema de coordenadas'
+ggplot(data = mpg) + #BREAK
+#'agrega una capa de puntos'
+geom_point(
+mapping = aes(x = displ, y = hwy)
+) #BREAK
+```
+
+---
+class: inverse, center, middle
+
+
+
+# Ahora
+--
+
+¿Esta gráfica comprueba o refuta tu hipótesis acerca de la eficiencia del uso del combustible y el tamaño del motor?
+
+--
+
+Ten en cuenta la siguiente plantilla:
+
+    ggplot(data = <DATA>) + 
+    <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+---
+class: inverse, center, middle
+
+
+
+# Ejercicios
+---
+
+¿Qué ves si sólo corres ggplot(data = mpg)?
+
+--
+
+¿Cuántos renglones y columnas tiene mpg?
+
+--
+
+¿Qué describe la variable drv? (utiliza ?mpg)
+
+--
+
+Has una gráfica de dispersión entre las variables hwy vs cyl.
+
+--
+
+¿Qué pasa si haces una gráfica de dispersión entre class y drv?
+¿Por qué no es útil esta gráfica?
+
+---
+class: inverse, center, middle
+
+
+
+# 1 - Resolviendo algunos de ejemplo ...
+---
+`r chunk_reveal("graph0", break_type = "rotate", widths = c(1,0.8), title = "### Has una gráfica de dispersión entre las variables hwy vs cyl. ¿Qué pasa si haces una gráfica de dispersión entre class y drv?¿Por qué no es útil esta gráfica?")`
+```{r graph0, eval = F, echo = F}
+ggplot(data = mpg) +
+geom_point(mapping = aes(x = hwy, y = cyl)) + #ROTATE
+geom_point(mapping = aes(x = class, y = drv)) #ROTATE
+```
+---
+class: inverse, center, middle
+
+
+
+
+
+# Mapear elementos estéticos
+---
+
+`r chunk_reveal("map", widths = c(1,1), title = "### El mejor valor de una imagen es cuando nos forza a notar lo que nunca esperamos ver. - John Tukey")`
+
+```{r map, eval = F, echo = F}
+mpg %>% 
+mutate(rojo=case_when(
+ hwy > 20 & displ >5~T, T~F)) %>%
+ggplot() + 
+geom_point(aes(x =displ, y = hwy, color = rojo)) +
+scale_color_manual(values = c("black","red")) +
+theme(legend.position = "none")
+```
+
+---
+class: inverse, center, middle
+
+# Veamos que ...
+---
+Los puntos rojos parece ser que se salen de la relación lineal. 
+ 
+--
+
+¿Cómo podrías explicar estos carros? Una posible hipótesis es que sean carros híbridos.
+
+--
+
+Podemos agregar una tercera dimensión a nuestra gráfica de dos dimensiones mediante la estética.
+
+--
+
+Es un elemento visual de los objetos en la gráfica. Puede ser tamaño, forma, transparencia, color
+
+--
+
+Podemos darnos cuenta que 5 de los 6 puntos que parecieran salirse de la relación es porque son carros de 2 plazas. En retrospectiva no podían ser híbridos pues éstos no tienen tamaños de motor tan grande.
+
+--
+
+¿Qué pasó con los suv? Para las formas sólo utiliza 6 diferentes formas por defecto
+
+---
+class: inverse, center, middle
+
+
+# Viendo la gráfica y modiicando parámetros ...
+---
+`r chunk_reveal("graph1", break_type = "rotate", widths = c(1,1), title = "### Viendo la gráfica y cambiando parámetros ...")`
+```{r graph1, eval = F, echo = F}
+ggplot(data = mpg) + 
+geom_point(aes(x = displ, y = hwy, color = class))+ #ROTATE
+geom_point(aes(x = displ, y = hwy, alpha = class))+ #ROTATE
+geom_point(aes(x = displ, y = hwy, size = class))+ #ROTATE
+geom_point(aes(x = displ, y = hwy, shape = class))+ #ROTATE
+geom_point(aes(x = displ, y = hwy), size = 10)+ #ROTATE
+geom_point(aes(x = displ, y = hwy), color = "red")+ #ROTATE
+geom_point(aes(x=displ, y=hwy), shape=1, fill="red") #ROTATE
+```
+---
+class: inverse, center, middle
+
+
+# Ejercicios 2
+---
+
+¿Qué hay de malo con este código?
+
+--
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+
+--
+
+¿Qué variables de mpg son categóricas?
+
+--
+
+¿Qué variables de mpg son continuas?
+
+--
+
+¿Cómo puedes saber esta información cuando corres mpg?
+
+--
+
+Mapea una variable continua para color, tamaño y forma
+
+--
+
+¿Qué hace la estética "stroke"? pista: utiliza ?geom_point
+
+--
+
+¿Qué pasa si en lugar de poner una variable ponemos una condición? ej: aes(color = displ < 5)
+
+---
+class: inverse, center, middle
+
+
+# 2 - Resolviendo algunos de ejemplo ...
+---
+`r chunk_reveal("graph2", break_type = "rotate", widths = c(1.5,1), title = "### ¿Qué hay de malo con este código?¿Qué hace la estética stroke? y Sobre la condición")`
+```{r graph2, eval = F, echo = F}
+ggplot(data = mpg) + 
+geom_point(aes(x = displ, y = hwy, color = "blue")) +#ROTATE
+geom_point(aes(x = displ, y = hwy), shape = 21, stroke = 3, fill= "red") +#ROTATE
+geom_point(aes(x = displ, y = hwy, size = displ < 5), shape = 21) +#ROTATE
+geom_point(aes(x = displ, y = hwy), shape = 21) #ROTATE
+```
+---
+class: inverse, center, middle
+
+
+
+
+<!-- adjust font size in this css code chunk, currently 80 -->
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+
+.remark-slide-content {
+  font-size: 28px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.remark-slide-content > h1:first-of-type {
+  margin-top: 0px;
+}
+```
+
+

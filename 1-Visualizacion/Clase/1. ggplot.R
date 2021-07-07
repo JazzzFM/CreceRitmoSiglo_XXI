@@ -35,15 +35,17 @@ ggplot(data = <DATA>) +
 ggplot(data = mpg) + geom_point(mapping = aes(x = hwy, y = cyl))
 # ¿Qué pasa si haces una gráfica de dispersión entre class y drv? ¿Por qué no es útil esta gráfica?
 ggplot(data = mpg) + geom_point(mapping = aes(x = class, y = drv))
+
 # Mapear elementos estéticos ----------------------------------------------
 # El mejor valor de una imagen es cuando nos forza a notar lo que nunca esperamos ver.
 # John Tukey
 
 mpg %>% mutate(rojo =case_when(hwy > 20 & displ >5~T,
-                                T~F)) %>% ggplot() + geom_point(aes(x =displ, y = hwy, color = rojo)) +
-  scale_color_manual(values = c("black","red")) + theme(legend.position = "none")
+T~F)) %>% ggplot() + geom_point(aes(x =displ, y = hwy, color = rojo)) +
+scale_color_manual(values = c("black","red")) + theme(legend.position = "none")
 
-# Los puntos rojos parece ser que se salen de la relación lineal. ¿Cómo podrías explicar estos carros?
+# Los puntos rojos parece ser que se salen de la relación lineal. 
+# ¿Cómo podrías explicar estos carros?
 # Una posible hipótesis es que sean carros híbridos.
 
 # Podemos agregar una tercera dimensión a nuestra gráfica de dos dimensiones mediante la estética.
