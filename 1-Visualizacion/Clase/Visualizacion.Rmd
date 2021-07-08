@@ -20,10 +20,12 @@ resource_files:
 
 ```{r setup, include=FALSE}
 library(flipbookr)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
 knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 knitr::opts_chunk$set(fig.height = 6, out.width = "90%", comment = " ", cache = F, dpi = 300)
-source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+
 ```
 
 <!-- Primera Clase -->
@@ -169,7 +171,7 @@ geom_point(mapping = aes(x = class, y = drv)) #ROTATE
 class: inverse, center, middle
 
 
-
+<!-- Maperar elementos estéticos -->
 
 
 # Mapear elementos estéticos
@@ -189,6 +191,7 @@ theme(legend.position = "none")
 
 ---
 class: inverse, center, middle
+
 
 # Veamos que ...
 ---
@@ -218,7 +221,7 @@ Podemos darnos cuenta que 5 de los 6 puntos que parecieran salirse de la relaci�
 class: inverse, center, middle
 
 
-# Viendo la gráfica y modiicando parámetros ...
+# Viendo la gráfica y modificando parámetros ...
 ---
 `r chunk_reveal("graph1", break_type = "rotate", widths = c(1,1), title = "### Viendo la gráfica y cambiando parámetros ...")`
 ```{r graph1, eval = F, echo = F}
@@ -288,8 +291,253 @@ class: inverse, center, middle
 
 
 
+# Problemas comunes
+---
 
-<!-- adjust font size in this css code chunk, currently 80 -->
+  typeo
+
+--
+
+  + paréntesis
+
+--
+
+  + comillas
+    
+--
+
+  + ggplot(data = mpg) + 
+    geom_bar(mapping = aes(x = displ, y = hwy, size = year))
+
+--
+
+  + '+' en consola
+
+--
+
+  + '+' en renglón
+
+--
+
+  + Ayuda y ve ejemplos
+
+--
+
+  + Lee el error y googlea el error
+
+---
+class: inverse, center, middle
+
+
+<!-- Facets -->
+
+
+# Facets 
+---
+`r chunk_reveal("graph4", break_type = "rotate", widths = c(1,1), title = "### El uso de Facets")`
+```{r graph4, eval = F, echo = F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2) +#ROTATE 
+  facet_grid(drv ~ cyl) #ROTATE
+```
+---
+class: inverse, center, middle
+
+
+
+# Ejercicios 3
+---
+
+¿Qué pasa cuando utilizas los facets en variables continuas?
+
+--
+
+¿Qué significan los campos vacíos en facet_grid(drv ~cyl)? ¿Cómo se relacionan con esta gráfica?
+
+--
+
+¿Qué gráficas realiza el siguiente código? ¿Qué significa .? 
+
+--
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(. ~ drv)
+
+--
+
+¿Qué ventajas y desventajas hay al utilizar facets sobre usar la estética del color? ¿Cómo podría cambiar el balance si tuviéramos una bd más grande?
+
+--
+
+¿Qué hace los parámetros nrow y ncol de facet_wrap? Qué otros parámetros contralan el diseño de los páneles individualmente? ?facet_wrap
+
+--
+
+Cuando utilizas facet_grid debes poner la viarable con mayor número de categorías únicas en las columnas ¿Por qué?
+
+---
+class: inverse, center, middle
+
+
+
+# 3- Resolviendo algunos de ejemplo ...
+---
+
+`r chunk_reveal("graph5", break_type = "rotate", widths = c(1,1), title = "### ¿Qué pasa cuando utilizas los facets en variables continuas? ")`
+```{r graph5, eval = F, echo = F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ displ, nrow = 2) +#ROTATE
+  facet_grid(. ~ drv) +#ROTATE
+  facet_wrap(~drv,ncol = 3) +#ROTATE
+  facet_grid(. ~ cyl) +#ROTATE
+  facet_wrap(~ class, nrow = 2) +#ROTATE
+```
+
+---
+class: inverse, center, middle
+
+
+# Resolviendo algunos más de ejemplo ...
+---
+
+`r chunk_reveal("graph6", widths = c(1.2,1), title = "### ¿Qué ventajas y desventajas hay al utilizar facets sobre usar la estética del color?")`
+```{r graph6, eval = F, echo = F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+---
+class: inverse, center, middle
+
+
+<!-- Objetos Geométricos -->
+
+# Objetos Geométricos
+---
+`r chunk_reveal("graph10", widths = c(1,1) )`
+
+```{r graph10, eval = F, echo = F}
+a <- ggplot(mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+  
+b <- ggplot(mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+grid.arrange(a,b,nrow = 1)
+```
+---
+class: inverse, center, middle
+
+
+
+# Sobre los geoms
+---
+
+Diferentes geoms
+
+--
+
+Objeto geométrico para representar datos. 
+
+--
+
+Ej. 
+  + gráfica de barras: geom de barras
+  
+--
+
+  + gráfica de líneas: geom de líneas
+
+--
+  
+  + gráfica de dispersión: geom de puntos
+  
+  + el geom de suavidad: valores ajustados
+
+---
+class: inverse, center, middle
+
+
+
+# Cada geom tiene argumentos para ser mapeados
+---
+`r chunk_reveal("graph11", break_type = "rotate", widths = c(1.5,1), title = "### Diferentes geoms.")`
+
+```{r graph11, eval = F, echo = F}
+ggplot(data = mpg) + 
+geom_point(mapping = aes(x = displ, y = hwy)) +#ROTATE 
+geom_smooth(mapping = aes(x = displ, y = hwy)) +#ROTATE
+geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv)) +#ROTATE
+  
+geom_point(aes(x = displ, y = hwy, color = drv)) + 
+geom_smooth(aes(x = displ, y = hwy, linetype = drv, color = drv)) #ROTATE
+```
+---
+class: inverse, center, middle
+
+
+# 1 - Nuevos Geoms
+---
+`r chunk_reveal("graph12", widths = c(1,1), title = "### Nota que está gráfica contiene 2 geoms en una misma gráfica.")`
+
+```{r graph12, eval = F, echo = F}
+a <- ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+b <- ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv))
+
+c <- ggplot(data = mpg) +
+  geom_smooth(
+    mapping = aes(x = displ, y = hwy, color = drv),
+    show.legend = FALSE
+  )
+
+grid.arrange(a,b,c,nrow = 1) #BREAK
+```
+---
+class: inverse, center, middle
+
+
+# 2 - Duplicar código
+---
+`r chunk_reveal("graph13", widths = c(1,1), title = "### Sólo es necesario poner + para agregar múltiples geoms en una misma gráfica.")`
+
+```{r graph13, eval = F, echo = F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy)) #BREAK
+```
+---
+class: inverse, center, middle
+
+
+# 2 - Se pueden establecer mapeos globales
+---
+`r chunk_reveal("graph14", break_type = "rotate", widths = c(1,1), title = "### Mapeos globales.")`
+
+```{r graph14, eval = F, echo = F}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+geom_point() + geom_smooth() +#ROTATE
+geom_point(aes(color = class)) + geom_smooth() #ROTATE
+```
+---
+class: inverse, center, middle
+
+# Se puede especificar datos específicos por geom
+---
+`r chunk_reveal("graph15", widths = c(1,1), title = "### Mapeos globales.")`
+
+```{r graph15, eval = F, echo = F}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth(data = filter(mpg, class == "subcompact"))
+```
+---
+class: inverse, center, middle
 
 ```{css, eval = TRUE, echo = FALSE}
 .remark-code{line-height: 1.5; font-size: 80%}
@@ -304,7 +552,6 @@ code.r.hljs.remark-code{
   position: relative;
   overflow-x: hidden;
 }
-
 
 code.r.hljs.remark-code:hover{
   overflow-x:visible;
@@ -324,5 +571,3 @@ code.r.hljs.remark-code:hover{
   margin-top: 0px;
 }
 ```
-
-

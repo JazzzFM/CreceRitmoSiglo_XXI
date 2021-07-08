@@ -12,6 +12,14 @@ resource_files:
 - renv.lock
 ---
 
+<style type="text/css">
+  body{
+  font-size: 13pt;
+  text-align: justify;
+  text-justify: inter-word;
+}
+</style>
+
 ```{r setup, include=FALSE}
 library(learnr)
 ```
@@ -20,19 +28,25 @@ library(learnr)
 
 ### Ciencia y práctica en la educación
 
-Desafortunadamente la práctica en educación se ejecuta sin tener evidencias científicas de que los métodos funcionan. En lugar de tener fundamentos sólidos nos enfocamos en la intuición en cómo enseñar Y cómo aprender con consecuencias negativas.
+Desafortunadamente la práctica en educación se ejecuta sin tener evidencias científicas de que los métodos funcionan. En lugar de tener fundamentos sólidos nos enfocamos en la intuición en cómo enseñar y cómo aprender con consecuencias negativas.
 
 Es como utilizar la vacuna del coronavirus sin antes tener evidencia científica de que realmente funcione. Henry L. (Roddy) Roediger III reportó que desafortunadamente la práctica en educación en su mayoría no está fundamentada en descubrimientos científicos.
 
-En este curso vamos a revisar los procesos básicos de la percepción, la atención y la memoria según las investigaciones Y cómo aplican en la práctica, si la ciencia apoya la efectividad de cierta estrategia de aprendizaje la debemos adoptar, al mismo tiempo seguir siendo flexibles Por qué la ciencia sigue evolucionando.
+En este curso vamos a revisar los procesos básicos de la percepción, la atención y la memoria según las investigaciones y cómo aplican en la práctica. Si la ciencia apoya la efectividad de cierta estrategia de aprendizaje, la debemos adoptar, 
+Al mismo tiempo debemos seguir siendo flexibles, por qué la ciencia sigue evolucionando.
 
-¿Tú te pondrías la vacuna aunque no haya sido probada? o peor ún ¿si científicamente está comprobado que no funciona?
+¿Tú te pondrías la vacuna aunque no haya sido probada? o peor aún ¿si científicamente está comprobado que no funciona?
 
- La psicología cognitiva se define usualmente como el estudio de la mente, incluyendo procesos como; la percepción, la atención y la memoria (No la confundamos con la neurociencia que se enfoca en como funciona el cerebro) ayuda a entender el aprendizaje al probar hipótesis de estrategias de aprendizaje que fueron desarrolladas por lo que ahora sabemos de la mente.
+```{r stormtrooper, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%", fig.align="center"}
+knitr::include_graphics("images/visualizacion.png")
+```
+
+La psicología cognitiva se define usualmente como el estudio de la mente, incluyendo procesos como; la percepción, la atención y la memoria (No la confundamos con la neurociencia que se enfoca en como funciona el cerebro) ayuda a entender el aprendizaje al probar hipótesis de estrategias de aprendizaje que fueron desarrolladas por lo que ahora sabemos de la mente.
 
 Una forma diferente de evidencia es la intuición porque nuestro sentir acerca de cómo aprendemos es más convincente que la realidad, por ejemplo, si un estudiante lee y vuelve a leer un libro de texto se volverán cada vez más confiados de que les irá bien en un examen, si otro grupo de estudiantes en lugar de esta estrategia hacen ejercicios, estarán menos confiados en su rendimiento en el examen. Porque estos ejercicios pueden sentirse difíciles, pero en realidad, aquellos que tomaron los ejercicios de práctica obtendrán mejores rendimientos que los alumnos que releyeron los libros de texto, por esto, hacerle caso a nuestra intuición de cómo aprendemos puede ser contraproducente.
 
 No sólo nuestra intuición puede ser una mala guía también podemos guiar de mala manera a otros. Los estilos de aprendizaje describen la idea de que los estudiantes aprenden de diferentes formas, entre los estilos más populares están el visual y el verbal, la idea es que algunos aprendan visualmente y otros verbalmente.
+
 
 Un grupo de científicos en 2008 descubrieron que no existe evidencia para apoyar este punto de vista (pashler, mcdaniel, rohrer & bjork, 2008) maestros de matemáticas elementales de Estados Unidos reconocen la importancia de enseñar matemáticas utilizando los métodos recomendados por la psicología cognitiva a pesar de esto muy pocos acceden a publicaciones científicas relevantes, respondieron a la encuesta que nunca acceden a publicaciones en revistas científicas para mejorar sus habilidades de enseñanza en la práctica. 
 

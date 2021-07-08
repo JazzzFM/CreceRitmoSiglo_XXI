@@ -4,10 +4,10 @@ username: JazzzFM
 account: JazzzFM
 server: datos.morant.com.mx
 hostUrl: https://datos.morant.com.mx/__api__
-appId: 155
-bundleId: 24477
-url: https://datos.morant.com.mx:443/content/155/
-when: 1625608905.33477
-lastSyncTime: 1625608905.33479
+appId: 158
+bundleId: 24493
+url: https://datos.morant.com.mx:443/content/158/
+when: 1625709051.21833
+lastSyncTime: 1625709051.21837
 asMultiple: FALSE
-asStatic: TRUE
+asStatic: FALSE
