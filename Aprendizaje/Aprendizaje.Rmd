@@ -24,6 +24,11 @@ resource_files:
 library(learnr)
 ```
 
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "80%", fig.align="center"}
+knitr::include_graphics("images/uno.png")
+```
+
+
 ## Introducción 
 
 ### Ciencia y práctica en la educación
@@ -32,18 +37,22 @@ Desafortunadamente la práctica en educación se ejecuta sin tener evidencias ci
 
 Es como utilizar la vacuna del coronavirus sin antes tener evidencia científica de que realmente funcione. Henry L. (Roddy) Roediger III reportó que desafortunadamente la práctica en educación en su mayoría no está fundamentada en descubrimientos científicos.
 
-En este curso vamos a revisar los procesos básicos de la percepción, la atención y la memoria según las investigaciones y cómo aplican en la práctica. Si la ciencia apoya la efectividad de cierta estrategia de aprendizaje, la debemos adoptar, 
-Al mismo tiempo debemos seguir siendo flexibles, por qué la ciencia sigue evolucionando.
+En este curso vamos a revisar los procesos básicos de la percepción, la atención y la memoria según las investigaciones y cómo aplican en la práctica. 
+
+Si la ciencia apoya la efectividad de cierta estrategia de aprendizaje, la debemos adoptar, al mismo tiempo debemos seguir siendo flexibles, por qué la ciencia sigue evolucionando.
 
 ¿Tú te pondrías la vacuna aunque no haya sido probada? o peor aún ¿si científicamente está comprobado que no funciona?
 
-```{r stormtrooper, fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "100%", fig.align="center"}
-knitr::include_graphics("images/visualizacion.png")
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/page_1.jpg")
 ```
 
 La psicología cognitiva se define usualmente como el estudio de la mente, incluyendo procesos como; la percepción, la atención y la memoria (No la confundamos con la neurociencia que se enfoca en como funciona el cerebro) ayuda a entender el aprendizaje al probar hipótesis de estrategias de aprendizaje que fueron desarrolladas por lo que ahora sabemos de la mente.
 
-Una forma diferente de evidencia es la intuición porque nuestro sentir acerca de cómo aprendemos es más convincente que la realidad, por ejemplo, si un estudiante lee y vuelve a leer un libro de texto se volverán cada vez más confiados de que les irá bien en un examen, si otro grupo de estudiantes en lugar de esta estrategia hacen ejercicios, estarán menos confiados en su rendimiento en el examen. Porque estos ejercicios pueden sentirse difíciles, pero en realidad, aquellos que tomaron los ejercicios de práctica obtendrán mejores rendimientos que los alumnos que releyeron los libros de texto, por esto, hacerle caso a nuestra intuición de cómo aprendemos puede ser contraproducente.
+Una forma diferente de evidencia es la intuición porque nuestro sentir acerca de cómo aprendemos es más convincente que la realidad, por ejemplo, si un estudiante lee y vuelve a leer un libro de texto se volverán cada vez más confiados de que les irá bien en un examen, si otro grupo de estudiantes en lugar de esta estrategia hacen ejercicios, estarán menos confiados en su rendimiento en el examen. 
+
+
+Porque estos ejercicios pueden sentirse difíciles, pero en realidad, aquellos que tomaron los ejercicios de práctica obtendrán mejores rendimientos que los alumnos que releyeron los libros de texto, por esto, hacerle caso a nuestra intuición de cómo aprendemos puede ser contraproducente.
 
 No sólo nuestra intuición puede ser una mala guía también podemos guiar de mala manera a otros. Los estilos de aprendizaje describen la idea de que los estudiantes aprenden de diferentes formas, entre los estilos más populares están el visual y el verbal, la idea es que algunos aprendan visualmente y otros verbalmente.
 
@@ -64,14 +73,20 @@ De acuerdo a pomerance, greenberg & walsh, 2016, muy pocos cursos de educación 
 la discrepancia entre la investigación y la práctica es más compleja que sólo una comunicación interrumpida, hay tres razones principales:
   
   * 1 - Falta de tiempo y acceso a revistas académicas y la dificultad de interpretar la escritura técnica.
+  
   * 2 - Incomodidad con los cambios, hallazgos imprecisos y reluctancia con aceptar hallazgos que no empata con su propia intuición.
+  
   * 3 - Baja confianza en investigadores los maestros pueden sentir que los investigadores no tienen consciente lo que realmente sucede en el salón de clases y hacen recomendaciones irrelevantes.
 
 ## Percepción
 
-Antes de hablar de aprendizaje Tenemos que hablar de percepción esto es porque la percepción determina como entendemos el mundo la percepción envuelve los cinco sentidos Aunque los más relevantes para el aprendizaje sea la vista y el oído, pongamos un ejemplo de oído:
+Antes de hablar de aprendizaje tenemos que hablar de percepción esto es porque la percepción determina como entendemos el mundo la percepción envuelve los cinco sentidos, aunque los más relevantes para el aprendizaje sea la vista y el oído, pongamos un ejemplo de oído:
 
-Imagina que vas caminando en el bosque y escuchas un ruido de un crujido, tu reacción va a depender de lo que sepas o intérpretes, puedes pensar en una rama que se rompió y sigues caminando o puedes pensar que están cargando una escopeta y te asustas O tal vez no te asustes porque sabes que hay cazadores cerca y tomaste las medidas de precaución correctas para alejarte de los las áreas designadas para la caza, depende de lo que pienses puedes tener ninguna reacción como que se eleve dramáticamente tu pulso cardíaco o no.
+Imagina que vas caminando en el bosque y escuchas un ruido de un crujido, tu reacción va a depender de lo que sepas o intérpretes, puedes pensar en una rama que se rompió y sigues caminando o puedes pensar que están cargando una escopeta y te asustas o tal vez no te asustes porque sabes que hay cazadores cerca y tomaste las medidas de precaución correctas para alejarte de los las áreas designadas para la caza, depende de lo que pienses puedes tener ninguna reacción como que se eleve dramáticamente tu pulso cardíaco o no.
+
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/tres.jpg")
+```
 
 Este ejemplo, ilustra que la interpretación de algo (en este caso un sonido) depende de lo que sabemos de él, pero saber que fue una rama en lugar de una escopeta no cambia las ondas del sonido, sólo cambia la forma en que las escuchas, esto es clave para diferenciar la sensibilidad de la percepción.
 
@@ -85,34 +100,40 @@ Los bebés recién nacidos por lo general tienen un procesamiento de abajo hacia
 
 Tendemos a pensar que cuando vemos algo juntamos las piezas de lo que realmente está (abajo hacia arriba)  sin embargo, utilizamos más procesamientos de arriba hacia abajo de lo que pensamos.
 
-Más imágenes de ejemplos: "aprender" cubriendo las letras de la mitad para abajo "hola amigo" en mayúsculas y que la A y la H sean parecidas.
+Ejemplo:
 
-     12
-    A13C
-     14
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/cuatro.jpg")
+```
 
-Los estudiantes traen diferentes experiencias así como diferentes tipos y niveles de conocimiento al salón de clases y Esto va a afectar Cómo percibe la información presentada en el salón de clases
+Los estudiantes traen diferentes experiencias así como diferentes tipos y niveles de conocimiento al salón de clases y esto va a afectar Cómo percibe la información presentada en el salón de clases
 
 ### ¿Cómo juega esto en el salón?
 
 Un estudiante podrá enlazar ideas abstractas a un ejemplo de su vida, esto hará que sea mucho más fácil de recordar, otro estudiante tal vez no tenga una experiencia similar y sólo puede interpretar el concepto de forma más abstracta y le será más difícil de recordar.
 
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/cinco.jpg")
+```
+
 Al darnos cuenta que estas diferencias existen desde el principio es un paso importante a tomar para hacer que el conocimiento sea accesible para todos los alumnos. La maldición al conocimiento es el fenómeno de pensar que algo es fácil obvio por el hecho de que ya tienes mucha experiencia.
 
-A veces los maestros carecen de la conciencia de cómo procesa la información un alumno. esos profesores alguna vez fueron alumnos y no tenían conocimiento de todo lo que ahora enseñan, es difícil para ellos desaprender la información para ponerse en los zapatos del estudiante y experimentar la novedad de aprender estos conceptos.
+A veces los maestros carecen de la conciencia de cómo procesa la información un alumno. Esos profesores alguna vez fueron alumnos y no tenían conocimiento de todo lo que ahora enseñan, es difícil para ellos desaprender la información para ponerse en los zapatos del estudiante y experimentar la novedad de aprender estos conceptos.
 
 Una posible solución es disminuir la sobre confianza para pensar en respuestas o explicaciones alternativas (Nickerson 1999)
 
 
 ## Atención
 
-La atención es notoriamente difícil de definir, pero es esencial para que el aprendizaje ocurra.
+La atención es notoriamente difícil de definir, pero es esencial para que el aprendizaje ocurra. Los recursos de nuestra atención son limitados y por esto  el profesor tiene que estar direccionando a la información más importante o relevante.
 
-Los recursos de nuestra atención son limitados y por esto  el profesor tiene que estar direccionando a la información más importante o relevante
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/seis.jpg")
+```
 
 La definición más común y aceptada de la atención entre psicólogos cognitivos es:
 
-  * El foco en un estímulo específico o la habilidad de poner el foco en un estímulo específico o lugar
+  * El foco en un estímulo específico o la habilidad de poner el foco en un estímulo específico o lugar.
 
   * Normalmente se dice que la atención es un recurso con capacidad limitada se puede pensar como un presupuesto como analogía.
 
@@ -127,25 +148,26 @@ La teoría de carga cognitiva de sweller dice que como tenemos recursos limitado
 
 ### El mito de la multitarea
 
-Una característica importantísima de la atención es que sólo podemos seleccionar un punto en donde mantendremos el foco de nuestra atención, es prácticamente imposible poner atención a más de una cosa al mismo tiempo
+Una característica importantísima de la atención es que sólo podemos seleccionar un punto en donde mantendremos el foco de nuestra atención, es prácticamente imposible poner atención a más de una cosa al mismo tiempo.
+
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/siete.jpg")
+```
 
 Podrías protestar que puedes manejar mientras escuchas música y que puedes tener la televisión prendida o la música mientras estudias y que no son una distracción para ti, y tal vez es algo que te has acostumbrado a tener en el fondo y sientes que es algo complementario y que no distrae o interfiere con tus estudios.
 
  **Déjame decirte que resulta que esta intuición es incorrecta**
 
-EJemplo: detalle tv -> no buen resumen.
-
 Cuando sientes que estás haciendo tareas a la vez, o poniendo atención a más de una cosa, lo que realmente estás haciendo es cambiar de foco de ida y vuelta entre las cosas que crees poner atención al mismo tiempo.
 
 Algo importante a considerar es que mientras cambias tu atención de ida y vuelta, llegan costos importantes, este costo es que se reduce la eficiencia y la la velocidad de reacción en ambas tareas.
 
-Ejercicio práctico: 1-26, A-Z
 
 ### ¿Qué factores lleva la atención hacia el aprendizaje?
 
 La teoría del incremento del rasgo sobresaliente de la atención indica que los recursos de la atención constantemente cambia por lo que algunas cosas sobresalen más que otras.
 
-ejemplo: cuenta objetos rojos de tu habitación ¿No es increíble?
+Ejemplo: Cuenta objetos rojos de tu habitación ¿No es increíble?
 
 Esta sobresaliencia Podría tener varios orígenes:
 
@@ -154,31 +176,33 @@ Esta sobresaliencia Podría tener varios orígenes:
  * La forma en la que la información es presentada por el maestro.
  * Características abajo arriba como colores brillosos y sonidos altos.
 
-Levanta la mano si está respirando.
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/ocho.jpg")
+```
 
 Hidi y Harackiwicz (2000) Distinguieron entre dos tipos de intereses que un individuo puede tener dos puntos intereses individuales e intereses situacionales.
 
- por ejemplo, tú estás interesado en este contenido que les doy pues pagaste por ello Y sabes qué te sirve para tu vida.
+Por ejemplo, tú estás interesado en este contenido que les doy pues pagaste por ello y sabes qué te sirve para tu vida, intereses de la situación es que tan interesante el maestro hace la clase.
 
- intereses de la situación es que tan interesante el maestro hace la clase.
+La comunicación clara de ideas dichas en un buen nivel de dificultad, actividades para los alumnos como que investiguen información y den la clase, usar ejemplos concretos.
 
- comunicación Clara de ideas dichas en un buen nivel de dificultad
- actividades para los alumnos como que investiguen información y den la clase
- usar ejemplos concretos
+Nota que esto no es lo mismo que la motivación interna y externa que como hemos visto se refiere que el aprendizaje se está llevando a cabo sólo por voluntad propia del alumno o premios o castigos externos.
 
- nota que esto no es lo mismo que la motivación interna y externa que como hemos visto se refiere que el aprendizaje se está llevando a cabo sólo por voluntad propia del alumno o premios o castigos externos.
-
- Esta distinción es importante porque las recompensas extrínsecas o castigos puede ser perjudiciales para las motivaciones extrínsecas e intrínsecas, el interés situacional puede mantener e incluso fortalecer los intereses inherentes.
+Esta distinción es importante porque las recompensas extrínsecas o castigos puede ser perjudiciales para las motivaciones extrínsecas e intrínsecas, el interés situacional puede mantener e incluso fortalecer los intereses inherentes.
 
 ### ¿Cuáles son las consecuencias de no poner atención?
 
 Sin importar la motivación que tengas tenemos que admitir que a veces nos vamos a distraer de lo que se supone que estás haciendo o pensando, a estas distracciones los psicólogos cognitivos les llaman mind-wandering (mente deambulante) y a lo que deberías de estar poniendo atención le llaman task set (conjunto de tareas)
 
-Las Mentes deambulantes, tienen una relación interesante con la dificultad de la tarea.
+Las **mentes deambulantes**, tienen una relación interesante con la dificultad de la tarea.
+
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/nueve.jpg")
+```
 
 Las personas tienden a tener una mente deambulante mucho más frecuente cuando tienen una tarea fácil que una difícil. Los investigadores proponen que alrededor de la mitad del tiempo, los estudiantes no prestan atención a lo que el maestro está diciendo.
 
-Esto es un problema porque si pierden de  información relevante, los estudiantes reportan que el número de momentos deambulantes  tiene una correlación con la comprensión de lectura posterior y el rendimiento de la memoria pero no es la causa.
+Esto es un problema porque si pierden de  información relevante, los estudiantes reportan que el número de momentos deambulantes tiene una correlación con la comprensión de lectura posterior y el rendimiento de la memoria pero no es la causa.
 
 También sucede durante exámenes y esto podría causar un manejo pobre del tiempo y posiblemente reprobarlo.
 
@@ -186,93 +210,108 @@ También sucede durante exámenes y esto podría causar un manejo pobre del tiem
 
 Una área de investigación intensiva es en la capacidad de nuestra memoria de corto plazo, no sólo en términos de tiempo, sino en términos de Cuántos elementos separados de información pueden ser guardados en la memoria en cualquier momento. Muchas personas tienden a tener una extensión de dígitos de 5 a 9 ítems quiere decir que la capacidad de la memoria de corto plazo Le vamos a llamar la extensión de tarea:
 
-  * Ejemplo: aprende los siguientes 17 items
-      ** PATI3CUTANLOCEOIN
+Ejemplo: aprende los siguientes 17 items
 
-  * Ahora trata de aprenderlo
-      ** CAPITULO3ATENCION
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/10.png")
+```
 
-  * Ahora sólo son tres ítems
+Ahora trata de aprenderlo
+
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/11.png")
+```
+
 
 Adicionalmente al almacenamiento, la memoria de corto plazo nos permite  manipular información y cambiar entre tareas aunque no serás más eficiente que si sólo te dedicas a una sin embargo, en el contexto para aprender información a largo plazo lo más importante es pasar la información de la memoria de corto plazo a la de largo plazo.
 
- El proceso de la memoria de corto plazo esencialmente decide qué es lo que realmente vale la pena quedarse y qué puede olvidarse por completo en una ventana de 15 a 30 segundos.
+El proceso de la memoria de corto plazo esencialmente decide qué es lo que realmente vale la pena quedarse y qué puede olvidarse por completo en una ventana de 15 a 30 segundos.
 
 ## Memoria de trabajo
  
-Muchos psicólogos cognitivos han intentado explicar el proceso que lleva a cabo la atención a través de un modelo que le llaman a la memoria de trabajo.
+Muchos psicólogos cognitivos han intentado explicar el proceso que lleva a cabo la atención a través de un modelo que le llaman a la **memoria de trabajo**.
 
-Este modelo describe el proceso de mantener la información, manipular la, y enviarla a la memoria de largo plazo y nos puede ayudar a cambiar entre tareas, en  particular estos psicólogos están interesados en tres procesos en particular:
+Este modelo describe el proceso de mantener la información, manipularla, y enviarla a la memoria de largo plazo y nos puede ayudar a cambiar entre tareas, en  particular estos psicólogos están interesados en tres procesos en particular:
 
-    * 1 - Bucle fonológico.
-    * 2 - Block de dibujo visuoespacial.
-    * 3 - Ejecutivo central.
+  * 1 - Bucle fonológico.
+  * 2 - Block de dibujo visuoespacial.
+  * 3 - Ejecutivo central.
 
 El bucle fonológico habla esencialmente de repetir lo que no quieres olvidar una y otra vez para que lo recuerdes por un momento breve.
 
-Ejemplo: aprender número de celular por nopoder dar clic, si tú bucle fonológico está ocupado haciendo algo vas a tener un momento difícil.
+Ejemplo: Aprender número de celular por nopoder dar clic, si tú bucle fonológico está ocupado haciendo algo vas a tener un momento difícil.
 
-Ejemplo: d de dé de…
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/12.png")
+```
 
 Blog de dibujo visoespacial, por otro lado, te ayuda a guardar información visual utilizando imágenes
 
-Ejemplo: traza la ruta desde tu cuarto a la cocina y te imaginas a ti recorriéndolo
+Ejemplo: Traza la ruta desde tu cuarto a la cocina y te imaginas a ti recorriéndolo
 
 Aparentemente trabaja independientemente al bucle fonológico.
 
-Ejemplo: ahora Inténtalo diciendo dddd
+Ejemplo: Ahora inténtalo diciendo dddd
 
-Son procesos cognitivos diferentes, el tercer proceso, el Ejecutivo central, no está completamente Claro que hace esta parte del modelo.
+Son procesos cognitivos diferentes, el tercer proceso, el ejecutivo central, no está completamente claro que hace esta parte del modelo.
 
 Involucra todos los procesos restantes de la memoria de trabajo y está muy relacionado con la atención:
 
-    * Determina A qué específicamente poner el foco determina Qué información mandar o recibir de la memoria a largo plazo hace la interconexión entre el bucle fonológico y el blog de dibujo visoespacial
+  * Determina a qué específicamente poner el foco determina que información mandar o recibir de la memoria a largo plazo hace la interconexión entre el bucle fonológico y el block de dibujo visuoespacial.
 
 ### Diferencias individuales en la atención.
 
-La tendencia en soltar la concentración difiere de persona a persona y durante la vida, por ejemplo,  adultos mayores reportan menos mentes deambulantes que adultos más jóvenes, voy a describir tres teorías que intentan explicar las diferencias entre personas y Por qué algunas personas podrían encontrar lo más difícil mantener el foco.
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/13.jpg")
+```
+
+La tendencia en soltar la concentración difiere de persona a persona y durante la vida, por ejemplo,  adultos mayores reportan menos mentes deambulantes que adultos más jóvenes, voy a describir tres teorías que intentan explicar las diferencias entre personas y porqué algunas personas podrían encontrar lo más difícil mantener el foco.
 
 **Capacidad de la memoria de trabajo**
 
-Se refiere a que los recursos de la atención es dependiente de Cuánta información podemos retener y manipular en cualquier momento
+Se refiere a que los recursos de la atención es dependiente de cuanta información podemos retener y manipular en cualquier momento.
 
 **Velocidad de procesamiento**
 
-Se refiere que los recursos de la atención depende de qué tan rápido podemos hacer este tipo de tareas (15x7, etc) mientras más rápido logremos procesar cosas mejor podremos llevar a cabo tareas que requieren múltiples pedazos de información
+Se refiere que los recursos de la atención depende de qué tan rápido podemos hacer este tipo de tareas (15x7, etc) mientras más rápido logremos procesar cosas mejor podremos llevar a cabo tareas que requieren múltiples pedazos de información.
  
-**control en la atención**
+**Control en la atención**
 
-Esta teoría pone la carga en la habilidad de poner el foco dónde lo elegimos en cualquier momento.
- aquellas que tienen mayor control de la tensión tiene una mayor habilidad de elegir Dónde poner el foco, mantenerlo por períodos largos sin distraerse o empezar con la mente deambulante.
-
+Esta teoría pone la carga en la habilidad de poner el foco dónde lo elegimos en cualquier momento, aquellas que tienen mayor control de la tensión tiene una mayor habilidad de elegir donde poner el foco, mantenerlo por períodos largos sin distraerse o empezar con la mente deambulante.
 
 Recientemente han empezado a intentar entrenar el cerebro a través de juegos y que practiquen para aumentar la capacidad, hacer operaciones más rápido y controlar la atención.
 
-Pero no hay evidencia de que fuera de los juegos, en la vida real, también aplica. Por esta razón me voy a enfocar en estrategias de aprendizaje efectivas y no en intenta entrenar el cerebro. 
+Pero no hay evidencia de que fuera de los juegos, en la vida real, también aplica. 
 
-## Memoria
+Por esta razón me voy a enfocar en estrategias de aprendizaje efectivas y no en intenta entrenar el cerebro. 
 
-Nuestra identidad está llena de cosas que recordamos o hemos vivido y que pensamos acerca de nosotros mismos, tal vez ahora ya tienes una identidad aspiracional hacia el futuro llena de metas proyectos objetivos, por ejemplo, terminar la carrera, estar sanos, tener tu propio negocio, incluso cómo y dónde retirarte. Pero qué imaginamos o qué hacemos cuando imaginamos el futuro, el viaje hacia el futuro mental y la teoría más popular dice que el proceso es más o menos el mismo que recordar
+## Tipos de memoria
+
+Nuestra identidad está llena de cosas que recordamos o hemos vivido y que pensamos acerca de nosotros mismos, tal vez ahora ya tienes una identidad aspiracional hacia el futuro llena de metas proyectos objetivos, por ejemplo, terminar la carrera, estar sanos, tener tu propio negocio, incluso cómo y dónde retirarte. 
+
+Pero que imaginamos o que hacemos cuando imaginamos el futuro, el viaje hacia el futuro mental y la teoría más popular dice que el proceso es más o menos el mismo que recordar.
+
+```{r fig.margin = TRUE, echo = FALSE, fig.width=3, out.width = "50%", fig.align="center"}
+knitr::include_graphics("images/14.jpg")
+```
 
 Lo que realmente estamos haciendo cuando imaginamos nuestro futuro es tomar pedazos de información de nuestro pasado incluso de lo que hemos leído o de lo que hemos visto en películas y las proyectamos hacia el futuro a una nueva situación imaginaria.
 
 Pero tu autoconcepto no es lo único para lo que sirve la memoria todo lo que haces requiere de la memoria de alguna u otra manera, y te voy a poner algunos ejemplos en donde utilizamos la memoria.
 
-Recordar nombres:  tal vez pensamos que somos malos con los nombres pero Alomejor los que recordamos con mayor facilidad son los nombres de nuestros familiares y amigos esto pasa porque tenemos más oportunidades de practicar y usar esos nombres en el día a día 
+**Recordar nombres**:  Tal vez pensamos que somos malos con los nombres pero es probable que los recordamos con mayor facilidad son los nombres de nuestros familiares y amigos esto pasa porque tenemos más oportunidades de practicar y usar esos nombres en el día a día .
 
-Recordar si hemos hecho algo: a lo mejor te ha pasado no recuerdas si hiciste algo si te tomaste tu pastilla o en dónde guardaste algún objeto personal y este proceso qué nos previene de estar seguros si sí lo hicimos o no se le llama interferencia es un problema muy común especialmente en adultos mayores que tienden a estar en mayor medicación y tienden a tener memorias más pobres.
+**Recordar si hemos hecho algo**: A lo mejor te ha pasado no recuerdas si hiciste algo, si te tomaste tu pastilla o en dónde guardaste algún objeto personal y este proceso qué nos previene de estar seguros si sí lo hicimos o no se le llama interferencia es un problema muy común especialmente en adultos mayores que tienden a estar en mayor medicación y tienden a tener memorias más pobres.
 
-Recordar hacer algo en el futuro:  la memoria prospectiva nos permite planear hacer algo.
+**Recordar hacer algo en el futuro**:  La memoria prospectiva nos permite planear hacer algo.
 
-Ser capaz de entender una plática:  cuando escuchas a alguien hablar tienes que integrar las palabras que están diciendo una detrás de otra porque si tú olvidarás una palabra inmediatamente después de que escuchas lo siguiente solamente escucharías un conjunto de palabras individuales y no podrías crear el entendimiento.  el proceso que utilizamos para este tipo de  evento en el momento se llama la memoria de trabajo.
+**Ser capaz de entender una plática**: Cuando escuchas a alguien hablar tienes que integrar las palabras que están diciendo una detrás de otra porque si tú olvidarás una palabra inmediatamente después de que escuchas lo siguiente solamente escucharías un conjunto de palabras individuales y no podrías crear el entendimiento. El proceso que utilizamos para este tipo de evento en el momento se llama la **memoria de trabajo**.
 
-Recordar cómo hacer algo: tal vez algunas veces puedes recordar el proceso o el conjunto de acciones sin realmente poder describir las por ejemplo, tocar el piano. Esta memoria que depende de tus habilidades.
-
-Normalmente se le llama la memoria de procedimiento y es diferente a la memoria declarativa que con esta  si somos capaces de reportar nuestras memorias, algunos piensan que ahora que tenemos el internet ya no nos debemos preocupar de la memoria, de hecho, los humanos hemos dependido de factores externos o de sistemas externos de memoria durante muchos años. los libros, anotar notas, listas recordatorios desde hace muchas generaciones.
+**Recordar cómo hacer algo**: Tal vez algunas veces puedes recordar el proceso o el conjunto de acciones sin realmente poder describir las por ejemplo, tocar el piano. Esta memoria que depende de tus habilidades. Normalmente se le llama la **memoria de procedimiento** y es diferente a la memoria declarativa que con estasi somos capaces de reportar nuestras memorias, algunos piensan que ahora que tenemos el internet ya no nos debemos preocupar de la memoria, de hecho, los humanos hemos dependido de factores externos o de sistemas externos de memoria durante muchos años. Los libros, anotar notas, listas recordatorios desde hace muchas generaciones.
 
 En algunas situaciones es mucho más factible olvidar algo o algún lugar donde nos tomamos una foto que algo que solamente vimos. Quiero que te preguntes porque no sólo utilizó mi computadora la respuesta a esa pregunta es obvia por qué no puedes utilizar tu computadora sin utilizar la memoria antes.
 
-### La memoria no es  como una biblioteca la memoria se reconstruye.
+### La memoria no es  como una biblioteca, la memoria se reconstruye.
 
 Antes se pensaba que la memoria era como una biblioteca entraba conocimiento y se guardaba en un mismo lugar y cuando no recordamos un objeto o un concepto era porque a lo mejor no lo habíamos guardado de forma eficiente. Ahora se ha demostrado que no es así el concepto principal de la memoria de largo plazo es la idea de que cada vez que recuerdas una memoria de hecho la estás cambiando cada vez que tú dices una historia sale un poco más pulida embelleciendo algunos detalles optando algunos puntos aburridos.  
 

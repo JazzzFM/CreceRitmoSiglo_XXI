@@ -1527,7 +1527,7 @@ server <- function(input, output, session) {
 La figura siguiente muestra el nuevo grafo reactivo. Ten en cuenta que, como se desee, `x1` y `x2` ya no tienen una dependencia reactiva de `lambda1`, `lambda2` y `n`: cambiar sus valores no activará el cálculo. Dejamos las flechas en gris muy pálido solo para recordartr que `x1` y `x2` continúan usando los valores, pero ya no toman una dependencia reactiva de ellos.
 
 ```{r echo = FALSE, fig.align="center", out.width = "50%", message = FALSE, fig.cap="eventReactive() permite separar las dependencias (flechas negras) de los valores utilizados para calcular el resultado (flechas gris pálido)."}
-knitr::include_graphics("images/timing-button-2.png")
+knitr::include_graphics("images/timing-button-4.png")
 ```
 
 ### Observers
