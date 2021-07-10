@@ -5,10 +5,9 @@ account: JazzzFM
 server: datos.morant.com.mx
 hostUrl: https://datos.morant.com.mx/__api__
 appId: 152
-bundleId: 24449
-url: https://datos.morant.com.mx:443/content/152/
-when: 1624892684.37883
-lastSyncTime: 1624892684.37885
+bundleId: 24506
+url: https://datos.morant.com.mx:443/shiny/
+when: 1625867972.81128
+lastSyncTime: 1625867972.81133
 asMultiple: FALSE
 asStatic: FALSE
-additionalFiles: renv.lock
