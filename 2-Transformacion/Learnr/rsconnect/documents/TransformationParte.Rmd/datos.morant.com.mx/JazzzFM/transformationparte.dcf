@@ -5,10 +5,10 @@ account: JazzzFM
 server: datos.morant.com.mx
 hostUrl: https://datos.morant.com.mx/__api__
 appId: 150
-bundleId: 24436
-url: https://datos.morant.com.mx:443/content/150/
-when: 1624312962.79018
-lastSyncTime: 1624312962.7902
+bundleId: 24511
+url: https://datos.morant.com.mx:443/transformacion/
+when: 1626103933.6655
+lastSyncTime: 1626103933.66555
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Transformation.Rmd
+ignoredFiles: .Rprofile
