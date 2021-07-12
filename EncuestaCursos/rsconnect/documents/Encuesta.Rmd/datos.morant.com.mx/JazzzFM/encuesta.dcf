@@ -1,0 +1,14 @@
+name: encuesta
+title: Encuesta
+username: JazzzFM
+account: JazzzFM
+server: datos.morant.com.mx
+hostUrl: https://datos.morant.com.mx/__api__
+appId: 160
+bundleId: 24502
+url: https://datos.morant.com.mx:443/content/160/
+when: 1625854865.54193
+lastSyncTime: 1625854865.54195
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|.Rprofile|.secrets/20061abcbc1c6ecf51bd9cf7e37350f6_jflores@gerenciadelpoder.com.mx|.secrets/9566fe0643cfe888fecd0b72f870afec_jflores@gerenciadelpoder.com.mx|AppEncuesta/app.R|AppEncuesta/CRUD.R|images/visualizacion.png
