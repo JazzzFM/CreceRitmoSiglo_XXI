@@ -176,6 +176,7 @@ ggplot(data = mpg) +
 # Objetos geométricos -----------------------------------------------------
 
 library(gridExtra)
+
 a <- ggplot(mpg) +
   geom_point(mapping = aes(x = displ, y = hwy))
   
@@ -360,7 +361,6 @@ demo <- tribble(
 ggplot(data = demo) +
   geom_bar(mapping = aes(x = cut))
 
-
 ggplot(data = diamonds) + 
   geom_bar(mapping = aes(x = cut, y = stat(prop), group = 1 ))
 
@@ -369,7 +369,7 @@ ggplot(data = diamonds) +
     mapping = aes(x = cut, y = depth),
     fun.min = min,
     fun.max = max,
-    fun = median
+    fun = mean
   )
 
 # Ejercicio
@@ -398,9 +398,14 @@ ggplot(data = diamonds) +
 # 2. ¿Qué hace geom_col? Cuál es la diferencia con
 # geom_bar?
 
-diamonds %>% count(cut) %>% ggplot() + geom_col(aes(x = cut, y = n)) 
+diamonds %>%
+  count(cut) %>%
+  ggplot() +
+  geom_col(aes(x = cut, y = n)) 
 
-diamonds %>% ggplot() + geom_bar(aes(y = cut))
+diamonds %>% 
+  ggplot() + 
+  geom_bar(aes(y = cut))
 
 # la transformación default es identity, que
 # deja los datos como estan.
