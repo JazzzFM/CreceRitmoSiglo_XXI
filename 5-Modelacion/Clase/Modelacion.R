@@ -200,7 +200,7 @@ ggplot(sim1, aes(x, y)) +
   geom_point(size = 2, colour = "grey30") + 
   geom_abline(
     aes(intercept = a0, slope = a1, colour = -dist), 
-    data = filter(models, rank(dist) <= 10)
+    data = filter(models, min_rank(dist) <= 10)
   )
 
 "
@@ -210,7 +210,7 @@ nuevamente coloreado por `-dist`.
 "
 
 ggplot(models, aes(a0, a1)) +
-  geom_point(data = filter(models, rank(dist) <= 10), size = 4, colour = "red") +
+  geom_point(data = filter(models, min_rank(dist) <= 10), size = 4, colour = "red") +
   geom_point(aes(colour = -dist))
 
 "

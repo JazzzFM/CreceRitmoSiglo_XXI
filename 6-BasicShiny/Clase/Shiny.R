@@ -557,7 +557,10 @@ server <- function(input, output, session) {
     "Hello friend!" 
   })
   output$code <- renderPrint({ 
-    summary(1:10) 
+    # summary(1:10) 
+    "hello friend"
+    
+    
   })
 }
 
@@ -1165,8 +1168,8 @@ Si tienes algunos datos simulados, puedo usar estas funciones para comparar
 dos variables:
 "  
 
-x1 <- rnorm(100, mean = 0, sd = 0.5)
-x2 <- rnorm(200, mean = 0.15, sd = 0.9)
+x1 <- rnorm(10000, mean = 0, sd = 0.5)
+x2 <- rnorm(20000, mean = 0, sd = 1.9)
 
 freqpoly(x1, x2)
 cat(t_test(x1, x2))

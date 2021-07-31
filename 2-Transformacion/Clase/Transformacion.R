@@ -61,7 +61,7 @@ near(1 / 49 * 49, 1)
 
 filter(flights, month == 11 | month == 12)
 
-filter(flights, month %in% c(11,12))
+filter(flights, month %in% c(9,12))
 
 
 "
@@ -73,7 +73,7 @@ Por ejemplo:
 "
 
 filter(flights, !(arr_delay > 120 | dep_delay > 120))
-filter(flights, arr_delay <= 120, dep_delay <= 120)
+filter(flights, arr_delay <= 120 & dep_delay <= 120)
 
 
 ### Valores faltantes
@@ -148,13 +148,13 @@ rename(flights, tail_num = tailnum)
 Podrías utilizar la función `everything()` 
 "
 
-select(flights, time_hour, air_time, everything())
+select(flights, year, month, day, time_hour, air_time, everything())
 
 "
 Otra forma de cambiar el orden de las columnas es con `relocate()` 
 "
 
-relocate(flights, time_hour, dep_time, .before = year)
+relocate(flights, time_hour, dep_time, .after = day)
 
 
 "Revisa `?relocate` para mayor detalle."
@@ -255,7 +255,7 @@ lag(x)
 lead(x)
 
 "
-**Operaciones cumulativas**: 
+**Operaciones acumulativas**: 
   `cumsum()`, `cumprod()`, `cummin()`, `cummax()`, `cummean()`
 "
 
@@ -322,6 +322,8 @@ Más adelante ahondaremos en el parámetro `na.rm = TRUE`
 by_day <- group_by(flights, year, month, day)
 summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))
 
+flights %>% group_by(year, month, day) %>% 
+  summarise(delay = mean(dep_delay, na.rm = T))
 "
 Estas últimas herramientas son las que utilizarás más comúnmente cuando 
 trabajes con `dplyr`. Antes de continuar quisiera hacer un paréntesis
@@ -366,6 +368,16 @@ delays <- flights %>%
   ) %>% 
   filter(count > 20, dest != "HNL")
 
+flights %>% 
+  group_by(dest) %>% 
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) %>% 
+  filter(count > 20, dest != "HNL") %>%
+  ggplot(aes(x = dist, y = delay)) + 
+  geom_point(aes(size = count), alpha = 1/3) + geom_smooth(se = F)
 "
 Es much más fácil de leer: agrupas, luego resumes, luego filtras.
 "
@@ -377,7 +389,8 @@ Es much más fácil de leer: agrupas, luego resumes, luego filtras.
 
 flights %>% 
   group_by(year, month, day) %>% 
-  summarise(mean = mean(dep_delay))
+  summarise(mean = mean(dep_delay),
+            vuelos =)
 
 "
 Obtenemos muchos valores faltantes.
@@ -425,7 +438,7 @@ del número de vuelos vs. retraso promedio por avión.
 delays <- not_cancelled %>% 
   group_by(tailnum) %>% 
   summarise(
-    delay = mean(arr_delay, na.rm = TRUE),
+    delay = mean(arr_delay),
     n = n()
   )
 
@@ -477,7 +490,7 @@ not_cancelled %>%
 **Medidas de rango**: 
   `min()`, `quantile(x,0.25)`, `max()`.
 
-¿Cuándo es que el primer vuelo y el último salen todos los días?
+¿Cuándo es  el primer vuelo y el último salen todos los días?
 "  
 
 not_cancelled %>% 
@@ -524,7 +537,7 @@ Los conteos son tan útiles que dplyr ofrece una función en particular
 "
 
 not_cancelled %>% 
-  count(dest)
+  count(dest,carrier, sort = T) %>% count(dest, sort = T)
 
 "
 Opcionalmente puedes proveer una variable de peso. 
@@ -532,6 +545,8 @@ Opcionalmente puedes proveer una variable de peso.
 
 not_cancelled %>% 
   count(tailnum, wt = distance)
+
+not_cancelled %>% group_by(tailnum) %>% summarise(millas = sum(distance))
 
 "
 **Conteos y proporciones de valores lógicos**: 
@@ -576,6 +591,16 @@ pero la mediana de de las medianas de un grupo no es la mediana global.
 Si quieres desagrupar sólo utiliza la función `ungroup()`
 "
 
+mediana_dia <- not_cancelled %>% group_by(year, month, day) %>% 
+  summarise(mediana_d = median(distance))
+
+mm <- mediana_dia %>% summarise(mediana_m = median(mediana_d))
+
+mediana_mes <- not_cancelled %>% group_by(year, month) %>% 
+  summarise(mediana_m = median(distance))
+
+mm %>% left_join(mediana_mes, by = c("year","month"))
+
 daily %>% 
   ungroup() %>%             
   summarise(flights = n())  
@@ -585,7 +610,7 @@ daily %>%
 "
 
 1. Intenta obtener el mismo resultado que dan los siguientes códigos 
-  `not_cncelled %>% count(dest)` y `not_cancelled %>% count(tailnum, wt = distnace)` 
+  `not_cancelled %>% count(dest)` y `not_cancelled %>% count(tailnum, wt = distance)` 
   (sin utilizar la función `count()`)
 
 2. La definición de vuels cancelados es (`is.na(dep_delay) | is.na(arr_delay)`)
@@ -609,7 +634,7 @@ Encontrar los peores miembros de un grupo
 
 flights_sml %>% 
   group_by(year, month, day) %>%
-  filter(rank(desc(arr_delay)) < 10)
+  filter(min_rank(desc(arr_delay)) <= 10)
 
 "
 Encontrar grupos que son mayores a un umbral
@@ -620,6 +645,7 @@ popular_dests <- flights %>%
   filter(n() > 365)
 popular_dests
 
+flights %>% count(dest) %>% filter(n < 365)
 "
 Calcular las métricas por grupo
 "
@@ -630,15 +656,30 @@ popular_dests %>%
   select(year:day, dest, arr_delay, prop_delay)
 
 
-Funciones que trabajan naturalmente con mutates y filters
-agrupados se conocen como funciones ventana. 
-
-Lee la siguiente documentación `vignette("window-functions")`
+# Funciones que trabajan naturalmente con mutates y filters
+# agrupados se conocen como funciones ventana. 
+# 
+# Lee la siguiente documentación `vignette("window-functions")`
 
 ### Ejercicios 2
+
+flights %>% group_by(tailnum) %>% 
+  summarise(prop_vuelos_retrasados = mean(arr_delay > 0 & !is.na(arr_delay)),
+            prop_vuelos_cancelados = mean(is.na(arr_delay)),
+            n_vuelos  = n()) %>% 
+  mutate(prop_vuelos_retr_mas_cancelados = prop_vuelos_retrasados + prop_vuelos_cancelados) %>% 
+  arrange(desc(prop_vuelos_retrasados)) %>%
+  filter(n_vuelos > 25)
+
+flights %>% filter(arr_delay > 0) %>% group_by(tailnum) %>% 
+  summarise(promedio_retraso = mean(arr_delay,na.rm = T),
+            n_vuelos  = n()) %>% 
+  arrange(desc(promedio_retraso)) %>%
+  filter(n_vuelos > 25)
 "
 1. ¿Qué avión (`tailnum`) tiene el peor record de llegadas a tiempo? 
-    (proporción de vuelos no retrasados o cancelados o media del retraso de llegada)
+    (proporción de vuelos retrasados al llegar o cancelados o 
+    media del retraso de llegada)
 
 2. ¿En qué hora deberías tomar un vuelo para evitar retrasos lo más posible?
 
@@ -650,6 +691,10 @@ group_by(hour) %>%
 summarise(n = n(),
 arr_delay_prom = mean(arr_delay, na.rm = TRUE)) %>% 
 arrange(arr_delay_prom)
+
+flights %>% filter(!is.na(arr_delay)) %>% mutate(hora = dep_time %/% 100) %>% group_by(hora) %>%
+summarise(vuelos = n(), prop = mean(arr_delay > 0),promedio = mean(arr_delay)) %>% arrange(prop) %>%
+ggplot(aes(x = hora, y = prop, size = vuelos)) + geom_point()
 
 3. Para cada destino, calcula el total de minutos retrasados.
   Para cada vuelo, calcula la proporción del total de retraso para su destino.
