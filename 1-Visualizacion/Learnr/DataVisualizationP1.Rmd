@@ -172,6 +172,30 @@ quiz(caption = "Responde",
 )
 ```
 
+```{r quiz2, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Qué hay de malo con este código?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+```{r quiz2, echo = FALSE}
+quiz(caption = "Responde",
+  question_text(
+  "¿Qué hay de malo con este código?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
 
 ```{r quiz3, echo = FALSE}
 quiz(caption = "Responde",

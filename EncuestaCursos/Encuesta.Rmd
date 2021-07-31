@@ -1,0 +1,209 @@
+---
+title: "Feedback de los estudiantes"
+output: learnr::tutorial
+runtime: shiny_prerendered
+resource_files:
+- renv.lock
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(learnrhash)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Encuesta
+
+
+```{r quiz1}
+quiz(
+  caption = "Responde",
+  question("1 - Accesibilidad de los tutores; disponibilidad, capacidad de escucha y nivel de respuesta.",
+    answer("Muy buena", correct = TRUE),
+    answer("Buena", correct = TRUE),
+    answer("Suficiente", correct = TRUE),
+    answer("Insuficiente", correct = TRUE)
+  ),
+  question("2 - Material del curso; organización, claridad y utilidad.",
+    answer("Muy buena", correct = TRUE),
+    answer("Buena", correct = TRUE),
+    answer("Suficiente", correct = TRUE),
+    answer("Insuficiente", correct = TRUE)
+  ),
+  question("3 - ¿Qué herramienta del curso utilizas más?",
+    answer("rstudio cloud", correct = TRUE),
+    answer("learnrs", correct = TRUE),
+    answer("scripts '.R' en la clase", correct = TRUE),
+    answer("notas propias", correct = TRUE)
+  ),
+   question("4 - ¿Qué herramienta del curso utilizas menos?",
+    answer("rstudio cloud", correct = TRUE),
+    answer("learnrs", correct = TRUE),
+    answer("scripts '.R' en la clase", correct = TRUE),
+    answer("notas propias", correct = TRUE)
+  ),
+   question("5 - ¿Con que frecuencia utilizas rstudio cloud?",
+    answer("Muy frecuente", correct = TRUE),
+    answer("Regularmente", correct = TRUE),
+    answer("Pocas veces practico", correct = TRUE),
+    answer("No uso la herramienta", correct = TRUE)
+  ),
+  question("6 - ¿Con que frecuencia utilizas el learnr?",
+    answer("Muy frecuente", correct = TRUE),
+    answer("Regularmente", correct = TRUE),
+    answer("Pocas veces practico", correct = TRUE),
+    answer("No uso la herramienta", correct = TRUE)
+  ),
+   question("7 - ¿Con que frecuencia utilizas los scripts '.R'?",
+    answer("Muy frecuente", correct = TRUE),
+    answer("Regularmente", correct = TRUE),
+    answer("Pocas veces practico", correct = TRUE),
+    answer("No uso la herramienta", correct = TRUE)
+  ),
+  question("8 - El profesor mantiene un ritmo de exposición correcto.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE)
+  ),
+   question("9 - El profesor consigue mantener mi atención durante las clases.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE)
+  ),
+  question("10 - La carga de trabajo de las prácticas es adecuada.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE)
+  ),
+  question("11 - La cantidad de material explicado en la asignatura es la adecuada.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE)
+  ),
+  question("12 - Tengo tiempo suficiente para entender y asimilar las cosas que me explican.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE)
+  ),
+  question("13 - El material del curso estaba bien preparado y se ha explicado cuidadosamente.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE)
+  ),
+  question("14 - He aprendido cosas que considero valiosas.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE),
+    answer("Nunca", correct = TRUE)
+  ),
+  question("15 - He aprendido y comprendido los contenidos de este curso.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE),
+    answer("Nunca", correct = TRUE)
+  ),
+  question("16 - La documentación de la asignatura está resultando útil.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE),
+    answer("Nunca", correct = TRUE)
+  ),
+  question_text(
+  "17 - ¿Qué mejorarías en las clases en vivo?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+),
+ question_text(
+  "18 - ¿Cuántas horas en promedio le dedicas al estudio-práctica?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+),
+  question("19 - ¿Qué tanto te apegas a tus horarios de estudio?.",
+    answer("Siempre", correct = TRUE),
+    answer("Casi siempre", correct = TRUE),
+    answer("Normalmente", correct = TRUE),
+    answer("Raramente", correct = TRUE),
+    answer("Nunca", correct = TRUE)
+  ),
+question("20 - ¿Qué módulo te gustó más?",
+    answer("Aprendizaje efectivo", correct = TRUE),
+    answer("Visualización", correct = TRUE),
+    answer("Transformación", correct = TRUE),
+    answer("Analisis exploratorio", correct = TRUE),
+    answer("Modelación", correct = TRUE),
+    answer("Comunicación con shiny", correct = TRUE)
+  ),
+question_text(
+  "¿Por qué?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+),
+question("21 - ¿Qué módulo te gustó menos?",
+    answer("Aprendizaje efectivo", correct = TRUE),
+    answer("Visualización", correct = TRUE),
+    answer("Transformación", correct = TRUE),
+    answer("Analisis exploratorio", correct = TRUE),
+    answer("Modelación", correct = TRUE),
+    answer("Comunicación con shiny", correct = TRUE)
+  ),
+question_text(
+  "¿Por qué?",
+  answer(NULL, correct = TRUE),
+  incorrect = "Lo estaremos revisando! Gracias!",
+  try_again_button = "Modifica tu respuesta",
+  allow_retry = TRUE
+)
+)
+```
+
+Finalmente, revisa el siguiente link que estamos preparando para las siguientes clases [Clase de Visualización](https://datos.morant.com.mx/connect/#/apps/159/access/37)
+
+```{r quiz2}
+quiz(
+  caption = "Responde",
+question("22 - ¿Qué piensas de la nueva forma de presentar las clases con este formato?",
+    answer("Muy bien, me parece adecuado", correct = TRUE),
+    answer("Bien, prefiero este formato de clase", correct = TRUE),
+    answer("Prefiero el anterior formato de clase", correct = TRUE),
+    answer("No me gustó", correct = TRUE)
+  )
+)
+```
+## Envía tus respuestas
+
+```{r context="server"}
+learnrhash::encoder_logic()
+```
+
+```{r encode, echo=FALSE}
+learnrhash::encoder_ui(
+  ui_before = shiny::div(
+    "Envía tus respuestas",
+     "Haz clic en el botón de abajo para generar su hash y",
+     "envíalo usando el siguiente formulario:",
+    shiny::tags$br()
+  )
+)
+```
+
+Enviar hash al siguiente link -> [__Aqui__](https://docs.google.com/spreadsheets/d/1lYrZcPSxG6wQ3W6lBmgjcebWeuKVeXY6s__J_UQveGg/edit?usp=sharing)
+
+```{r stormtrooper2, echo = FALSE, fig.align='center'}
+knitr::include_graphics("images/morant.jpg")
+```

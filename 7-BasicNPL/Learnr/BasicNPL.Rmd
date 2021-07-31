@@ -15,6 +15,7 @@ resource_files:
 - renv.lock
 - renv.lock
 - renv.lock
+- renv.lock
 ---
 
 ```{r setup, include=FALSE}
@@ -838,9 +839,6 @@ textstat_keyness(dfmat3, target = "2017-Trump") %>%
 
 ```
 
-### Ejercicios 
-  * 1 - 
-  * 2 - 
 
 ## Realizar ejercicios
 
