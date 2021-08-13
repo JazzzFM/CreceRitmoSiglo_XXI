@@ -1,6 +1,0 @@
-"0","x <- parse_integer(c(""123"", ""345"", ""abc"", ""123.45""))"
-"2","2 parsing failures.
-row col               expected actual
-  3  -- an integer             abc   
-  4  -- no trailing characters 123.45
-"

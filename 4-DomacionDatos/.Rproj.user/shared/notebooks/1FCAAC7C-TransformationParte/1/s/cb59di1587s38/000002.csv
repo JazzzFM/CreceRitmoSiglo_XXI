@@ -1,4 +1,0 @@
-"0","filter(flights, carrier %in% c(""AA"", ""DL"", ""UA""))"
-"2","Error in filter(flights, carrier %in% c(""AA"", ""DL"", ""UA"")) : 
-  object 'flights' not found
-"

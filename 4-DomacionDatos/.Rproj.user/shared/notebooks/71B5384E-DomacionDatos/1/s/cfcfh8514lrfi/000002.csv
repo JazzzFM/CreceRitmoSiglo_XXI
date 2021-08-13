@@ -1,4 +1,0 @@
-"0","read_delim(file, delim = ""|"")"
-"2","Error in as.character(x) : 
-  cannot coerce type 'closure' to vector of type 'character'
-"
