@@ -334,6 +334,7 @@ table4a
 table4a %>% 
   pivot_longer(c(`1999`, `2000`), names_to = "año", values_to = "casos")
 
+# Ver imagen de: images/longer.png
 # `año` y `casos` no existen en `table4a` por lo que ponemos sus nombres entre comillas.
 # `pivot_longer()` alarga los conjuntos de datos aumentando el número de filas y
 #  disminuyendo el número de columnas. Otro ejemplo:
@@ -368,7 +369,7 @@ table2
 table2 %>%
   pivot_wider(names_from = type, values_from = count)
 
-
+#  ver imagen de: imagen/wider.png
 # Opcionalmente, una función aplicada al valor en cada celda de la salida.
 # Por ejemplo:
 
