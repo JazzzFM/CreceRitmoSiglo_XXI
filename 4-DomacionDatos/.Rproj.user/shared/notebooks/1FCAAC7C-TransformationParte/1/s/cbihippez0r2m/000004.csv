@@ -1,1 +1,0 @@
-"0","filter(bd, x > 2 | is.na(x))"

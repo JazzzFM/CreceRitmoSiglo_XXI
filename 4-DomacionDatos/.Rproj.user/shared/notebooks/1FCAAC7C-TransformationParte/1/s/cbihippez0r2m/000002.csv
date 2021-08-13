@@ -1,2 +1,0 @@
-"0","bd <-  tibble(x = c(1:3, NA))"
-"0","filter(bd, x > 2)"
